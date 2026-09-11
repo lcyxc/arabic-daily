@@ -3,7 +3,7 @@
 一个**单文件、离线可用**的阿拉伯语背单词网页工具，内置《词汇表_乱序.doc》的 **932 个词条**，
 手机 / 电脑打开即用，学习记录保存在浏览器本地（localStorage），不联网、不上传任何数据。
 
-> 在线体验：`https://<你的用户名>.github.io/<仓库名>/`（见下方「部署到 GitHub Pages」）
+> 在线体验：**https://lcyxc.github.io/arabic-daily/** （仓库：https://github.com/lcyxc/arabic-daily）
 
 ---
 

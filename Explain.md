@@ -247,6 +247,9 @@
 
 ## 六之二、上传到 GitHub（在线使用 / 分享）
 
+**本项目的在线地址：<https://lcyxc.github.io/arabic-daily/>**（仓库 <https://github.com/lcyxc/arabic-daily>，main 分支根目录）
+→ 本地改了 `daily-arabic.html` 后，把文件重新上传/推送一次，线上版就会更新（约 1 分钟生效）。
+
 仓库里需要的文件：`index.html`（入口，自动跳转到工具）、`daily-arabic.html`（工具本体）、
 `README.md`、`Explain.md`、`input.txt`。
 
