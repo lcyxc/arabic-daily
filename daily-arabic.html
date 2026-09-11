@@ -1,0 +1,3825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>阿拉伯语每日打卡 · عربي كل يوم</title>
+<style>
+  :root{
+    --bg:#f4f6f5;
+    --card:#ffffff;
+    --ink:#1c2b29;
+    --ink-soft:#6b7d7a;
+    --line:#e3e9e7;
+    --brand:#0f766e;
+    --brand-soft:#e6f2f0;
+    --ok:#15803d;
+    --ok-soft:#e8f6ec;
+    --bad:#c2410c;
+    --bad-soft:#fdeee6;
+    --gold:#b45309;
+    --radius:16px;
+    --shadow:0 6px 20px rgba(16,60,55,.07);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.6;
+    padding-bottom:40px;
+  }
+  .ar{
+    font-family:"Traditional Arabic","Scheherazade New","Amiri","Noto Naskh Arabic","Geeza Pro","Segoe UI",serif;
+    direction:rtl;unicode-bidi:isolate;
+  }
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:linear-gradient(135deg,#0f766e,#0e7490);
+    color:#fff;padding:14px 16px 10px;
+    box-shadow:0 4px 14px rgba(15,118,110,.25);
+  }
+  .brand{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+  .brand h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px}
+  .brand .sub{font-size:12px;opacity:.85}
+  nav.tabs{display:flex;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs button{
+    flex:0 0 auto;border:0;cursor:pointer;
+    background:rgba(255,255,255,.16);color:#fff;
+    padding:7px 14px;border-radius:999px;font-size:13.5px;font-family:inherit;
+    transition:.18s;
+  }
+  nav.tabs button.active{background:#fff;color:var(--brand);font-weight:600}
+  /* ---------- 背诵区的两个子分区 ---------- */
+  nav.subtabs{display:flex;gap:8px;margin-bottom:12px}
+  nav.subtabs button{
+    flex:1;font-family:inherit;font-size:14px;cursor:pointer;padding:11px 10px;border-radius:12px;
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    box-shadow:var(--shadow);transition:.16s;font-weight:500;
+  }
+  nav.subtabs button .cnt{font-size:12px;font-weight:400;opacity:.75;font-variant-numeric:tabular-nums}
+  nav.subtabs button.active{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  nav.subtabs button.active .cnt{opacity:.9}
+  .subpane[hidden]{display:none}
+  main{max-width:720px;margin:0 auto;padding:14px 12px 0}
+  .view{display:none}
+  .view.active{display:block;animation:fade .22s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .card{
+    background:var(--card);border-radius:var(--radius);padding:16px;
+    box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:12px;
+  }
+  .card h2{font-size:14px;margin:0 0 10px;color:var(--ink-soft);font-weight:600;letter-spacing:.5px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .grow{flex:1 1 160px;min-width:0}
+  input[type=text],input[type=number],textarea,select{
+    width:100%;font-family:inherit;font-size:14px;color:var(--ink);
+    background:#fbfdfc;border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;outline:none;transition:.18s;
+  }
+  input:focus,textarea:focus{border-color:var(--brand);background:#fff;box-shadow:0 0 0 3px var(--brand-soft)}
+  textarea{min-height:120px;resize:vertical;line-height:1.75}
+  label.f{font-size:12.5px;color:var(--ink-soft);display:block;margin:0 0 5px}
+  button.btn{
+    font-family:inherit;font-size:14px;cursor:pointer;border-radius:10px;
+    padding:10px 16px;border:1px solid var(--line);background:#fff;color:var(--ink);
+    transition:.16s;font-weight:500;
+  }
+  button.btn:hover{border-color:#c9d6d2;background:#fafcfb}
+  button.btn:active{transform:scale(.97)}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  button.primary:hover{background:#0d6961}
+  button.ghost{background:transparent;border-color:transparent;color:var(--ink-soft);padding:8px 10px}
+  button.ghost:hover{background:#eef2f1;color:var(--ink)}
+  button:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+  button.danger{color:#b91c1c;border-color:#f3d2d2;background:#fff}
+  button.danger:hover{background:#fff5f5}
+  .small{font-size:12.5px;color:var(--ink-soft)}
+  .hint{font-size:12.5px;color:var(--ink-soft);margin-top:8px;line-height:1.7}
+  .hint code{background:#eef2f1;padding:1px 5px;border-radius:5px;font-size:12px}
+  .comp{font-size:11.5px;color:#9aa8a5;margin-top:6px}
+  /* 进度条 */
+  .prog-wrap{margin-bottom:12px}
+  .prog-head{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
+  .prog-head b{color:var(--brand)}
+  .bar{height:9px;background:#e8edeb;border-radius:99px;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#14b8a6,#0f766e);transition:width .35s ease}
+  /* 卡片 */
+  .quiz{text-align:center;padding:22px 16px 18px}
+  .quiz .tag{
+    display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:99px;
+    background:var(--brand-soft);color:var(--brand);margin-bottom:14px;
+  }
+  .quiz .tag.rv{background:#fff4e5;color:var(--gold)}
+  .word{
+    font-size:clamp(34px,11vw,54px);line-height:1.5;font-weight:600;
+    margin:6px 0 4px;word-break:break-word;
+  }
+  .word.sz-m{font-size:clamp(26px,8vw,38px);line-height:1.6}
+  .word.sz-s{font-size:clamp(20px,6vw,28px);line-height:1.7}
+  .word.sz-xs{font-size:clamp(16px,4.6vw,22px);line-height:1.8}
+  .wform{
+    font-size:14.5px;color:#7d8f8c;line-height:1.9;margin:2px auto 4px;
+    max-width:96%;word-break:break-word;
+  }
+  .full-entry{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+  .full-entry .ar{font-size:16px;line-height:1.9;display:block;color:#3d5450}
+  .translit{font-size:13.5px;color:#8a9a97;font-style:italic;margin-bottom:6px;direction:ltr}
+  .reveal-btn{margin-top:14px}
+  .answer{border-top:1px dashed var(--line);margin-top:16px;padding-top:14px;text-align:left;display:none}
+  .answer.show{display:block;animation:fade .25s ease}
+  .meaning{font-size:18px;font-weight:600;line-height:1.55;word-break:break-word}
+  .mean-label{font-size:12px;color:var(--ink-soft);margin-bottom:3px}
+  .actions{display:none;gap:10px;margin-top:18px}
+  .actions.show{display:flex}
+  .actions button{
+    flex:1;padding:15px 8px;font-size:16px;font-weight:600;border-radius:12px;
+    border:1px solid transparent;cursor:pointer;font-family:inherit;transition:.16s;
+  }
+  .actions button:active{transform:scale(.97)}
+  .btn-ok{background:var(--ok-soft);color:var(--ok);border-color:#c9ead2}
+  .btn-ok:hover{background:#dcf0e3}
+  .btn-bad{background:var(--bad-soft);color:var(--bad);border-color:#f7d6c4}
+  .btn-bad:hover{background:#fbe2d5}
+  .kbd-tip{font-size:11.5px;color:#a4b2af;margin-top:12px}
+  /* ---------- 汉译阿题面 / 默写 ---------- */
+  .prompt-zh{
+    font-size:clamp(20px,6vw,28px);font-weight:600;line-height:1.7;
+    margin:10px auto 6px;max-width:96%;word-break:break-word;
+  }
+  .prompt-tip{font-size:12.5px;color:#9aa8a5;margin-bottom:4px}
+  .write-box{margin-top:16px;text-align:left}
+  .write-input{
+    font-size:20px;padding:12px 14px;text-align:center;background:#fbfdfc;
+    border:1.5px solid #d7e3e0;border-radius:12px;
+  }
+  .write-input.ar{font-size:24px;line-height:1.9}
+  .write-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+  .write-input:disabled{background:#f3f7f6;color:#5b6f6b}
+  .grade-box{
+    margin-top:12px;background:#f8fbfa;border:1px solid var(--line);
+    border-left:4px solid #cfdad7;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.8;
+  }
+  .grade-badge{font-size:15px;font-weight:600;margin-bottom:4px}
+  .g-ok{border-left-color:#5cb87a}   .g-ok .grade-badge{color:var(--ok)}
+  .g-near{border-left-color:#e0a63a} .g-near .grade-badge{color:#b45309}
+  .g-bad{border-left-color:#e07a4a}  .g-bad .grade-badge{color:var(--bad)}
+  .g-none{border-left-color:#b9c6c3} .g-none .grade-badge{color:#6b7d7a}
+  .grade-line{font-size:13px;color:#4b5d59}
+  .grade-line b{color:var(--ink)}
+  #btnRetry{margin-top:10px}
+  .actions button.rec{box-shadow:0 0 0 3px var(--brand-soft);transform:none}
+  /* ---------- 上一个 / 下一个 导航 ---------- */
+  .nav-row{
+    display:flex;align-items:center;gap:8px;margin-top:14px;
+    padding-top:12px;border-top:1px dashed var(--line);
+  }
+  .nav-btn{flex:0 0 auto;font-size:13.5px;padding:9px 12px;white-space:nowrap}
+  .nav-btn.edge{opacity:.55}
+  .nav-pos{
+    flex:1;text-align:center;font-size:12.5px;color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  .nav-pos b{color:var(--brand);font-size:14px}
+  .nav-j{color:#b45309;font-size:11px}
+  .grade-box.readonly{background:#f3f7f6;border-left-color:#b9c6c3}
+  .word-sm{font-size:26px;font-weight:600;line-height:1.6;margin-top:2px}
+  .meaning-sm{font-size:14.5px;color:#3d5450;line-height:1.7}
+  .ans-line{margin-bottom:8px}
+  /* ---------- 阿语屏幕键盘 ---------- */
+  .akb{
+    display:grid;grid-template-columns:repeat(11,1fr);gap:4px;margin-top:10px;
+    background:#f8fbfa;border:1px solid var(--line);border-radius:10px;padding:6px;
+  }
+  .akb[hidden]{display:none}
+  .akb-k{
+    font-family:inherit;font-size:17px;line-height:1;padding:9px 0;cursor:pointer;
+    background:#fff;border:1px solid var(--line);border-radius:7px;color:var(--ink);
+    font-family:"Traditional Arabic","Amiri","Noto Naskh Arabic",serif;
+  }
+  .akb-k:active{background:var(--brand-soft)}
+  .akb-wide{grid-column:span 4;font-size:13px;font-family:inherit}
+  @media(max-width:420px){
+    .akb{grid-template-columns:repeat(9,1fr)}
+    .akb-k{font-size:15px;padding:8px 0}
+    .write-input{font-size:18px}
+    .write-input.ar{font-size:21px}
+  }
+  /* 打卡 */
+  .center{text-align:center;padding:14px 10px}
+  .big-emoji{font-size:44px;line-height:1}
+  .stars{color:#f59e0b;font-size:26px;letter-spacing:4px}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+  .stat{background:#f8fbfa;border:1px solid var(--line);border-radius:12px;padding:12px 6px}
+  .stat b{display:block;font-size:22px;color:var(--brand);line-height:1.3}
+  .stat span{font-size:11.5px;color:var(--ink-soft)}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+  .cal .d{
+    aspect-ratio:1/1;border-radius:8px;background:#f1f5f4;border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10.5px;color:#9aa8a5;
+  }
+  .cal .d.on{background:linear-gradient(135deg,#14b8a6,#0f766e);color:#fff;border-color:transparent;font-weight:600}
+  .cal .d.today{box-shadow:0 0 0 2px #0f766e inset}
+  .cal .d.on.today{box-shadow:0 0 0 2px #f59e0b inset}
+  .cal .d em{font-style:normal;font-size:12px}
+  .hist-item{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    padding:9px 2px;border-bottom:1px dashed var(--line);font-size:13.5px;
+  }
+  .hist-item:last-child{border-bottom:0}
+  .hist-item .dt{font-variant-numeric:tabular-nums;color:var(--ink)}
+  .hist-item .mt{font-size:12px;color:var(--ink-soft)}
+  .pill{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--ok-soft);color:var(--ok)}
+  /* 打卡页：两个区的状态 */
+  .zone-status{margin-top:12px;text-align:left}
+  .zone-row{
+    display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center;
+    background:#f8fbfa;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:7px;
+  }
+  .zone-row.zdone{background:var(--ok-soft);border-color:#c9ead2}
+  .zone-row .zn{font-size:13.5px;font-weight:600}
+  .zone-row .zt{grid-column:1/2;font-size:12px;color:var(--ink-soft)}
+  .zone-row button{grid-column:2/3;grid-row:1/3}
+  .zone-row .zt:only-child{grid-column:1/3}
+  /* 单词本 */
+  .wlist{max-height:none}
+  .witem{
+    display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);
+  }
+  .witem:last-child{border-bottom:0}
+  .witem .w1{flex:0 0 auto;min-width:74px;max-width:46%;text-align:right;font-size:21px;line-height:1.5;word-break:break-word}
+  .witem .w1.w1-sm{font-size:16px}
+  .witem .w1 .w1t{display:block;font-size:11.5px;color:#9aa8a5;line-height:1.6}
+  .witem .w2{flex:1;min-width:0}
+  .witem .w2 .m{font-size:13.5px;word-break:break-word}
+  .witem .w2 .meta{font-size:11px;color:#9aa8a5;margin-top:2px}
+  .lvl{color:#f59e0b;letter-spacing:1px;font-size:11px}
+  .empty{text-align:center;color:var(--ink-soft);padding:26px 10px;font-size:13.5px}
+  .empty .big{font-size:34px;display:block;margin-bottom:8px}
+  table.preview{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  table.preview th,table.preview td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:left}
+  table.preview th{color:var(--ink-soft);font-weight:500;font-size:12px}
+  table.preview td.a{text-align:right;font-size:17px}
+  .switch{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .switch:last-child{border-bottom:0}
+  .switch .lbl{font-size:14px}
+  .switch .lbl small{display:block;color:var(--ink-soft);font-size:11.5px}
+  .tog{position:relative;width:46px;height:26px;flex:0 0 auto}
+  .tog input{opacity:0;width:0;height:0;position:absolute}
+  .tog span{position:absolute;inset:0;background:#cfdad7;border-radius:99px;transition:.2s;cursor:pointer}
+  .tog span::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}
+  .tog input:checked+span{background:var(--brand)}
+  .tog input:checked+span::after{transform:translateX(20px)}
+  #toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:rgba(28,43,41,.94);color:#fff;padding:10px 18px;border-radius:99px;
+    font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:88vw;text-align:center;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  footer{max-width:720px;margin:22px auto 0;padding:0 16px;text-align:center;font-size:11.5px;color:#9aa8a5}
+  /* ---------- 滑块调节面板 ---------- */
+  details.tune{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:12px 16px;margin-bottom:12px;box-shadow:var(--shadow);
+  }
+  #tuneSet-read details.tune, #tuneSet-write details.tune{background:#fbfdfc;box-shadow:none;margin-bottom:0;border-radius:12px}
+  details.tune>summary{
+    cursor:pointer;font-size:13.5px;color:var(--ink);list-style:none;
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  }
+  details.tune>summary::-webkit-details-marker{display:none}
+  details.tune>summary::before{content:"⚙️";font-size:14px}
+  details.tune>summary::after{content:"▾";margin-left:auto;color:var(--ink-soft);font-size:12px}
+  details.tune[open]>summary::after{content:"▴"}
+  details.tune>summary b{color:var(--brand)}
+  .tune-body{padding-top:14px;margin-top:12px;border-top:1px dashed var(--line)}
+  .tune-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13.5px;margin-bottom:7px}
+  .tune-row .val{color:var(--brand);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tune-row .val b{font-size:16px}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:0 0 4px;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;background:#e2ebe9}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;
+    background:#fff;border:3px solid var(--brand);margin-top:-8px;box-shadow:0 2px 6px rgba(15,118,110,.3);
+  }
+  input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:#e2ebe9}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--brand)}
+  .tune-preview{
+    background:var(--brand-soft);color:#0c5f58;border-radius:10px;padding:9px 12px;
+    font-size:13px;line-height:1.7;margin-top:8px;
+  }
+  .tune-preview b{font-variant-numeric:tabular-nums}
+  [hidden]{display:none !important}
+  /* ---------- 进度池（多人 / 多份进度各自独立） ---------- */
+  .poolbar{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.22);
+  }
+  .poolbar .pb-lbl{font-size:12px;color:rgba(255,255,255,.86);white-space:nowrap}
+  .poolbar select{
+    flex:1;min-width:110px;max-width:220px;font-family:inherit;font-size:13px;
+    padding:7px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.14);color:#fff;
+  }
+  .poolbar select option{color:#1c2b29;background:#fff}
+  .poolbar .btn{padding:7px 11px;font-size:12.5px;background:rgba(255,255,255,.16);
+    color:#fff;border-color:rgba(255,255,255,.35)}
+  .poolbar .btn:hover{background:rgba(255,255,255,.26)}
+  .plist-item{
+    display:flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid var(--line);
+    border-radius:10px;background:#fbfdfc;margin-bottom:7px;font-size:13px;
+  }
+  .plist-item.on{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-soft)}
+  .plist-item .pn{font-weight:600}
+  .plist-item .pm{color:var(--ink-soft);font-size:12px}
+  .plist-item .grow{flex:1;text-align:left;min-width:0}
+  .plist-item .btn{padding:6px 10px;font-size:12.5px}
+  /* ---------- 首次使用：给进度池起名字 ---------- */
+  .mask{
+    position:fixed;inset:0;background:rgba(20,32,30,.5);z-index:120;
+    display:flex;align-items:center;justify-content:center;padding:18px;
+  }
+  .mask[hidden]{display:none}
+  .dialog{
+    background:var(--card);border-radius:18px;padding:20px 20px 16px;max-width:430px;width:100%;
+    box-shadow:0 18px 50px rgba(0,0,0,.28);text-align:left;
+  }
+  .dialog h3{margin:0 0 6px;font-size:17px}
+  .dialog input[type=text]{
+    width:100%;font-family:inherit;font-size:15px;padding:11px 13px;margin-top:10px;
+    border:1px solid var(--line);border-radius:10px;background:#fbfdfc;color:var(--ink);
+  }
+  .dialog .row{margin-top:12px}
+  /* ---------- 同步提示条 ---------- */
+  .sync-note{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    border-radius:10px;padding:9px 12px;font-size:13px;line-height:1.6;margin-bottom:10px;
+  }
+  .sync-note.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
+  .sync-note.ok{background:var(--brand-soft);border:1px solid #b8e0da;color:#0c5f58}
+  .sync-note .btn{padding:6px 10px;font-size:12.5px}
+  @media(max-width:420px){
+    .card{padding:13px;border-radius:14px}
+    .meaning{font-size:16.5px}
+    .actions button{font-size:15px;padding:14px 6px}
+    .stat b{font-size:19px}
+  }
+  @media(prefers-color-scheme:dark){
+    /* 保持简洁，不做完整暗色，只轻微降低亮度 */
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>阿拉伯语 · 每日打卡 <span class="ar" style="font-size:15px;opacity:.9">عربي كل يوم</span></h1>
+    <div class="sub" id="todayLabel"></div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-view="v-read" class="active">📖 背诵区</button>
+    <button data-view="v-write">✍️ 默写区</button>
+    <button data-view="v-words">📚 单词本</button>
+    <button data-view="v-checkin">✅ 打卡</button>
+    <button data-view="v-settings">⚙️ 设置</button>
+  </nav>
+  <div class="poolbar">
+    <span class="pb-lbl">👤 进度池</span>
+    <select id="poolSel" title="切换进度池"></select>
+    <button class="btn" id="btnPoolNew" title="新建一个空进度池">＋ 新建</button>
+    <button class="btn" id="btnPoolManage" title="管理进度池">⚙️ 管理</button>
+  </div>
+</header>
+
+<main>
+  <!-- ========== 背诵区（认读）：阿→中 / 中→阿 两个子分区 ========== -->
+  <section class="view active" id="v-read">
+    <nav class="subtabs" id="subtabsRead">
+      <button data-sub="read" class="active">🇸🇦 阿 → 中 <span class="cnt" id="subCnt-read"></span></button>
+      <button data-sub="recall">🇨🇳 中 → 阿 <span class="cnt" id="subCnt-recall"></span></button>
+    </nav>
+    <div class="subpane" id="subpane-read">
+      <div id="tuneTop-read"></div>
+      <div id="reviewArea-read"></div>
+    </div>
+    <div class="subpane" id="subpane-recall" hidden>
+      <div id="tuneTop-recall"></div>
+      <div id="reviewArea-recall"></div>
+    </div>
+  </section>
+
+  <!-- ========== 默写区（打字） ========== -->
+  <section class="view" id="v-write">
+    <div id="tuneTop-write"></div>
+    <div id="reviewArea-write"></div>
+  </section>
+
+  <!-- ========== 单词本 / 导入 ========== -->
+  <section class="view" id="v-words">
+    <div class="card">
+      <h2>导入单词</h2>
+      <label class="f">每行一个，格式 <b>单词 : 释义</b>（也可加第 3 列音标）</label>
+      <textarea id="importBox" spellcheck="false" placeholder="مَبَسَّطٌ : 简化的，通俗的
+مُتَعَلِّمٌ جـ مُتَعَلِّمُونَ : 学生，学习者
+نَقَصَهُ يَنْقُصُ نَقْصًا الشَّيْءُ : 缺少，缺乏
+*ثَقَافَةٌ : 文化
+جَمِيلٌ::美丽的::jamīl"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="btnPreview">预览解析</button>
+        <button class="btn primary" id="btnImport">导入 / 更新</button>
+        <button class="btn ghost" id="btnClearBox">清空输入</button>
+      </div>
+      <div class="hint">
+        · 格式 <b>单词 : 释义</b>，中文冒号 <code>：</code>、英文冒号 <code>:</code>、制表符都支持。<br>
+        · 词条里的 <code>جـ</code>（复数）、<code>م</code>（阴性）、动词变位会自动拆成小字「补充形式」显示，背的时候大字只显示词头。<br>
+        · 行首加 <code>*</code> 表示「补充词」，卡片上会标 ＊（例如 <code>*ثَقَافَةٌ : 文化</code>）。<br>
+        · 高级格式（<code>::</code> 分隔）：<code>单词::释义::音标</code>；单词已存在时自动更新释义。
+      </div>
+      <div id="previewArea"></div>
+    </div>
+
+    <div class="card">
+      <h2>我的单词本 <span id="wordCount" class="small"></span></h2>
+      <div class="row" style="margin-bottom:8px">
+        <input type="text" id="searchWord" class="grow" placeholder="搜索单词或释义…">
+        <button class="btn ghost" id="btnExport">导出备份</button>
+      </div>
+      <div id="wordList" class="wlist"></div>
+    </div>
+  </section>
+
+  <!-- ========== 打卡 ========== -->
+  <section class="view" id="v-checkin">
+    <div class="card center" id="checkinCard"></div>
+    <div class="card">
+      <h2>统计</h2>
+      <div class="stat-grid" id="statGrid"></div>
+    </div>
+    <div class="card">
+      <h2>最近 28 天</h2>
+      <div class="cal" id="calGrid"></div>
+      <div class="hint">绿色 = 已打卡，方框加粗 = 今天。点击日历方块可查看那天的记录。</div>
+    </div>
+    <div class="card">
+      <h2>历史打卡记录 <span id="histCount" class="small"></span></h2>
+      <div id="histList"></div>
+    </div>
+  </section>
+
+  <!-- ========== 设置 ========== -->
+  <section class="view" id="v-settings">
+    <div class="card">
+      <h2>👤 进度池 <span class="small" id="poolNow"></span></h2>
+      <div class="hint" style="margin-top:0">
+        每个池子有<b>各自的单词进度、背诵/默写习惯（滑块）、打卡记录和单词本</b>，互不影响。<br>
+        多人共用一台设备时，一人一个池子；也可以给自己建「冲刺模式 / 复习模式」两个池子。
+      </div>
+      <div class="row" style="margin-top:10px">
+        <select id="poolSel2" class="grow"></select>
+        <button class="btn" id="btnPoolRename">改名</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="btnPoolNew2">＋ 新建空池</button>
+        <button class="btn" id="btnPoolCopy">复制当前池</button>
+        <button class="btn danger" id="btnPoolDel">删除当前池</button>
+      </div>
+      <div id="poolList" style="margin-top:12px"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="btnPoolExport">导出当前池（JSON）</button>
+        <button class="btn" id="btnPoolImport">粘贴导入为新池</button>
+        <button class="btn ghost" id="btnPoolClearBox">清空输入</button>
+      </div>
+      <textarea id="poolBox" spellcheck="false" style="margin-top:10px;min-height:80px"
+        placeholder="「导出当前池」会把当前进度池的完整数据填到这里；换设备时把它复制过去，粘回来点「粘贴导入为新池」即可继续。"></textarea>
+      <div id="poolMsg" class="hint"></div>
+    </div>
+    <div class="card">
+      <h2>📖 背诵区（阿译中 / 中译阿 两个子分区）</h2>
+      <div id="tuneSet-read"></div>
+    </div>
+    <div class="card">
+      <h2>✍️ 默写区（打字：看提示写答案）</h2>
+      <div id="tuneSet-write"></div>
+    </div>
+    <div class="card">
+      <h2>通用设置</h2>
+      <div class="switch">
+        <div class="lbl">显示释义时自动朗读<small>使用系统阿拉伯语语音（部分设备需联网）</small></div>
+        <label class="tog"><input type="checkbox" id="setAutoTts"><span></span></label>
+      </div>
+      <div class="switch">
+        <div class="lbl">默认显示音标<small>导入时第 3 列为音标</small></div>
+        <label class="tog"><input type="checkbox" id="setTranslit"><span></span></label>
+      </div>
+      <div class="switch">
+        <div class="lbl">键盘快捷键<small>← → 翻上/下一张，空格显示释义，1 记住了，2 没记住（需外接键盘）</small></div>
+        <label class="tog"><input type="checkbox" id="setKeys"><span></span></label>
+      </div>
+    </div>
+    <div class="card">
+      <h2>数据管理</h2>
+      <div class="row">
+        <button class="btn" id="btnRebuild">重新生成本日任务</button>
+        <button class="btn" id="btnReloadDemo">载入内置词汇表</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn danger" id="btnClearProgress">清空学习进度（保留单词）</button>
+        <button class="btn danger" id="btnWipe">清空全部数据</button>
+      </div>
+      <div class="hint">
+        所有数据只保存在这台设备的浏览器里（localStorage），不会上传网络。<br>
+        换设备或换浏览器时，请到「单词本」点「导出备份」复制数据，再在新设备粘贴导入。
+      </div>
+    </div>
+    <div class="card">
+      <h2>关于</h2>
+      <div class="hint" style="margin-top:0">
+        单文件离线工具 · 数据存于本机 localStorage。<br>
+        复习策略：没记住的词优先进入下一次任务，记住了的词按 1 / 2 / 3 / 7 / 14 / 30 天的间隔复习。
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>阿拉伯语每日打卡 · 单文件离线版</footer>
+<div id="toast"></div>
+
+<!-- 首次使用：给自己的进度池起名字 -->
+<div class="mask" id="poolStart" hidden>
+  <div class="dialog">
+    <h3>👋 先给「你的进度池」起个名字</h3>
+    <div class="small" style="line-height:1.8">
+      每个人的背诵习惯和进度会单独存进一个<b>进度池</b>，互不干扰。<br>
+      起个名字方便以后在顶部一键切换（比如「小明」「上班地铁背」）。
+    </div>
+    <input type="text" id="poolNameInput" maxlength="24" placeholder="例如：小明">
+    <div class="row">
+      <button class="btn primary" id="btnPoolStartOk">创建我的进度池</button>
+      <button class="btn ghost" id="btnPoolStartSkip">先跳过，用默认名字</button>
+    </div>
+    <div class="hint">名字只是本机上的一个标签，数据仍然只存在这台设备里，不会上传。</div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* =======================================================================
+   阿拉伯语每日单词打卡工具
+   数据全部存于 localStorage，键名：arabicDaily.v1
+   ======================================================================= */
+
+const LS_KEY = 'arabicDaily.v1';
+const SPACE_DAYS = [1, 2, 3, 7, 14, 30, 60];   // 记忆等级 -> 下次复习间隔（天）
+
+/* ---------------- 工具函数 ---------------- */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+const pad2 = n => String(n).padStart(2, '0');
+const HOUR = 3600 * 1000, DAY = 24 * HOUR;
+
+function ymd(d){ d = d || new Date(); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function parseYmd(s){ const p = String(s || '').split('-').map(Number); return new Date(p[0], (p[1] || 1) - 1, p[2] || 1); }
+function startOfDay(d){ d = d || new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function daysBetween(a, b){ return Math.round((startOfDay(b) - startOfDay(a)) / DAY); }
+function addDays(d, n){ const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function weekdayZh(d){ return ['日','一','二','三','四','五','六'][d.getDay()]; }
+function fmtDate(ts){
+  const d = new Date(ts);
+  return ymd(d) + ' 周' + weekdayZh(d) + ' ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+}
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function uid(){ return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function mulberry32(seed){
+  let a = seed >>> 0;
+  return function(){
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function strSeed(s){ let h = 2166136261 >>> 0; s = String(s); for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+function shuffle(arr, rnd){ const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(rnd() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function pick(arr, rnd){ return arr[Math.floor(rnd() * arr.length)]; }
+
+let toastTimer = null;
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1900);
+}
+
+/* ---------------- 内置词汇表 ----------------
+   来自《词汇表_乱序.doc》，元素格式：[阿拉伯语词条, 中文释义, 1=原文带 * 标记]
+   词条中的 جـ = 复数、م = 阴性，其余是动词变位/宾语搭配，
+   显示时会自动拆成「词头」（大字）+「补充形式」（小字）。
+   -------------------------------------------- */
+const BUILTIN_VERSION = 2;   // 词表内容有修正时 +1，打开时会自动刷新已有词条文本（保留进度）
+const BUILTIN_WORDS = [
+  ["مَبَسَّطٌ","简化的，通俗的",0],
+  ["مُتَعَلِّمٌ جـ مُتَعَلِّمُونَ","学生，学习者",0],
+  ["اَلصُّومَالُ","索马里",0],
+  ["طَائِفَةٌ","一伙，一派，一批",0],
+  ["نَقَصَهُ يَنْقُصُ نَقْصًا ونُقْصَانًا الشَّيْءُ","缺少，缺乏",0],
+  ["فَيْلَسُوفٌ جـ فَلاَسِفَةٌ","哲学家",0],
+  ["قَسَّمَ يُقَسِّمُ تَقْسِيمًا الشَّيْءَ إِلَى","分，划分，分成（几部分）",0],
+  ["تِرَامٌ","有轨电车",0],
+  ["قَصَدَ يَقْصِدُ قَصْدًا الشَّيْءَ","指……而言，意思是……，旨在",0],
+  ["عَصَاهُ يَعْصِي عَصْيًا وعِصْيَانًا","不服从，不听从；造反，叛逆",0],
+  ["مَحْصُولٌ جـ مَحْصُولاَتٌ","产品，物产",0],
+  ["أَثْنَاءَ","在……期间",0],
+  ["مُتَضَايِقٌ","烦闷的，烦恼的",0],
+  ["مُنْشَأَةٌ جـ مُنْشَآتٌ","机构，企业；设施",0],
+  ["أَشْعَرَ يُشْعِرُ إِشْعَارًا فُلاَنًا بِكَذَا","使……感到",0],
+  ["قَاتِمٌ","深色的，黑暗的",0],
+  ["حَيَاءٌ","害羞，羞愧",0],
+  ["عُمَانُ","阿曼",0],
+  ["مُسْتَمِعٌ","旁听生；听者",0],
+  ["مُتَطَلَّبٌ جـ مُتَطَلَّبَاتٌ","要求",0],
+  ["غَلَبَ يَغْلِبُ غَلْبًا عَلَى","压倒，战胜，打败",0],
+  ["مِثَالٌ جـ أَمْثِلَةٌ ومُثُلٌ","例子，典型，模范",0],
+  ["حِكْمَةٌ جـ حِكَمٌ","哲理，格言",0],
+  ["جِسْرٌ جـ جُسُورٌ","桥，桥梁",0],
+  ["قُوَّةٌ جـ قُوًى","力量",0],
+  ["وَعْيٌ","觉悟，意识",0],
+  ["هَمَّهُ يَهُمُّ هَمًّا الأَمْرُ","与……有关；使担忧，使烦恼；使感兴趣",0],
+  ["تَغَلَّبَ يَتَغَلَّبُ تَغَلُّبًا عَلَى كَذَا","克服，战胜",1],
+  ["تَجَمَّعَ الْقَوْمُ","聚集，集会",0],
+  ["لَيْتَ","但愿，希望",0],
+  ["مُمَهَّدٌ","平坦的；铺平的；准备就绪的",0],
+  ["دَانَ يَدِينُ دِينًا وَدِيَانَةً بِكَذَا / تَدَيَّنَ بِهِ","信仰，信奉",0],
+  ["اَللِّيسَانْسُ","文学士学位",0],
+  ["آخَرُ جـ آخَرُونَ م أُخْرَى جـ أُخْرَيَاتٌ","其他的，另外的",0],
+  ["عَظَّمَهُ يُعَظِّمُ تَعْظِيمًا","尊敬，赞颂",0],
+  ["اَلْعِيدُ الْوَطَنِيُّ","国庆节",0],
+  ["سُلَّمٌ جـ سَلاَلِمُ","梯子，阶梯",0],
+  ["بِالإضَافَةِ إِلَى ذَلِكَ","除此之外，此外",0],
+  ["جَارٌ جـ جِيرَانٌ","邻居",0],
+  ["أَعْلَى م عُلْيَا","最高的，极高的，较高的",0],
+  ["اَلدُّنْيَا","今世，人世，红尘；世界，天下（阴性）",0],
+  ["دِينٌ جـ أَدْيَانٌ","宗教，教",1],
+  ["عَلِمَ يَعْلَمُ عِلْمًا اْلأَمْرَ أَوْ بِهِ","知道，了解，懂得",1],
+  ["ثَقَافَةٌ","文化",1],
+  ["ضَرَّاءٌ","逆境，艰难，灾难",0],
+  ["أَوَّلُ أَمْسِ","前天",0],
+  ["ثَمَانٍ م ثَمَانِيَةٌ","八",1],
+  ["سَلْبِيٌّ","消极的",0],
+  ["سَبَقَ يَسْبِقُ سَبْقًا لَهُ أَنْ فَعَلَ كَذَا","曾经做……，以前做……",0],
+  ["عَلَى ضَوْءِ...","按照，依照",0],
+  ["أَحْضَرَ يُحْضِرُ إِحْضَارًا الشَّيْءَ","拿来，带来",1],
+  ["مُرَبَّعٌ","平方的，四方的",0],
+  ["إِيرَانِيٌّ","伊朗人，伊朗的",0],
+  ["أَمَرَ يَأْمُرُ أَمْرًا فُلاَنًا بِكَذَا","命令，吩咐，指挥",0],
+  ["أَلْقَى يُلْقِي إِلْقَاءً الشَّيْءَ","抛，投，扔",0],
+  ["لَحِقَ يَلْحَقُ لَحْقًا ولَحَاقًا بِهِ / أَدْرَكَه","追上，赶上",0],
+  ["اِبْنٌ جـ بَنُونَ وَأَبْنَاءٌ","儿子，子弟",1],
+  ["قَادِرٌ جـ قَادِرُونَ م قَادِرَةٌ عَلَى","有能力的，能够的",1],
+  ["عُضْوٌ جـ أَعْضَاءٌ","成员；肢体",1],
+  ["حَقًّا / بِالْحَقِّ","对，真的，确实地",0],
+  ["حَذَّرَهُ يُحَذِّرُ تَحْذِيرًا مِنْ","警告，提醒",0],
+  ["مُنَاوِبٌ","轮流的；轮班的，值班的",0],
+  ["حَفْلَةُ سَهَرٍ","晚会",0],
+  ["اَلْيُونَانُ","希腊",0],
+  ["قِسْمُ الأَمْرَاضِ الْبَاطِنِيَّةِ","内科",0],
+  ["هَامٌّ","重要的",0],
+  ["سَارَ يَسِيرُ سَيْرًا","走，行走",0],
+  ["سَمَاوِيٌّ","天的，天空的；天启的",0],
+  ["مَحَلِّيٌّ م مَحَلِّيَّةٌ","本地的，当地的，国内的，本国的",0],
+  ["دُونَ جَدْوَى","徒劳地，无益地",0],
+  ["أُسْطُورِيٌّ","神化的，传说的",0],
+  ["مُتْعَةٌ جـ مُتَعٌ","享受，乐趣，快感",0],
+  ["بِحَيْثُ","因此，由此，因而",0],
+  ["بَلْ","而且；而，而是",0],
+  ["ذَرَّةٌ","原子，离子，微粒",0],
+  ["إِمْكَانِيَّةٌ جـ إِمْكَانِيّاتٌ","可能性",0],
+  ["اِسْتِهْلاَكِيٌّ","消费的，消费性的",0],
+  ["اَلأَلْعَابُ اْلأُولِمْبِيَّةُ","奥林匹克运动（会）",0],
+  ["نَظَرِيٌّ","理论的，理论上的",0],
+  ["اَلإِسْلاَمُ / اَلدِّينُ اْلإِسْلاَمِيُّ","伊斯兰教",0],
+  ["مِنْ حَيْثُ","从……方面来说，就……方面而言",0],
+  ["هَاتِ الشَّيْءَ","把……拿过来（命令式动词）",0],
+  ["مُجْتَمَعٌ جـ مُجْتَمَعَاتٌ","社会",1],
+  ["دَوْرِيٌّ","周期的，定期的",0],
+  ["وَقَى يَقِي وِقَايَةً فُلاَنًا مِنْ...","保护某人免遭……",1],
+  ["مَنْ ( الاسم الموصول)","……的人（关系代词）",1],
+  ["صَدًى جـ أَصْدَاءٌ","回音，反响，回声",0],
+  ["ضِدَّ...","反对……",1],
+  ["اَلْجَزَائِرُ","阿尔及利亚；阿尔及尔",0],
+  ["فَائِدَةٌ جـ فَوَائِدُ","利益，好处，用处，利息",1],
+  ["خَطِيرٌ م خَطِيرَةٌ","严重的，重大的，严峻的",1],
+  ["صِنَاعَةٌ جـ صِنَاعَاتٌ","工业，产业",1],
+  ["وَقْتُ الْفِرَاغِ جـ أَوْقَاتُ الْفِرَاغِ","业余时间",0],
+  ["مُحْتَوًى جـ مُحْتَوَيَاتٌ","内容",0],
+  ["ضَحِكَ يَضْحَكُ ضَحْكًا","大笑",0],
+  ["عَنَى يَعْنِي عَنْيًا وعِنَايَةً كَذَا","意味着……，意思是……",0],
+  ["جَاذِبِيَّةٌ","吸引力",0],
+  ["أَحْيَانًا... وَأَحْيَانًا أُخْرَى...","有时……有时……，时而……时而……",1],
+  ["اِسْتَمَرَّ يَسْتَمِرُّ اِسْتِمْرَارًا","继续",0],
+  ["فَاضَ يَفِيضُ فَيْضًا","充满，满盈；泛滥",0],
+  ["جُمْبَازٌ / جَمْبَازٌ / جَمْبَاسْتِيكْ","体操",0],
+  ["يَدَوِيٌّ","手工的，手动的",0],
+  ["بِفَرَحٍ وَمَرَحٍ","高兴地，兴奋地",0],
+  ["سَاطِعٌ م سَاطِعَةٌ","灿烂的，光辉的，耀眼的",0],
+  ["مُتَحَرِّكٌ جـ مُتَحَرِّكُونَ","活动的，运动的",0],
+  ["شَاعَ يَشِيعُ شُيُوعًا الْخَبَرُ","传开，流传",0],
+  ["مَلْحُوظٌ م مَلْحُوظَةٌ","显著的，明显的，看得到的",0],
+  ["شَتَمَهُ يَشْتُمُ شَتْمًا","辱骂，骂",0],
+  ["نِظَامٌ جـ نُظُمٌ وأَنْظِمَةٌ","制度，体系，规律，体例",0],
+  ["تَمَكَّنَ يَتَمَكَّنُ تَمَكُّنًا مِنْ","能够",0],
+  ["أَثَارَ يُثِيرُ إِثَارَةً الشَّيْءَ","掀起，引起，激起",0],
+  ["أُرُوبِّيٌّ م أُرُوبِّيَّةٌ","欧洲的；欧洲人",1],
+  ["خُلُقٌ جـ أَخْلاَقٌ","性格，脾气；品行，道德",0],
+  ["خَارِجَ كَذَا","在……外面",0],
+  ["تَصَرُّفٌ جـ تَصَرُّفَاتٌ","行为",0],
+  ["حَصَدَ يَحْصُدُ حَصْدًا وحِصَادًا الزَّرْعَ","收割",0],
+  ["صَوَّرَهُ يُصَوِّرُ تَصْوِيرًا","描绘；照相",0],
+  ["رُوحٌ جـ أَرْوَاحٌ","精神，灵魂，生命（阴性）",0],
+  ["لَنْ","决不，将不",0],
+  ["حِضْنٌ جـ أَحْضَانٌ","怀抱，胸怀",0],
+  ["ثَمَرٌ جـ ثِمَارٌ وَأَثْمَارٌ الْوَاحِدَةُ ثَمَرَةٌ","果实；成果",0],
+  ["مَا","……的物（连接名词）",1],
+  ["رَحْمَةُ اللهِ","天恩，安拉的恩惠",0],
+  ["لاَ دَاعِيَ لِ...","不需要，不必要",0],
+  ["مُتَبَايِنٌ","不同的，相异的",0],
+  ["بَائِعٌ جـ بَائِعُونَ وَبَاعَةٌ م بَائِعَةٌ","售货员，小贩",1],
+  ["مُفَاجِيٌّ","突然的",0],
+  ["مُسْتَحِيلٌ","不可能的",0],
+  ["إِمَّا ... وَإِمَّا ...","要么……要么，不是……就是",0],
+  ["خَالٌ جـ أَخْوَالٌ / أخُو الأُمِّ","舅舅",0],
+  ["خُلاَصَةٌ جـ خُلاَصَاتٌ","精华，精髓",0],
+  ["مُنْذُ","自从，自……以来",0],
+  ["اِنْشَغَلَ يَنْشَغِلُ اِنْشِغَالاً","被占用；忙于，致力于",0],
+  ["حَقَّ يَحِقُّ حَقًّا لَهُ أو عَلَيْهِ أَنْ...","他有权……，理应",0],
+  ["سَرِيعٌ م سَرِيعَةٌ","快的，迅速的",1],
+  ["مُرَتَّبٌ","整理好的，排列好的",0],
+  ["مَبْلَغٌ جـ مَبَالِغُ","金额，款项，钱数；数额",0],
+  ["شَتَوِيٌّ م شَتَوِيَّةٌ","冬季的，冬天的",0],
+  ["بَصِيرٌ","有远见的，有眼力的",0],
+  ["ضَمَّ يَضُمُّ ضَمًّا الشَّيْءَ","包括，集拢，合并",0],
+  ["مَكَانَةٌ جـ مَكَانَاتٌ","地位，职位，等级，身份",1],
+  ["مَحْظُوظٌ","幸运的",0],
+  ["إِذْ أَنَّ...","因为",0],
+  ["تَنَافَسَ يَتَنَافَسُ تَنَافُسًا الْقَوْمُ","竞争",0],
+  ["جِرَاحِيٌّ","外科的",0],
+  ["تَوْجِيهٌ جـ تَوْجِيهَاتٌ","指示，指导",0],
+  ["جَامِعَةٌ أَهْلِيَّةٌ","私立大学",0],
+  ["أَثْمَرَ يُثْمِرُ إِثْمَارًا الشَّجَرُ","结果实，挂果",0],
+  ["فِي سَبِيلِ...","为了……，争取……",0],
+  ["أَحْدَاثُ السَّاعَةِ","热点问题，焦点问题",0],
+  ["غَيَّرَهُ يُغَيِّرُ تَغْيِيرًا","改变",0],
+  ["مَصْرُوفٌ جـ مَصْرُوفَاتٌ ومَصَارِيفُ","费用，开支",0],
+  ["عَلَى خَيْرِ وَجْهٍ","很好地，最好地",0],
+  ["بِصَرَاحَةٍ","坦率地，明白地，公开地",0],
+  ["تَمْرِينٌ جـ تَمْرِينَاتٌ","练习，操练",0],
+  ["أَصَابَ يُصِيبُ إِصَابَةً الشَّيْءَ","击中，命中",0],
+  ["ذَاتٌ مُثَنَّاهُ ذَوَاتَانِ جـ ذَوَاتٌ","物主，自己，自身；拥有……（阴性）",0],
+  ["نَهْرٌ جـ أَنْهَارٌ","江，河，河流",0],
+  ["مَيَّزَ يُمَيِّزُ تَمْيِيزًا الشَّيْءَ","区分，区别，鉴别，分辨",0],
+  ["اِحْتَضَنَ يَحْتَضِنُ اِحْتِضَانًا فُلاَنًا","拥抱，搂抱",0],
+  ["اَلتِّجَارَةُ","商业，贸易",0],
+  ["رَأْسٌ جـ رُؤُوسٌ","头；顶端",0],
+  ["سَجَّلَ يُسَجِّلُ تَسْجِيلاً الشَّيْءَ","记录，记",0],
+  ["اَلَّذِي جـ اَلَّذِينَ م اَلَّتِي جـ اَللاَّتِي وَاللَّوَاتِي","……的（连接名词）",1],
+  ["عِنْدَئِذٍ","此时，正在这时",0],
+  ["أَبْعَدَ يُبْعِدُ إِبْعَادًا فُلاَنًا عَنِ الشَّيْءِ","使远离；挪开；消除",0],
+  ["تَسَلَّمَ يَتَسَلَّمُ تَسَلُّمًا الشَّيْءَ","接到，收到",1],
+  ["يَئِسَ يَيْأَسُ يَأْسًا مِنْهُ","对……失望，绝望",0],
+  ["مُعَلَّبٌ","被装入罐头的",0],
+  ["أَرَاحَ يُرِيحُ إِرَاحَةً فُلاَنًا","使休息；使人愉快，使人轻松",0],
+  ["قَارِسٌ","严寒的，极冷的",0],
+  ["قَوْلٌ جـ أَقْوَالٌ","话",0],
+  ["أَرْنَبٌ جـ أَرَانِبُ م أَرْنَبَةٌ","兔子",0],
+  ["دَمٌ جـ دِمَاءٌ","血液，血",0],
+  ["شَخْصٌ جـ أَشْخَاصٌ","个，个人；人次",1],
+  ["رَمْزِيٌّ","象征性的，象征的",0],
+  ["مُتَأَخِّرٌ","落后的，迟到的",0],
+  ["ضَبَطَ يَضْبِطُ ضَبْطًا كَذَا","控制住；矫正，调整；捉住，查获",0],
+  ["سُكُونٌ / هُدُوءٌ","安静，宁静",0],
+  ["زَادَ يَزِيدُ زِيَادَةً الشَّيْءَ","增加",0],
+  ["سَمَّاه يُسَمِّي تَسْمِيَةً كَذَا وَبِكَذَا","命名他为……，把他叫做……",0],
+  ["وَسَطٌ جـ أَوْسَاطٌ","中间，居中的",1],
+  ["إِيرَانُ","伊朗",0],
+  ["اِزْدَادَ يَزْدَادُ اِزْدِيَادًا","增加",0],
+  ["بِنَشَاطٍ","积极地，活跃地",0],
+  ["آسِيَا","亚洲",0],
+  ["يَسَّرَ يُيَسِّرُ تَيْسِيرًا لَهُ اْلأَمْرَ","使……容易；为……提供方便",0],
+  ["مَتِينٌ","坚固的，结实的",0],
+  ["خَصِبٌ","肥沃的",0],
+  ["اِقْتَصَرَ يَقْتَصِرُ اِقْتِصَارًا عَلَيْهِ","局限于",0],
+  ["جِهَةٌ جـ جِهَاتٌ","方向，方面",1],
+  ["أَدْهَشَ يُدْهِشُ إِدْهَاشًا فُلاَنًا","使吃惊，使惊异",0],
+  ["قِطْعَةٌ جـ قِطَعٌ","块，段，截；（作品的）一部分",0],
+  ["رَجَعَ يَرْجَعُ رُجُوعًا","回去，回来，回归",0],
+  ["عُرْفٌ جـ عُرَفٌ وأَعْرَافٌ","惯例，常规；（社交）礼节",0],
+  ["أَثْبَتَ يُثْبِتُ إِثْبَاتًا الأَمْرَ","证实，证明",0],
+  ["شَجَاعَةٌ","勇敢，勇气，无畏",0],
+  ["جَهِلَهُ يَجْهَلُ جَهْلاً وجَهَالَةً الرَّجُلُ","无知；愚笨",0],
+  ["مَايُو","五月",1],
+  ["نَافِعٌ","有益的，有用的",0],
+  ["نَهْرُ الْفُرَاتِ","幼发拉底河",0],
+  ["مَعَ مُرُورِ الأَيَّامِ","随着时间的流逝",0],
+  ["رُجُولَةٌ","男子气，大丈夫气概，阳刚之气",0],
+  ["تَأَثَّرَ يَتَأَثَّرُ تَأَثُّرًا بِكَذَا","受……影响",0],
+  ["ثَمَانِي مِائَةٍ","八百",1],
+  ["جَامَلَ يُجَامِلُ مُجَامَلَةً","客套，寒暄；奉承",0],
+  ["اِنْفَتَحَ يَنْفَتِحُ اِنْفِتَاحًا","开放",0],
+  ["قِطَارٌ جـ قِطَارَاتٌ وقُطُرٌ","火车，列车",0],
+  ["لاَ بَأْسَ","没关系",0],
+  ["لَحْدٌ جـ أَلْحَادٌ ولُحُودٌ","坟墓",0],
+  ["إِفْرِيقِيَا","非洲",1],
+  ["فَتًى جـ فِتْيَانٌ وفِتْيَةٌ","青年人，小伙子",0],
+  ["كَشَفَ يَكْشِفُ كَشْفًا الشَّيْءَ وَعَنْهُ","揭开，揭露，暴露；（医学）检查",0],
+  ["صَدَّرَ يُصَدِّرُ تَصْدِيرًا الشَّيْءَ إِلَى...","向……出口……",0],
+  ["بَحَثَ يَبْحَثُ بَحْثًا فِي الْمَوْضُوعِ","探讨，研究，调查",0],
+  ["اِثْنَا عَشَرَ م اِثْنَتَا عَشْرَةَ","十二",1],
+  ["غَبِيٌّ جـ أَغْبِيَاءُ","愚笨的，笨蛋，蠢货",0],
+  ["سَلِيمٌ م سَلِيمَةٌ","健康的，完好的，平安无事的",1],
+  ["مَظْلُومٌ","受欺负的，被冤枉的",0],
+  ["مَاهِرٌ جـ مَهَرَةٌ","精巧的，熟练的，高明的",0],
+  ["دَوْرٌ جـ أَدْوَارٌ اَلْوَاحِدَةُ دَوْرَةٌ","角色；一回，一转，一次",0],
+  ["نَهَاهُ يَنْهَى نَهْيًا عَنْ","禁止",0],
+  ["تَحَرَّكَ يَتَحَرَّكُ تَحَرُّكًا","运动，活动",0],
+  ["عَقْلٌ جـ عُقُولٌ","智力，智慧，头脑，理解力",0],
+  ["جَمَالٌ","美，美丽，优美，漂亮",0],
+  ["غَرِيبٌ جـ غُرَبَاءُ م غَرِيبَةٌ","陌生的，奇怪的；外来的，外乡人",1],
+  ["صَارَ يَصِيرُ صَيْرًا وصَيْرُورَةً","变成，成为",0],
+  ["قَضِيَّةٌ جـ قَضَايَا","事业，问题，案件",0],
+  ["نُكْتَةٌ جـ نُكَتٌ ونِكَاتٌ","笑话",0],
+  ["إِمْبَرَاطُورٌ جـ أَبَاطِرَةُ","皇帝，帝王",0],
+  ["خَيَالِيٌّ","幻想的，虚幻的，虚拟的",0],
+  ["شَمْعَةٌ جـ شَمَعَاتٌ","蜡烛",0],
+  ["دِمَشْقُ","大马士革（叙利亚首都）",0],
+  ["طَبَّقَ يُطَبِّقُ تَطْبِيقًا كَذَا","实施，实行，实践",0],
+  ["كَافَّةٌ","全部，全体",0],
+  ["مَجْنُونٌ","发疯的，失去理智的，精神病患者",0],
+  ["حُرٌّ","自由的",0],
+  ["حَارِسٌ جـ حُرَّاسٌ وَحَرَسٌ","卫兵，卫士，哨兵",0],
+  ["اِغْتَرَّ يَغْتَرُّ اِغْتِرَارًا بِنَفْسِهِ","自满，骄傲",0],
+  ["حَصَّلَ يُحَصِّلُ تَحْصِيلاً الشَّيْءَ أو الْعِلْمَ","获得，收获，获取",0],
+  ["أَرْشَدَ يُرْشِدُ إِرْشَادًا فُلاَنًا إِلَى كَذَا","指导，引导",0],
+  ["تَكَلَّمَ يَتَكَلَّمُ تَكَلُّمًا","讲话，谈话",0],
+  ["كُرَةُ التَّنِسِ","网球",0],
+  ["تَرَكَ يَتْرُكُ تَرْكًا الشَّيْءَ","放弃，丢弃",0],
+  ["أَكَّدَ يُؤَكِّدُ تَأْكِيدًا كَذَا","强调；肯定",0],
+  ["ذَاقَ يَذُوقُ ذَوْقًا الشَّيْءَ","尝，品尝",0],
+  ["دَاخِلٌ","进入的；里面",0],
+  ["شَبِعَ يَشْبَعُ شَبَعًا وشَبْعًا مِنَ الطَّعَامِ","吃饱",0],
+  ["مَلَلٌ","厌烦",0],
+  ["جَوْهَرٌ جـ جَوَاهِرُ","本质，实质，精髓",0],
+  ["مُزْدَهِمٌ","拥挤的",0],
+  ["جَسَدٌ جـ أَجْسَادٌ","身体",0],
+  ["شَأْنٌ جـ شُؤُونٌ","事情，事务；情况；地位，重要性；关系",0],
+  ["اَلْكُرَةُ الطَّائِرَةُ","排球",0],
+  ["جُغْرَافِيَا","地理",0],
+  ["بُسْتَانٌ جـ بَسَاتِينُ","花园，园地",0],
+  ["حَجْمٌ جـ حُجُومٌ وأَحْجَامٌ","大小，体积，容量",0],
+  ["خَلَعَ يَخْلَعُ خَلْعًا الشَّيْءَ","脱，卸",0],
+  ["سِيَاحِيٌّ م سِيَاحِيَّةٌ","旅游的",0],
+  ["حَدِيثٌ جـ أَحَادِيثُ","谈话，传闻",0],
+  ["تَسَامَحَ يَتَسَامَحُ تَسَامُحًا","宽容，谅解",0],
+  ["عِيَانٌ","亲眼所见，目睹",0],
+  ["رَفِيقٌ جـ رِفَاقٌ وَرُفَقَاءُ","同志，伙伴",0],
+  ["حَرَمُ الْجَامِعَةِ","校园",0],
+  ["حَلَّلَ يُحَلِّلُ تَحْلِيلاً الشَّيْءَ","分析，分解，化验",0],
+  ["سَلِمَ يَسْلَمُ سَلاَمَةً وسَلاَمًا فُلاَنٌ مِنْ خَطَرٍ","安全，完好，平安",0],
+  ["رَابِطَةٌ جـ رَوَابِطُ","联系；协会；纽带",0],
+  ["وَحْدَهُ ( وَحْدَهَا ... )","单独，独自地",0],
+  ["أَمَلَهُ يَأْمُلُ أَمَلاً","希望",0],
+  ["مَازِجٌ","开玩笑的，诙谐者",0],
+  ["نَحَوٌ جـ أَنْحَاءٌ","方向，方面，方位；方法，样式",1],
+  ["مُنْتَظِمٌ","本科生，注册生；有系统的，有组织的",0],
+  ["تَسَابَقَ يَتَسَابَقُ تَسَابُقًا الْقَوْمُ","争先恐后，相互竞争",0],
+  ["أَشْرَفَ يُشْرِفُ إِشْرَافًا عَلَى","主持，负责；俯视，下临",0],
+  ["سِبَاحَةٌ","游泳",0],
+  ["تَمَّ يَتِمُّ تَمًّا وتَمَامًا اْلأَمْرُ","完成，成为完美的",1],
+  ["اِسْتَيْقَظَ يَسْتَيْقِظُ اِسْتِيقَاظًا مِنْ نَوْمِهِ","醒，睡醒",0],
+  ["عَنْ طَرِيقِ...","通过……，取道……",1],
+  ["مُؤَدَّبٌ م مُؤَدَّبَةٌ","有教养的，有礼貌的",0],
+  ["عَيْنٌ جـ عُيُونٌ وَأَعْيُنٌ","眼睛；泉眼；实物；硬币（阴性）",0],
+  ["مُؤَلَّفٌ جـ مُؤَلَّفَاتٌ","著作，作品",0],
+  ["مُهْمِلٌ","粗心的，疏忽大意的",0],
+  ["قَوَّى يُقَوِّي تَقْوِيَةً الشَّيْءَ","加强，巩固",0],
+  ["مَا ...","某一……（含糊的泛指名词）",0],
+  ["عَجِلَ يَعْجَلُ عَجَلاً وعَجَلَةً الرَّجُلُ","匆忙，着急",0],
+  ["رَاعَى يُرَاعِي مُرَاعَاةً الأَمْرَ","注意，遵守，关照",0],
+  ["كُلَّمَا","每当",0],
+  ["اَلشَّرِيعَةُ (الاِسْلاَمِيَّةُ)","（伊斯兰）法律",0],
+  ["أُورُبَّا أو أُرُوبَّا","欧洲",0],
+  ["أَرْوَعُ","绝妙的，卓绝的，最动人的",0],
+  ["اِعْتَبَرَهُ يَعْتَبِرُ اِعْتِبَارًا كَذَا","把……认为……，把……看作……",0],
+  ["رَبَطَ يَرْبُطُ رَبْطًا الشَّيْءَ بِالشَّيْءِ","连接，联系",0],
+  ["تَمَرَّنَ يَتَمَرَّنُ تَمَرُّنًا عَلَى كَذَا","练习，训练",0],
+  ["ظَهَرَ يَظْهَرُ ظُهُورًا الشَّيْءُ / بَدَا","出现，呈现，露出",1],
+  ["تَكْلِيفٌ جـ تَكَالِيفُ","花费，费用，成本；客气，客套",0],
+  ["زَوَّدَهُ يَزَوِّدُ تَزْوِيدًا بِكَذَا","供应，供给",0],
+  ["جِيبُوتِي","吉布提",0],
+  ["حَادِثَةٌ وحَادِثٌ جـ حَوَادِثُ","事件，事故，事迹，事端",1],
+  ["دُونَ كَذَا","不……，没有……",0],
+  ["لَبِسَ يَلْبَسُ لُبْسًا الثَّوْبَ / اِرْتَدَى يَرْتَدِي اِرْتِدَاءً","穿，戴，着装",0],
+  ["قَرِيبٌ جـ أَقَارِبُ وأَقْرِبَاءُ","亲戚，亲属",0],
+  ["جِذْرٌ جـ جُذُورٌ","根",0],
+  ["إِجَازَةٌ جـ إِجَازَاتٌ","假，假日，假期",0],
+  ["ثَقَافِيٌّ م ثَقَافِيَّةٌ","文化的",0],
+  ["صَقَلَ يَصْقُلُ صَقْلاً وصِقَالاً الشَّيْءَ","磨练，磨砺；磨光，擦亮",0],
+  ["كَامِيرَا جـ كَامِيرَاتٌ / آلَةُ التَّصْوِيرِ","照相机",0],
+  ["قَادَهُ يَقُودُ قِيَادَةً","领导，统帅，指挥",0],
+  ["كَوَّنَ يُكَوِّنُ تَكْوِينًا الشَّيْءَ","构成，组成，形成",0],
+  ["أَقَامَهُ يُقِيمُ إِقَامَةً","竖起，建立；举行，举办",0],
+  ["لَبَّى يُلَبِّي تَلْبِيَةً الدَّعْوَةَ","应邀，响应（号召）",0],
+  ["طَبَقَةٌ جـ طَبَقَاتٌ","层次，阶层，阶级",0],
+  ["جِسْمٌ جـ أَجْسَامٌ","身体，躯体",0],
+  ["وِزَارَةٌ جـ وِزَارَاتٌ","部，内阁",0],
+  ["دَارَ يَدُورُ دَوْرًا وَدَوَرَانًا الشَّيْءُ","转动，旋转，运转，进行",0],
+  ["اِسْتَغَلَّ يَسْتَغِلُّ اِسْتِغْلاَلاً الشَّيْءَ أو فُلاَنًا","利用；剥削",0],
+  ["ثَابِتٌ","固定的，坚固的",0],
+  ["مُنَشِّطٌ جـ مُنَشِّطَاتٌ","兴奋剂",0],
+  ["آنٌ / وَقْتٌ","时间",0],
+  ["طَعْمٌ جـ طُعُومٌ","味道，滋味",0],
+  ["إِنْسَانِيٌّ","人的，人类的，有人性的，人文的，人道的",0],
+  ["عَلَى ثِقَةٍ بِكَذَا أو بِأَنَّ...","相信，坚信",0],
+  ["اَلْمَاجِسْتِيرُ","硕士学位",0],
+  ["بِنَاءٌ جـ أَبْنِيَةٌ","建筑物，大厦",1],
+  ["وَرَدَ يَرِدُ وُرُودًا فِي","提到，出现，源自",0],
+  ["لَحْظَةٌ جـ لَحَظَاتٌ","瞬间，刹那，片刻",0],
+  ["مُبَاشَرَةً","直接地",0],
+  ["يَدٌ جـ أَيْدٍ","手",0],
+  ["اَلأُمَمُ الْمُتَّحِدَةُ","联合国",0],
+  ["اِلْتَفَّ يَلْتَفُّ اِلْتِفَافًا حَوْلَهُ","围绕",0],
+  ["سَامٌّ","有毒的",0],
+  ["مُتَوَسِّطٌ","中间的，中等的，平均的",0],
+  ["بِالضَّبْطِ","恰好，正好，准确地",0],
+  ["لَدَى...","在……跟前",0],
+  ["أَطَالَ يُطِيلُ إِطَالَةً الشَّيْءَ","放长，延长，拉长，加长",0],
+  ["لاَ كُلْفَةَ / لاَ تَكْلِيفَ / بِلاَ تَكْلِيفٍ","不客气",0],
+  ["دَقَّ يَدُّقُ دَقًّا الشَّيْءَ","敲，打",0],
+  ["مُشْتَقٌّ","派生词",0],
+  ["قَامَةٌ جـ قَامَاتٌ","身材，个子",0],
+  ["مَا إِنْ... حَتَّى...","刚……就……，一……就……",0],
+  ["اَلشَّرْقُ اْلأَوْسَطُ","中东",1],
+  ["مُتَطَوِّعٌ","志愿者",0],
+  ["مَعَالِمُ الْمَدِينَةِ","市容，城市的面貌",0],
+  ["خَاصِيَةٌ جـ خَصَائِصُ","特点，特性",0],
+  ["مَاكِيَاجٌ","化妆",0],
+  ["اَلطَّبِيعَةُ","自然，自然界；本质",0],
+  ["اِرْتَفَعَ يَرْتَفِعُ اِرْتِفَاعًا الشَّيْءُ","上升，升高",1],
+  ["فَرْدٌ جـ أَفْرَادٌ","个人，成员",1],
+  ["جَدِيرٌ بِكَذَا","值得……的",0],
+  ["كَرِهَ يَكْرَهُ كَرَاهِيَةً الشَّيْءَ","厌恶，讨厌",0],
+  ["وَقْتٌ جـ أَوْقَاتٌ","时间，时光",0],
+  ["وَسِيمٌ جـ وُسَمَاءُ","英俊的，清秀的，标志的",0],
+  ["تِرْمُومِتْرٌ","温度计，寒暑表",0],
+  ["مِنَ الْمَعْرُوفِ أَنَّ...","众所周知……",0],
+  ["جَائِزَةٌ جـ جَوَائِزُ","奖品，奖金",1],
+  ["مُمْتِعٌ م مُمْتِعَةٌ","有趣味的，引人入胜的",1],
+  ["مُدَّةٌ جـ مُدَدٌ","时间，时期，一段时间",1],
+  ["عَجِيبٌ م عَجِيبَةٌ","奇怪的，奇妙的",1],
+  ["اِجْتَمَعَ يَجْتَمِعُ اِجْتِمَاعًا بِ","见面；聚会，开会",0],
+  ["مَعَ الأَسَفِ الشَّدِيدِ","非常遗憾",0],
+  ["عَلَى كَيْفِكَ","随你便，随你意",0],
+  ["مُعْجِبٌ","令人奇怪的，可敬佩的，奇妙的",1],
+  ["خُطْوَةٌ جـ خُطًى وخُطُوَاتٌ","步伐，脚步",1],
+  ["خِبْرَةٌ جـ خِبَرٌ وخِبْرَاتٌ","经验，阅历",1],
+  ["شِرَاعِيَّةٌ جـ شِرَاعِيَّاتٌ","帆船",0],
+  ["أَدْخَلَ يُدْخِلُ إِدْخَالاً فُلاَنًا أَوْ شَيْئًا","带进，引进",0],
+  ["شَرَفٌ جـ أَشْرَافٌ","光荣，荣誉",0],
+  ["مِقْدَارٌ جـ مَقَادِيرُ","数量，分量，程度",0],
+  ["فَسِيحٌ","宽敞的",0],
+  ["ظَرْفٌ جـ ظُرُوفٌ","信封，信皮；环境，条件，情况",0],
+  ["بِيُسْرٍ / بِسُهُولَةٍ","容易地",0],
+  ["حَتَّى وَلَوْ","哪怕，即使",0],
+  ["جَاوَزَهُ يُجَاوِزُ مُجَاوَزَةً","超过，超越",0],
+  ["تَخَلَّفَ يَتَخَلَّفُ تَخَلُّفًا","落后",0],
+  ["بِيجَامَا","睡衣",0],
+  ["عُشْبٌ جـ أَعْشَابٌ الْوَاحِدَةُ عُشْبَةٌ","草，青草，绿草",0],
+  ["وَحْدَةٌ جـ وَحَدَاتٌ","单位；统一，团结",0],
+  ["قَوْمِيَّةٌ جـ قَوْمِيَّاتٌ","民族；民族主义",0],
+  ["مُسْتَوًى جـ مُسْتَوَيَاتٌ","水平，级别",1],
+  ["أَخِيرًا","最后，最终",0],
+  ["ضَرُورَةٌ","必要性，必须，急需",0],
+  ["فَضْلٌ جـ فُضُولٌ","功劳，恩惠",0],
+  ["أَنْتَجَ يُنْتِجُ إِنْتَاجًا الشَّيْءَ","生产，制造",1],
+  ["تَقْلِيدِيٌّ","传统的",0],
+  ["عَالَجَ يُعَالِجُ عِلاَجًا ومُعَالَجَةً الْمَرِيضَ أو الْمَسْأَلَةَ","治疗，医治；处理，解决（问题）",0],
+  ["قَصَرَ يَقْصِرُ قَصْرًا وقِصَارًا الشَّيْءَ عَلَى","局限，限定",0],
+  ["وَضَعَ يَضَعُ وَضْعًا الشَّيْءَ","放，置",0],
+  ["شَاعِرٌ جـ شُعَرَاءُ م شَاعِرَةٌ","诗人",0],
+  ["بَالَغَ يُبَالِغُ مُبَالَغَةً فِي الأَمْرِ","夸张，夸大",0],
+  ["خَفَّ يَخِفُّ خِفَّةً","变轻，减弱",0],
+  ["اِتَّخَذَ يَتَّخِذُ اِتِّخَاذًا الشَّيْءَ","采取，采纳，采用",1],
+  ["تَقْرِيبًا","大约，大概，大致",0],
+  ["بِدَايَةٌ","开始",0],
+  ["اِسْتَغْنَى يَسْتَغْنِي اِسْتِغْنَاءً عَنْ","无需，不缺",0],
+  ["اَلْبَكْلُورِيُوسُ","工学士学位（有的国家通用于学士学位）",0],
+  ["مِقْيَاسٌ جـ مَقَايِيسُ","标准，尺度，量具",1],
+  ["وَسِيلَةٌ جـ وَسَائِلُ","方法，手段，工具，媒介",1],
+  ["ضَيَّعَ يُضَيِّعُ تَضْيِيعًا الشَّيْءَ","浪费，错过，丧失",0],
+  ["أَنْجَزَ يُنْجِزُ إِنْجَازًا اْلأَمْرَ","完成，做完",0],
+  ["اِحْتَفَلَ يَحْتَفِلُ اِحْتِفَالاً بِكَذَا","庆祝",1],
+  ["زِرَاعَةٌ","农业",0],
+  ["حِكَايَةٌ جـ حِكَايَاتٌ","故事，传说",0],
+  ["بَالِغٌ جـ بَالِغُونَ","成年的，成人，成熟的",0],
+  ["إِنْسَانٌ جـ نَاسٌ","人",0],
+  ["عَالٍ ( عَالِي ) م عَالِيَةٌ","高的，崇高的",0],
+  ["أَشْبَعَ يُشْبِعُ إِشْبَاعًا فُلاَنًا","使吃饱，满足",0],
+  ["إِعْلاَمٌ جـ إِعْلاَمَاتٌ","宣传；通知，通告",0],
+  ["دَرَجَةٌ جـ دَرَجَاتٌ","一度；等级；分数；台阶",0],
+  ["حَضَّرَ يُحَضِّرُ تَحْضِيرًا الشَّيْءَ","准备",0],
+  ["نَاسَبَ يُنَاسِبُ مُنَاسَبَةً","适合，相称",0],
+  ["لاَحَظَ يُلاَحِظُ مُلاَحَظَةً الشَّيْءَ","观察，看到，觉察到",1],
+  ["اَلشَّمْسُ","太阳（阴性）",1],
+  ["ذَكَاءٌ","聪明",0],
+  ["تُرْكِيَا","土耳其",0],
+  ["مُقَابِلَ شَيْءٍ","对面，在……对面，面对",0],
+  ["اِطَّلَعَ يَطَّلِعُ اِطِّلاَعًا عَلَى الشَّيْءِ","了解，知悉，发现",0],
+  ["نَادَى يُنَادِي مُنَادَاةً ونِدَاءً الرَّجُلَ أو بِهِ","呼唤某人，叫某人",0],
+  ["وَعْدٌ جـ وُعُودٌ","许诺，诺言",0],
+  ["تَرْجَمَ يُتَرْجِمُ تَرْجَمَةً كَذَا","译，翻译",0],
+  ["عَادَ يَفْعَلُ","再做，重新做……",0],
+  ["اِقْتَرَبَ يَقْتَرِبُ اِقْتِرَابًا مِنْ","靠近，接近",0],
+  ["اِهْتَمَّ يَهْتَمُّ اِهْتِمَامًا بِكَذَا","重视，关心，注意；感兴趣",1],
+  ["مُدْهِشٌ","令人吃惊的",0],
+  ["أَدَارَ يُدِيرُ إِدَارَةً اْلأَمْرَ","使运转，管理，经营",0],
+  ["مِيزَةٌ جـ مَزَايَا","特点，特性",0],
+  ["جَمَاعِيٌّ","团体的，集体的，团队的",0],
+  ["غَابَ يَغِيبُ غَيْبًا وَغَيْبَةً وَغِيَابًا / تَغَيَّبَ","缺席，不在场",1],
+  ["زَادَ يَزِيدُ زِيَادَةً عَلَى","超过",0],
+  ["مُخْتَبَرٌ جـ مُخْتَبَرَاتٌ","实验室，化验室",0],
+  ["حَدَّثَهُ يُحَدِّثُ تَحْدِيثًا عَنْ كَذَا وَبِهِ","与……讲……，告诉某人……",0],
+  ["صِفَةٌ جـ صِفَاتٌ","本质，属性，品质，特征；形容词",0],
+  ["جَنَّةٌ جـ جَنَّاتٌ وجِنَانٌ","天堂，乐园",0],
+  ["جِهَازٌ جـ أَجْهِزَةٌ","仪器，设备，机构",1],
+  ["اِسْتَشْفَى يَسْتَشْفِي اِسْتِشْفَاءً","请医生看病，求医",0],
+  ["حَسَدَ يَحْسُدُ حَسَدًا وحَسَادَةً فُلاَنًا عَلَيْهِ","忌妒",0],
+  ["مَعْهَدٌ جـ مَعَاهِدُ","学院，专科大学",0],
+  ["قَوْمٌ","人们，民众，百姓",0],
+  ["فَنٌّ جـ فُنُونٌ","艺术，技术",1],
+  ["فَهِمَ يَفْهَمُ فَهْمًا الشَّيْءَ","明白，懂得，理解，领会",1],
+  ["وَاثِقٌ بِكَذَا","相信的，深信不疑的",0],
+  ["أَنْكَرَ يُنْكِرُ إِنْكَارًا الأَمْرَ","否认，反对",0],
+  ["فَشِلَ يَفْشَلُ فَشَلاً","失败；沮丧",1],
+  ["لِلْغَايَةِ / جِدًّا","非常，十分",0],
+  ["ثَرْوَةٌ جـ ثَرَوَاتٌ","财富",0],
+  ["سَفِينَةٌ جـ سُفُنٌ","船，舰，船只",0],
+  ["اِتِّحَادٌ","团结，联合，联合会",0],
+  ["أَزْرَقُ جـ زُرْقٌ م زَرْقَاءُ","蓝色的",1],
+  ["نَاوَلَهُ يُنَاوِلُ مُنَاوَلَةً الشَّيْءَ","递给，拿给",0],
+  ["عِنْدَمَا...","当……时候",1],
+  ["تَجَاذَبَ يَتَجَاذَبُ تَجَاذُبًا أَطْرَافَ الْحَدِيثِ / تَبَادَلَهَا","聊天",0],
+  ["صَائِبٌ / صَحِيحٌ","正确的",0],
+  ["ضِيقٌ","憋气，烦闷",0],
+  ["أَقْبَلَ يُقْبِلُ إِقْبَالاً عَلَى كَذَا","欢迎，喜欢",0],
+  ["مَعْقُولٌ","合理的",0],
+  ["هَيْئَةٌ جـ هَيْئَاتٌ","组织，机构，团体；姿态，模样",0],
+  ["أَدَاةٌ جـ أَدَوَاتٌ","工具，器材，用具",0],
+  ["لَذَّةٌ جـ لَذَّاتٌ","趣味，乐趣，快感",0],
+  ["أَسَاسٌ جـ أُسُسٌ","基础，根基，根据",1],
+  ["تَصَفَّحَ يَتَصَفَّحُ تَصَفُّحًا الْكِتَابَ","翻阅，浏览",0],
+  ["مَعْنًى جـ مَعَانٍ","意思，意义",0],
+  ["بِطَلاَقَةٍ","流利地",0],
+  ["صَفْحَةٌ جـ صَفَحَاتٌ","页，面",1],
+  ["دَبَّرَ يُدَبِّرُ تَدْبِيرًا الأَمْرَ","安排，布置",1],
+  ["جِلْدٌ جـ جُلُودٌ","皮，皮肤，表皮",0],
+  ["تَقَيَّأَ يَتَقَيَّأُ تَقَيُّؤًا فُلاَنٌ","呕吐",0],
+  ["مُخْتَصَرٌ","简略的，扼要的",0],
+  ["ضَرَبَ يَضْرِبُ ضَرْبًا الْمُثَلَ","举例，打比方",0],
+  ["اِعْتَنَى يَعْتَنِي اِعْتِنَاءً بِكَذَا","关心，照料",1],
+  ["مُوسِيقَى","音乐",0],
+  ["اَلْمُحِيطُ الْهِنْدِيُّ","印度洋",0],
+  ["أَلُو / هَالُو","喂，你好",1],
+  ["مُؤَثِّرٌ","动人的，感人的",0],
+  ["تَطَلَّبَ يَتَطَلَّبُ تَطَلُّبًا الأَمْرُ مِنْهُ كَذَا","要求，需要",0],
+  ["مَظْهَرٌ جـ مَظَاهِرُ","现象，表面",0],
+  ["تَمَنَّى يَتَمَنَّى تَمَنِّيًا لَهُ الأَمْرَ","祝愿，希望",0],
+  ["قَوَاعِدُ اللُّغَةِ","语法",0],
+  ["مَتْحَفٌ جـ مَتَاحِفُ","博物馆",0],
+  ["مَدْخَلٌ جـ مَدَاخِلُ","入口，门口",1],
+  ["لَطِيفٌ جـ لِطَافٌ وَلُطَفَاءُ وَلَطِيفُونَ م لَطِيفَةٌ","有趣的，亲切的，和蔼的",1],
+  ["هَدَفٌ جـ أَهْدَافٌ","目标，目的，靶子",1],
+  ["عَلَى سِبِيلِ الْمِثَالِ","例如，譬如说",0],
+  ["تَوَاضَعَ يَتَوَاضَعُ تَوَاضُعًا","成为谦虚的",0],
+  ["رَفَعَ يَرْفَعُ رَفْعًا الشَّيْءَ","举起，抬起；抬高",1],
+  ["لَكِنَّ / لَكِنْ","但是",0],
+  ["اَلْبَحْرُ اْلأَبْيَضُ الْمُتَوَسِّطُ","地中海",0],
+  ["عُصْفُورٌ جـ عَصَافِيرُ","小鸟，麻雀",0],
+  ["عَقَدَ يَعْقِدُ عَقْدًا الصَّدَاقَةَ مَعَ فُلاَنٍ","和……缔结友谊",0],
+  ["مَشْوِيٌّ","烤的，烤熟的",0],
+  ["جَازَ يَجُوزُ جَوَازًا الأَمْرُ","可以，允许，可能",0],
+  ["حَكَى يَحْكِي حِكَايَةً الْخَبَرَ","讲述，传说",0],
+  ["مَنَارَةٌ جـ مَنَارَاتٌ","灯塔",0],
+  ["لاَ شَكَّ فِي","毫无疑义，无疑",0],
+  ["مُنْتَصَفُ كَذَا","中间，半……",0],
+  ["قَتَلَهُ يَقْتُلُ قَتْلاً","杀，杀死，打死",0],
+  ["مَوْقِعٌ جـ مَوَاقِعُ","网站；地点，位置，场所",0],
+  ["مُمَاثِلٌ","相同的，相似的",0],
+  ["لاَ سِيَّمَا","特别是，尤其是",0],
+  ["أَدَبٌ جـ آدَابٌ","礼貌，礼节；文学",0],
+  ["مَسْؤُولِيَّةٌ جـ مَسْؤُولِيَّاتٌ","责任",0],
+  ["رِيَاضِيٌّ م رِيَاضِيَّةٌ","体育的",1],
+  ["يَهُودِيٌّ جـ يَهُودٌ","犹太人",0],
+  ["حَرَارَةٌ","热，热度，温度；热心",0],
+  ["تَحِيَّةٌ جـ تَحِيَّاتٌ","问候，致意，敬礼",1],
+  ["رَصِيفٌ جـ أَرْصِفَةٌ","站台，人行道",0],
+  ["نَظْرَةٌ جـ نَظَرَاتٌ","一眼，一瞥，目光",1],
+  ["تَعَدَّدَ يَتَعَدَّدُ تَعَدُّدًا","变多，增多",0],
+  ["حَيَوِيٌّ","有生机的，有活力的",0],
+  ["مُشَوِّقٌ","吸引人的，令人向往的",0],
+  ["حَتَّى","以便；直到",0],
+  ["أَسَّسَ يُؤَسِّسُ تَأْسِيسًا كَذَا","建立，创立，创办",0],
+  ["حَدَثٌ جـ أَحْدَاثٌ","事件，新事",0],
+  ["سِيَاسِيٌّ","政治的；政治家",0],
+  ["قُطْبٌ جـ أَقْطَابٌ","轴，轴心，极",0],
+  ["لِبَاسٌ جـ أَلْسِبَةٌ / مَلْبَسٌ جـ مَلاَبِسُ","衣服",0],
+  ["بَيْنَمَا...","正当……之际",0],
+  ["قَرَارٌ جـ قَرَارَاتٌ","决定，会议",0],
+  ["قَلِقٌ م قَلِقَةٌ","不安的，担心的；焦急的",0],
+  ["وَاحَةٌ جـ وَاحَاتٌ","绿洲",0],
+  ["مِنَ السَّائِدِ أَنْ...","……盛行的，……普遍的",0],
+  ["غَنَّى يُغَنِّي تَغْنِيَةً وَغِنَاءً","唱歌，歌颂",0],
+  ["نُقْطَةٌ جـ نِقَاطٌ","点，要点",0],
+  ["مُوجَزٌ","简要的，扼要的；概要",0],
+  ["نَمَّى يُنَمِّي تَنْمِيَةً الشَّيْءَ","发展，使成长",0],
+  ["عَفَا يَعْفُو عَفْوًا عَنْهُ أو عَنْ ذَنْبِهِ","原谅，宽恕",0],
+  ["حُمَّى","发烧，热症，热病（阴性）",0],
+  ["اِمْتَلأَ يَمْتَلِئُ اِمْتِلاَءً بِهِ","充满",0],
+  ["مُنْهَمِكٌ","专心的，埋头于……的",0],
+  ["رُوحِيٌّ","精神的",0],
+  ["قَمِيصٌ جـ قُمْصَانٌ وَأَقْمِصَةٌ","衬衣，衬衫",0],
+  ["رَخِيصٌ م رَخِيصَةٌ","便宜的，廉价的",1],
+  ["سَامٍ م سَامِيَةٌ","高尚的，崇高的",0],
+  ["حَمَى يَحْمِي حِمَايَةً فُلاَنًا مِنْ كَذَا","保护，维护，保卫",1],
+  ["دَقِيقٌ م دَقِيقَةٌ","细的，仔细的，精细的，细微的；精密的",1],
+  ["مَادَّةٌ جـ مَوَادُّ","物质，材料；科目，课程；条款",0],
+  ["اَلأُولِمْبِيَادُ","奥林匹克",0],
+  ["بِمُفْرَدِكَ","你独自地",0],
+  ["اِفْتَكَرَ يَفْتَكِرُ اِفْتِكَارًا","想，认为",0],
+  ["عَاجِلٌ","快的，急速的，迅速的",0],
+  ["أَمْنٌ / أَمَانٌ","安全，太平",0],
+  ["عَلَى رَغْمِ مِنْ ...","尽管……",0],
+  ["طَرَفٌ جـ أَطْرَافٌ","端；方面；边缘；肢体",0],
+  ["أَدْرَكَ يُدْرِكُ إِدْرَاكًا الْقِطَارَ أو الْعِلْمَ","赶上（火车）；意识到，理解，领会",0],
+  ["هِوَايَةٌ جـ هِوَايَاتٌ","兴趣，爱好，偏好",1],
+  ["صَفَّقَ يُصَفِّقُ تَصْفِيقًا","鼓掌，拍手",0],
+  ["لَجَأَ يَلْجَأُ لُجُوءًا إِلَى","投奔，避难；诉诸……",0],
+  ["خَرَّبَ يُخَرِّبُ تَخْرِيبًا الشَّيْءَ","毁坏，摧毁",0],
+  ["أَثَرِيٌّ","古迹的，文物的",0],
+  ["تَنَقَّلَ يَتَنَقَّلُ تَنَقُّلاً مِنْ مَكَانٍ إِلَى مَكَانٍ","迁移，迁徙",0],
+  ["لُغَوِيٌّ","语言的，语言学家",0],
+  ["حُلْوٌ","甜的；好的",0],
+  ["عَاقِبَةٌ جـ عَوَاقِبُ","后果，结局，下场",0],
+  ["نَدَمَ يَنْدَمُ نَدَمًا ونَدَامَةً عَلَى مَا فَعَلَهُ","后悔，懊悔",0],
+  ["رَمَادِيٌّ","灰色的",0],
+  ["مَبْعُوثٌ جـ مَبْعُوثُونَ","代表，使节；发出的，派出的",0],
+  ["آتٍ م آتِيَةٌ","下列的，下面的；来到的",0],
+  ["غَنِيٌّ بِ","富于……",0],
+  ["مَعْدُودٌ","屈指可数的",0],
+  ["بُطُولَةٌ جـ بُطُولاَتٌ","英雄气概，英雄行为；锦标（赛）",0],
+  ["نَسَمَةٌ جـ نَسَمَاتٌ","人（口）；气息",0],
+  ["نَالَ يَنَالُ نَيْلاً الشَّيْءَ","获得，赢得",0],
+  ["شَرْطٌ جـ شُرُوطٌ","条件",0],
+  ["رَشِيقٌ","苗条的，轻盈的",0],
+  ["حَيٌّ جـ أَحْيَاءٌ","街区；活着的，生物",0],
+  ["أَجْرَى يُجْرِي إِجْرَاءً (الْفَحْصَ)","进行（检查）",0],
+  ["حَثَّهُ يَحُثُّ حَثًّا عَلَى","催促，鼓动",0],
+  ["عَمَّةٌ جـ عَمَّاتٌ / أُخْتُ الأَبِ","姑，姑妈，姑母",0],
+  ["وَافِدٌ","来者，使者；来留学的",0],
+  ["أَمْسَكَ يُمْسِكُ إِمْسَاكًا بِالشَّيْءِ","握住，拿住，抓住",0],
+  ["ثَابَرَ يُثَابِرُ مُثَابَرَةً عَلَى اْلأَمْرِ","坚持，持之以恒",0],
+  ["حَكَمَ يَحْكُمُ حُكْمًا عَلَى","判断，判定，判处",0],
+  ["اِثْنَانِ م اِثْنَتَانِ","二，两个",1],
+  ["تَرْكِيبٌ جـ تَرَاكِيبُ","结构，框架",0],
+  ["مَتْجَرٌ جـ مَتَاجِرُ","商店，商场",0],
+  ["حَدٌّ جـ حُدُودٌ","边界，过境；限度，界限",0],
+  ["سَطْحٌ جـ سُطُوحٌ","表面，平面；房顶",0],
+  ["صَدَّقَهُ يُصَدِّقُ تَصْدِيقًا","相信",0],
+  ["غُرُورٌ","骄傲，自满",0],
+  ["صُدَاعٌ","头疼",0],
+  ["نِفْطٌ / بِتْرُولٌ","石油",1],
+  ["كِيلُومِتْرٌ جـ كِيلُومِتْرَاتٌ","公里",1],
+  ["حَمِيمٌ جـ أَحِمَّاءُ","亲密的，知己的",0],
+  ["قَطَفَ يَقْطِفُ قَطْفًا الثَّمَرَ أو الزَّهْرَ","采，摘",0],
+  ["تَنَاقَلَ يَتَنَاقَلُ تَنَاقُلاً الْقَوْمُ الْخَبَرَ","流传，传来传去",0],
+  ["صَيْدَلِيَّةٌ جـ صَيْدَلِيَّاتٌ","药房，药店",0],
+  ["اِسْتَطَاعَ يَسْتَطِيعُ اِسْتِطَاعَةً الأَمْرَ","能做，能够",0],
+  ["غَالِبٌ / فِي الْغَالِبِ","常常，往往，多半",0],
+  ["حَرَكَةٌ جـ حَرَكَاتٌ","运动，行动，举动，动作",1],
+  ["مَغْرُورٌ جـ مَغْرُورُونَ","骄傲的，自负的",0],
+  ["تَسْهِيلٌ جـ تَسْهِيلاَتٌ","方便，便利；特惠",0],
+  ["اِعْتَمَدَ يَعْتَمِدُ اِعْتِمَادًا عَلَى كَذَا","依靠，依赖",0],
+  ["فِكْرٌ جـ أَفْكَارٌ","思想，见解",1],
+  ["صَرَفَ يَصْرِفُ صَرْفًا فُلاَنًا عَنِ الأَمْرِ","劝阻，劝戒；使远离，妨碍",0],
+  ["مَكْتَبُ التَّسْجِيلِ","挂号处",0],
+  ["خَفَّفَ يُخَفِّفُ تَخْفِيفًا الشَّيْءَ","减轻，缓和",0],
+  ["مِيلٌ جـ أَمْيَالٌ","英里，哩",0],
+  ["مَحَبَّةٌ","爱，友爱，真情",0],
+  ["عَامَلَهُ يُعَامِلُ مُعَامَلَةً","对待，相处",0],
+  ["عَدَمُ...","不……",0],
+  ["جَوْلَةٌ جـ جَوْلاَتٌ","漫步，（转）圈，回合",0],
+  ["حَفِيدٌ جـ أَحْفَادٌ","孙子",0],
+  ["حَظِيَ يَحْظَى حُظْوَةً بِكَذَا","得到，获得",0],
+  ["تَفَرَّجَ يَتَفَرَّجُ تَفَرُّجًا عَلَى الْمُبَارَاةِ","观看",0],
+  ["بَحْثٌ جـ أَبْحَاثٌ وبُحُوثٌ","研究；论文",0],
+  ["ظَاهِرَةٌ جـ ظَوَاهِرُ","现象",0],
+  ["مُنِيَ بِكَذَا","遭受",0],
+  ["خَشِنٌ","粗糙的，粗鲁的",0],
+  ["بَاسِمٌ","微笑的人",0],
+  ["أَلْعَابُ الْقُوَى","田径运动",0],
+  ["اِرْتَبَطَ يَرْتَبِطُ اِرْتِبَاطًا بِكَذَا","与……联系，与……结合",0],
+  ["لَبِيبٌ جـ أَلِبَّاءُ","聪明的，机制的",0],
+  ["أُسْتُرَالِيَا","澳洲，澳大利亚",0],
+  ["مَوْرِدٌ جـ مَوَارِدُ","资源，财源；来源",0],
+  ["مَدْعُوٌّ جـ مَدْعُوُّونَ م مَدْعُوَّةٌ","应邀者，客人",0],
+  ["شَرَحَ يَشْرَحُ شَرْحًا الْكَلاَمَ","解释",0],
+  ["صَحَفِيٌّ جـ صَحَفِيُّونَ م صَحَفِيَّةٌ / صِحَافِيٌّ","新闻的；新闻工作者",0],
+  ["عَلَى تَرْتِيبِ...","按……排列",0],
+  ["فَرِحَ يَفْرَحُ فَرَحًا","高兴，愉快",0],
+  ["مَوْهَبَةٌ جـ مَوَاهِبُ","天赋，天才，天资",0],
+  ["اِسْتَغْرَقَ يَسْتَغْرِقُ اِسْتِغْرَاقًا الْوَقْتَ","占用时间，历时",0],
+  ["سَابِقًا","过去，以前，以往",0],
+  ["إِرَادَةٌ","意志，愿望，意愿",0],
+  ["مَبْدَأٌ جـ مَبَادِئُ","原则",0],
+  ["أَصْلٌ جـ أُصُولٌ","根，根本，根源",0],
+  ["حَسَّنَ يُحَسِّنُ تَحْسِينًا الشَّيْءَ","改善，改进",0],
+  ["فِلَسْطِينُ","巴勒斯坦",0],
+  ["نَسَبَهُ يَنْسُبُ نَسَبًا ونِسْبَةً إِلَى","归于，归咎于",0],
+  ["كَلاَمٌ","话，话语",0],
+  ["عَزْمٌ","决心",0],
+  ["مُتَعَدِّدٌ","众多的，大量的",0],
+  ["سَابَقَ يُسَابِقُ مُسَابَقَةً وسِبَاقًا فُلاَنًا","与某人比赛",0],
+  ["أَصْغَى يُصْغِي إِصْغَاءً إِلَى","倾听",0],
+  ["طَبْعٌ جـ طِبَاعٌ","个性，本性",0],
+  ["كَتَمَ يَكْتُمُ كَتْمًا وكِتْمَانًا الشَّيْءَ","隐瞒，隐匿，保守（秘密）",0],
+  ["دَوَّنَ يُدَوِّنُ تَدْوِينًا الشَّيْءَ","登记，记录，记载",0],
+  ["اِمْتَحَنَ يَمْتَحِنُ اِمْتِحَانًا فُلاَنًا","考试，测验",0],
+  ["رَشَّحَهُ يُرَشِّحُ تَرْشِيحًا لِكَذَا أو إِلَيْهِ","推荐，提名，推举",0],
+  ["اِسْتَضَافَهُ يَسْتَضِيفُ اِسْتِضَافَةً","申办；要求招待",0],
+  ["قِيمَةٌ جـ قِيَمٌ","价值",0],
+  ["أَحْمَقُ م حَمْقَاءُ جـ حُمْقٌ","愚昧的，笨的",0],
+  ["أَمَانَةٌ","忠诚，忠实；寄存物",0],
+  ["أَضْعَفَ يُضْعِفُ إِضْعَافًا الشَّيْءَ","削弱，使变弱",0],
+  ["اِمْتَدَّ يَمْتَدُّ اِمْتِدَادًا مِنْ... إِلَى","延伸到，扩展到，扩大到",0],
+  ["جُزُرُ قَمَرَ","科摩罗群岛",0],
+  ["غَايَةٌ جـ غَايَاتٌ","目的，终点，极点",1],
+  ["شُرْطِيٌّ جـ رِجَالُ الشُّرْطَةِ","警察",0],
+  ["صَاحَ يَصِيحُ صِيَاحًا","叫喊",0],
+  ["اَلْخَلِيجُ الْعَرَبِيُّ / اَلْخَلِيجُ الْفَارِسِيُّ","阿拉伯湾 / 波斯湾",0],
+  ["شَقَاءٌ","痛苦，苦难",0],
+  ["تَأَسَّسَ يَتَأَسَّسُ تَأَسُّسًا","成立，建立，建成",0],
+  ["تَقْلِيدٌ جـ تَقَالِيدُ","传统，习惯",0],
+  ["نِسَائِيٌّ","妇科的，妇女的",0],
+  ["أَدْرَكَ يُدْرِكُ إِدْرَاكًا اْلأَمْرَ","感到，认识到；追赶",0],
+  ["مَنْزِلَةٌ جـ مَنَازِلُ","地位，身份",0],
+  ["أَشْبَهَهُ يُشْبِهُ إِشْبَاهًا","像，似",0],
+  ["نَصَحَ يَنْصَحُ نُصْحًا فُلاَنًا أَوْ لَهُ","劝说，忠告",0],
+  ["قَاتَلَ يُقَاتِلُ مُقَاتَلَةً وَقِتَالاً","交锋、厮杀、战斗",0],
+  ["أَهَمِّيَّةٌ","重要性",0],
+  ["سَاحِلِيٌّ م سَاحِلِيَّةٌ","海滨的，沿海的",0],
+  ["فَخْمٌ","豪华的，雄伟的",0],
+  ["تَضَامَنَ يَتَضَامَنُ تَضَامُنًا الْقَوْمُ","团结",0],
+  ["فَاتحٌ","浅色的，淡色的",0],
+  ["اِشْتَهَى يَشْتَهِي اِشْتِهَاءً الشَّيْءَ","想往，渴望",0],
+  ["مِسْكِينٌ جـ مَسَاكِينُ","可怜的，不幸的",0],
+  ["فِي غَايَةِ...","极为……，十分",0],
+  ["مُزْدَهِرٌ","兴旺的，繁荣的",0],
+  ["ضَمِيرٌ جـ ضَمَائِرُ","良心，天良；人称代词",0],
+  ["كَادَ يَكَادُ كَوْدًا ومَكَادًا","几乎，差点儿",0],
+  ["أَهْدَى يُهْدِي إِهْدَاءً شَيْئًا لِفُلاَنٍ أو إِلَيْهِ","赠送",0],
+  ["صَافَحَهُ يُصَافِحُ مُصَافَحَةً","握手",0],
+  ["ضَلَّ يَضِلُّ ضَلاَلاً وَضَلاَلَةً الطَّرِيقَ وَعَنِ الطَّرِيقِ","迷路",0],
+  ["مَصِيرٌ جـ مَصَايِرُ","命运，结局",0],
+  ["مُخْلِصٌ جـ مُخْلِصُونَ م مُخْلِصَةٌ","忠实的，忠诚的",1],
+  ["تَسَلَّى يَتَسَلَّى تَسَلِّيًا","消遣，娱乐",0],
+  ["آسَفَهُ يُؤْسِفُ إِيسَافًا الأَمْرُ","令人遗憾，使人难过",0],
+  ["أَوْ","还是（选择连词）",0],
+  ["بَهَرَ يَبْهَرُ بَهْرًا النَّظَرَ","耀眼，使人眼花缭乱",0],
+  ["لَفَتَ يَلْفِتُ لَفْتًا فُلاَنًا أو نَظَرَهُ إِلَى كَذَا...","引起（某人）注意……",0],
+  ["عَلَى وَشْكِ كَذَا","快要……，几乎要……",0],
+  ["اِحْتَوَى يَحْتَوِي اِحْتِوَاءً عَلَى","包括，包含",0],
+  ["طَمِعَ يَطْمَعُ طَمَعًا وطَمَاعًا فِيهِ","贪婪，妄想，垂涎",0],
+  ["نَمَا يَنْمُو نُمُوًّا الشَّيْءُ","生长，发育；发展",1],
+  ["طَيْرٌ جـ طُيُورٌ","鸟",0],
+  ["مُعَيَّنٌ","特定的，指定的，确定的",0],
+  ["قَدَّرَ يُقَدِّرُ تَقْدِيرًا الأَمْرَ","估计，评价，赞赏",0],
+  ["شَحَذَ يَشْحَذُ شَحْذًا","磨练，磨砺；磨（刀）",0],
+  ["مَلَكَ يَمْلِكُ مُلْكًا الشَّيْءَ","占有，掌握，控制",0],
+  ["تَحْلِيلٌ جـ تَحَالِيلُ","化验，分析（报告）",0],
+  ["هَمٌّ جـ هُمُومٌ","心思，忧虑；意向",0],
+  ["خَاطَبَهُ يُخَاطِبُ مُخَاطَبَةً","与……对话，与……交谈",0],
+  ["سَرَّاءٌ","幸运，幸福，安乐",0],
+  ["بَرَكَةٌ جـ بَرَكَاتٌ","吉祥，祝福",0],
+  ["نَقْدٌ جـ نُقُودٌ","钱，现金",0],
+  ["بِدَهْشَةٍ","惊讶，惊异",0],
+  ["اِسْتَعَدَّ يَسْتَعِدُّ اِسْتِعْدَادًا لِكَذَا","准备，预备",1],
+  ["هَرَمٌ جـ أَهْرَامٌ","金字塔",0],
+  ["أَشْرَقَتْ تُشْرِقُ إِشْرَاقًا الشَّمْسُ","日出",0],
+  ["خِطَابٌ جـ خِطَابَاتٌ","书信，演说，讲话",1],
+  ["مَدًى","程度，限度，范围",0],
+  ["أَعْطَى يُعْطِي إِعْطَاءً فُلاَنٌ الشَّيْءَ","给予，给",0],
+  ["كَافَحَهُ يُكَافِحُ مُكَافَحَةً وَكِفَاحًا","与之斗争，反对，奋斗",0],
+  ["حَمِيدٌ","可嘉的，值得赞颂的",0],
+  ["قَبَّلَهُ يُقَبِّلُ تَقْبِيلاً","亲吻，接吻",0],
+  ["مُسْرِعٌ","快的，快速的",0],
+  ["اَلسُّودَانُ","苏丹",0],
+  ["تُرْكِيٌّ جـ أَتْرَاكٌ","土耳其人；土耳其的",0],
+  ["شُفِيَ يُشْفَى شِفَاءًا مِنْ مَرْضِهِ","痊愈，康复",1],
+  ["رَقَّى يُرَقِّي تَرْقِيَةً فُلاَنًا","提高，提拔，使升华",0],
+  ["جَامِعَةٌ شَامِلَةٌ","综合大学",0],
+  ["فِينِيقِيٌّ","腓尼基的，腓尼基",0],
+  ["خَبِيثٌ جـ خُبَثَاءُ","坏的，邪恶的；恶性的",0],
+  ["مَوَدَّةٌ","友好，友谊，好感",0],
+  ["نَازِلٌ جـ نَازِلُونَ وَنُزَّالٌ","客人，下榻的人；下来的，下降的",0],
+  ["تَجْرِبَةٌ جـ تَجَارِبُ","试验，尝试，经验",0],
+  ["أَهُّلَهُ يُؤَهِّلُ تَأْهِيلاً لِلأَمْرِ","造就，使有资格",0],
+  ["أَلِفْبَاءٌ","字母表，拼音",0],
+  ["تَمَشَّى يَتَمَشَّى تَمَشِّيًا الرَّجُلُ","散步",0],
+  ["أَسَاسِيٌّ","基本的，根本的，主要的",0],
+  ["قُدْرَةٌ / مَقْدِرَةٌ / مَقْدُورٌ","能力",0],
+  ["إِلاَّ","除去，除外（除外工具词）",0],
+  ["مُتَرَامِيَةُ الأَطْرَافِ","幅员辽阔的",0],
+  ["سَعَى يَسْعَى سَعْيًا إِلَى أو وَرَاءَ","致力于……，为……而努力",0],
+  ["اِنْبَغَى يَنْبَغِي اِنْبِغَاءً لَهُ أَنْ يَفْعَلَ كَذَا","他应该……，他应当……",0],
+  ["عَوَّدَ يُعَوِّدُ تَعْوِيدًا فُلاَنًا كَذَا","使某人习惯某事",0],
+  ["أَلَمٌ جـ آلاَمٌ","痛，疼痛，痛苦",0],
+  ["ضَمِنَ يَضْمَنُ ضَمَانًا الشَّيْءَ أَوْ بِهِ","保证，担保，保障",0],
+  ["مَرِيضٌ جـ مَرْضَى","病人，病号",0],
+  ["وُلِدَ وِلاَدَةً","出生，诞生",1],
+  ["نَاقَشَ يُنَاقِشُ مُنَاقَشَةً وَنِقَاشًا مَعَهُ مَسْأَلَةً أَوْ فِي مَسْأَلَةٍ","讨论，辩论",0],
+  ["فَضَّ يَفُضُّ فَضًّا الشَّيْءَ","拆开，解开",0],
+  ["حَسَبَ كَذَا / بِحَسَبِ كَذَا / عَلَى حَسَبِ كَذَا","根据，按照",0],
+  ["مَنَحَهُ يَمْنَحُ مَنْحًا الشَّيْءَ","给予，给；授予（学位，官衔）",0],
+  ["اِنْصَرَفَ يَنْصَرِفُ اِنْصِرَافًا إِلَى","离去，走开",0],
+  ["قَفَزَ يَقْفِزُ قَفْزًا","跳跃，跳起",0],
+  ["سَوَّقَ يُسَوِّقُ تَسْوِيقًا الشَّيْءَ","推销，营销，市场化",0],
+  ["تُونِسُ","突尼斯",0],
+  ["وَاقِعِيٌّ","现实的，实际的",0],
+  ["مُعَلِّمٌ جـ مُعَلِّمُونَ","老师，师傅",0],
+  ["حَقِيرٌ","下贱的，卑贱的",0],
+  ["تَامٌّ","完全的，圆满的",0],
+  ["أَشَارَ يُشِيرُ إِشَارَةٌ إِلَى كَذَا","指示，指出",0],
+  ["أَدَّى يُؤَدِّي تَأْدِيَةً وَأَدَاءً الْوَاجِبَ أَوْ غَيْرَهُ","完成，尽（职），履行",1],
+  ["فَعَلَ يَفْعَلُ فِعْلاً / عَمِلَ","做，干，行事，行动",0],
+  ["تَلَقَّى يَتَلَقَّى تَلَقِّيًا مِنْهُ الشَّيْءَ","收到，接到",1],
+  ["مَيْدَانٌ جـ مَيَادِينُ","广场；领域，范畴",0],
+  ["فَاتَتْه تَفُوتُ فَوْتًا وفَوَاتًا الْفُرْصَةُ","错过机会，失去良机",0],
+  ["اَلْمَغْرِبُ","摩洛哥",0],
+  ["اَلْقُرْآنُ","古兰经",1],
+  ["أَهَمُّ","更主要的，比较重要的",0],
+  ["سُلْحَفَاةٌ جـ سَلاَحِفُ","乌龟",0],
+  ["اِخْتَرَعَ يَخْتَرِعُ اِخْتِرَاعًا الشَّيْءَ","发明，创造",0],
+  ["اِسْتَعْمَلَ يَسْتَعْمِلُ اِسْتِعْمَالاً الشَّيْءَ / اِسْتَخْدَمَهُ","使用，运用",1],
+  ["اِطْمَأَنَّ يَطْمَئِنُّ اِطْمِئْنَانًا وَطُمَأْنِينَةً","安心，放心",0],
+  ["غَرَضٌ جـ أَغْرَاضٌ","目的，目标",1],
+  ["كَفَى يَكْفِي كِفَايَةً الشَّيْءُ","够用，足够",0],
+  ["لاَفِتَةٌ جـ لاَفِتَاتٌ","广告牌，标语牌，招牌",0],
+  ["قَارَّةٌ جـ قَارَّاتٌ","洲，大陆",0],
+  ["قَاسٍ م قَاسِيَةٌ","（食物）老的；冷酷的，严酷的；残忍的",0],
+  ["بَعَثَ يَبْعَثُ بَعْثًا فُلاَنًا","派遣",0],
+  ["جَيْبٌ جـ جُيُوبٌ","口袋，袋子",0],
+  ["بَارِيسُ","巴黎",0],
+  ["بَرٌّ","陆地",0],
+  ["حَكِيمٌ","哲人；明智的，英明的",0],
+  ["هَدَّمَهُ يُهَدِّمُ تَهْدِيمًا","破坏，毁坏",0],
+  ["مُعْجَمٌ جـ مَعَاجِمُ / قَامُوسٌ جـ قَوَامِيسُ","词典",0],
+  ["مُتَوَاصِلٌ","连续的，继续的",0],
+  ["ظَلاَمٌ","黑暗",0],
+  ["مَاضٍ ( اَلْمَاضِي ) م مَاضِيَةٌ","过去的，从前的；锋利的",1],
+  ["بَرُزَ يَبْرُزُ بَرَازَةً الرَّجُلُ","杰出，出众",0],
+  ["بِدُونِ... / دُونَ...","不……，没有……",0],
+  ["مَسِيحِيٌّ جـ مَسِيحِيُّونَ","基督教徒",0],
+  ["عَمَلِيَّةٌ جـ عَمَلِيَّاتٌ","手术；行动，动作；工序，过程，程序",0],
+  ["صَفَّى يُصَفِّي تَصْفِيَةً الشَّيْءَ","澄清，过滤，提炼；清除",0],
+  ["بَوْلٌ","尿",0],
+  ["وَطَنِيٌّ م وَطَنِيَّةٌ","民族的，全国的，本国的，爱国的",1],
+  ["اِعْتَقَدَ يَعْتَقِدُ اِعْتِقَادًا اْلأَمْرَ","相信，觉得，认为",1],
+  ["خَشِيَ يَخْشَى خَشْيًا وَخَشْيَةً كَذَا","害怕，惧怕，担心",1],
+  ["عَلَى عَجَلٍ أو بِعَجَلَةٍ أو في عَجَلَةٍ","匆忙地，急速地，迅速地",0],
+  ["لُؤْلُؤٌ جـ لآلِئُ الْوَاحِدَةُ لُؤْلُؤَةٌ","珍珠",0],
+  ["فَضَاءٌ","太空；空地，空间",0],
+  ["بِرَازٌ","大便",0],
+  ["خَفِيفُ الدَّمِ / خَفِيفُ الظِّلِّ","活泼的，风趣的",0],
+  ["فَزِعَ يَفْزَعُ فَزَعًا","吃惊，恐惧",0],
+  ["لَجْنَةٌ جـ لِجَانٌ","委员会",0],
+  ["شَاطِرٌ","聪明的，敏捷的",0],
+  ["حُكُومَةٌ جـ حُكُومَاتٌ","政府",0],
+  ["عَاقِلٌ","智能的，有头脑的，理智的",0],
+  ["اَلأُرْدُنُّ","约旦",1],
+  ["شِعَارٌ جـ أَشْعِرَةٌ وشُعُرٌ","标语，口号",0],
+  ["حَكَمٌ جـ حُكَّامٌ","裁判",0],
+  ["مُتَسَاوٍ م مُتَسَاوِيَةٌ","相等的，等值的",0],
+  ["مُلاَئِمٌ","合适的，适当的，相当的",0],
+  ["أَظْهَرَ يُظْهِرُ إِظْهَارًا الشَّيْءَ","显示，表现",0],
+  ["كَرَمٌ","慷慨，大方，宽宏大量",0],
+  ["أَثَّرَ يُؤَثِّرُ تَأْثِيرًا فِي أو عَلَى","影响",0],
+  ["اَلإِمَارَاتُ الْعَرَبِيَّةُ الْمُتَّحِدَةُ","阿拉伯联合酋长国",0],
+  ["رُبَّمَا","也许，或许，说不定，可能",1],
+  ["أَغْلَقَ يُغْلِقُ إِغْلاَقًا الْبَابَ أو غَيْرَهُ","关，关闭",0],
+  ["أُمْنِيَّةٌ جـ أَمَانٍ","希望，愿望",0],
+  ["زَالَ يَزُولُ زَوَالاً","消失",0],
+  ["اِعْتَرَفَ يَعْتَرِفُ اِعْتِرَافًا بِكَذَا","承认，招供",0],
+  ["أَخْرَجَ يُخْرِجُ إِخْرَاجًا الشَّيْءَ","拿出，取出，赶出",0],
+  ["مُقْبِلٌ م مُقْبِلَةٌ","下次的，将要到来的，未来的",0],
+  ["سَاكِنٌ","安静的，静止的",0],
+  ["أَثْمَنُ","最昂贵的，更昂贵的；最值钱的，更值钱的",0],
+  ["جَدَّ يَجِدُّ جِدًّا","认真，努力",0],
+  ["لِيبِيَا","利比亚",0],
+  ["حَقِيقِيٌّ","真实的，现实的",0],
+  ["طَبِيبٌ جـ أَطِبَّاءُ / دُكْتُورٌ جـ دَكَاتِرَةٌ","医生，医师",0],
+  ["طَارَ يَطِيرُ طَيْرًا وطَيَرَانًا","飞，飞翔",0],
+  ["إِسْتِرَاتِيجِيٌّ","战略的",0],
+  ["بَرْدٌ / بُرُودٌ / بُرُودَةٌ","冷，寒冷",1],
+  ["صَامِتٌ","沉默的，不作声的",0],
+  ["سَخِرَ يَسْخَرُ سَخَرًا مِنْهُ","嘲笑，挖苦，讥讽",0],
+  ["رَبَّى يُرَبِّي تَرْبِيَةً الْوَلَدَ","培养，培育，抚育（孩子）",1],
+  ["وَجَّهَهُ يُوَجِّهُ تَوْجِيهًا إِلَى أو نَحْوَ","使……朝向；向……提出",0],
+  ["تَابِعٌ لِ...","隶属于",0],
+  ["بِمُنَاسَبَةِ...","值……之际",0],
+  ["حَدَثَ يَحْدُثُ حُدُوثًا اْلأَمْرُ","发生",1],
+  ["تَمَهَّلَ يَتَمَهَّلُ تَمَهُّلاً فِي الْعَمَلِ","慢慢，从容",0],
+  ["سَعَادَةٌ","幸福",0],
+  ["كُفْءٌ جـ أَكْفَاءٌ","能胜任的，有才干的；人才",0],
+  ["نَهْرُ دِجْلَةَ","底格里斯河",0],
+  ["اِلْتَحَقَ يَلْتَحِقُ اِلْتِحَاقًا بِ","加入，参加",0],
+  ["نَظَّمَ يُنَظِّمُ تَنْظِيمًا الشَّيْءَ","组织，安排，整理，调整",0],
+  ["أَصْلِيٌّ","根本的，原来的",0],
+  ["مَا (لَمْ)... إِلاَّ... حَتَّى...","刚……就……",0],
+  ["وَصَفَ يَصِفُ وَصْفًا الطَّبِيبُ وَصْفَةً لِلْمَرِيضِ","开药方",0],
+  ["تَحَقَّقَ يَتَحَقَّقُ تَحَقُّقًا اْلأَمْرُ","实现，得到证实",0],
+  ["شَخَّصَ يُشَخِّصُ تَشْخِيصًا الْمَرِيضَ","诊断，鉴别；甄别",0],
+  ["مُبَارَكٌ / مَبْرُوكٌ","有福的，吉祥的，可喜可贺的；恭喜恭喜",0],
+  ["بِذْلَةٌ رَسْمِيَّةٌ / بَدْلَةٌ رَسْمِيَّةٌ","一套衣服，一身正装",0],
+  ["اَلْمُحِيطُ الأَطْلَسِيُّ / اَلْمُحِيطُ الأَطْلَنْطِيُّ","大西洋",0],
+  ["أَسْبِيرِينْ","阿司匹林",0],
+  ["وَافَقَهُ يُوَافِقُ مُوَافَقَةً عَلَى","同意，赞成，批准",0],
+  ["فِرْعَوْنِيٌّ م فِرْعَوْنِيَّةٌ","法老的",0],
+  ["تَغَيُّرٌ جـ تَغَيُّرَاتٌ","变化，变更，变动，变迁",0],
+  ["مِنَ اللاَّزِمِ أَنْ...","……是必需的",0],
+  ["سُلُوكٌ","行为，举止",0],
+  ["اِنْفَجَرَ يَنْفَجِرُ اِنْفِجَارًا الشَّيْءُ","爆发；爆炸",0],
+  ["مُصَمِّمٌ","下决心的，有决心的",0],
+  ["بَطِيءٌ م بَطِيئَةٌ","慢的，缓慢的",1],
+  ["عَلَى مَتْنِ الطَّائِرَةِ أو السَّفِينَةِ","在飞机（或船）上，乘飞机（或船）",0],
+  ["بِطَاقَةٌ جـ بِطَاقَاتٌ","卡片",0],
+  ["نَهَضَ يَنْهَضُ نَهْضًا وَنُهُوضًا","起来，奋起，复兴，振兴",0],
+  ["اَللَّجْنَةُ الأُولِمْبِيَّةُ الدُّوَلِيَّةُ","国际奥委会",0],
+  ["تَمْهِيدِيٌّ","预备的，筹备的",0],
+  ["مَجْهُولٌ","未知的，无名的",0],
+  ["مَرْمًى جـ مَرَامٍ","球门；射程；目标，目的",0],
+  ["تَوْفِيقٌ / نَجَاحٌ","成功，顺利",0],
+  ["جَلِيلٌ / عَظِيمٌ","伟大的",0],
+  ["أَمْرِيكَا","美洲；美国",1],
+  ["شَدِيدَةٌ جـ شَدَائِدُ","不幸，灾难",0],
+  ["وَفَّرَ يُوَفِّرُ تَوْفِيرًا لَهُ الشَّيْءَ","储蓄，积攒，节省",0],
+  ["نَصِيحَةٌ جـ نَصَائِحُ","忠告，劝告，嘱咐",1],
+  ["اِمْتَازَ يَمْتَازُ اِمْتِيَازًا بِهِ","具有……特性（长处，有点）",0],
+  ["زِيٌّ جـ أَزْيَاءٌ","式样；衣服，时装",0],
+  ["عِبَارَةٌ عَنْ...","意味着……，就是说……",0],
+  ["فَحَصَ يَفْحَصُ فَحْصًا الشَّيْءَ","检查，考察，检验",0],
+  ["مَرَّضَ يُمَرِّضُ تَمْرِيضًا الْمَرِيضَ","看护，护理，服侍（病人）",0],
+  ["وَصَلَ يَصِلُ وَصِلَةً الشَّيْءَ بِالشَّيْءِ / رَبَطَهُ بِهِ","连接，联系",0],
+  ["قِيَاسِيٌّ","标准的，合格的",0],
+  ["خُطَّةٌ جـ خُطَطٌ","计划，路线",1],
+  ["قَاسَ يَقِيسُ قِيَاسًا الشَّيْءَ","测量，衡量",0],
+  ["تَلْبِيَةً لِـ","应……邀请",0],
+  ["مُضْحِكٌ","可笑的，令人发笑的",0],
+  ["مَرِحٌ / فَرِحٌ","高兴地，快乐的",0],
+  ["مَعِدَةٌ جـ مَعِدٌ","胃",0],
+  ["حَمَامٌ جـ حَمَائِمُ الْوَاحِدَةُ حَمَامَةٌ","鸽子",0],
+  ["اِقْتِصَادِيٌّ","经济的",0],
+  ["تَعَامَلَ يَتَعَامَلُ تَعَامُلاً مَعَ فُلاَنٍ","交往，相处",0],
+  ["بَكَى يَبْكِي بُكَاءً","哭",0],
+  ["ذَكَرَهُ يَذْكُرُ ذِكْرًا وتَذْكَارًا","提到，想到",0],
+  ["مُسَاعِدٌ جـ مُسَاعِدُونَ م مُسَاعِدَةٌ","助手",0],
+  ["مَلأَ يَمْلأُ مَلأً اْلإِنَاءَ مَاءً أَوْ بِالْمَاءِ","灌满，盛满，填充",0],
+  ["تَعَاوَنَ يَتَعَاوَنُ تَعَاوُنًا الْقَوْمُ عَلَى الأَمْرِ","合作，互助",0],
+  ["مُتَكَلِّمٌ","说话人，发言人；第一人称",0],
+  ["دَعْهُ يَفْعَلْ","让他干吧",0],
+  ["أَجَلْ / نَعَمْ","是，是的（应答虚词）",1],
+  ["أرَى يُرِي إِرَاءَةً فُلاَنًا الشَّيْءَ","使……看见……，给……看……",0],
+  ["مُتَنَاقِضٌ جـ مُتَنَاقِضَاتٌ","矛盾物",0],
+  ["رَغْبَةٌ جـ رَغَبَاتٌ","愿望，欲望",0],
+  ["اَلْبَرِيدُ الأَلَكْتُرُونِيُّ / E-mail","电子邮件",0],
+  ["اجْتِمَاعِيٌّ جـ اجْتِمَاعِيَّةٌ","社会的",0],
+  ["مَتْنٌ جـ مُتُونٌ","背，背脊",0],
+  ["أَتْقَنَ يُتْقِنُ إِتْقَانًا الشَّيْءَ","精通，搞好",1],
+  ["تَفْصِيلٌ جـ تَفَاصِيلُ","细节，详细",0],
+  ["زِرَاعِيٌّ","农业的",0],
+  ["اَلإِنْسَانِيَّةُ","人道主义",0],
+  ["ثَمَانُونَ","八十",1],
+  ["رَدَّ عَلَيْهِ","答复，回答；还击",0],
+  ["خَرَقَ يَخْرِقُ خَرْقًا الْعَادَةَ","反常，突破；撕破，撕毁",0],
+  ["صَغُرَ يَصْغُرُ صِغْرًا","成为小的",0],
+  ["أُمَّةٌ جـ أُمَمٌ","民族",1],
+  ["أَنْسَى يُنْسِي إِنْسَاءً فُلاَنًا الشَّيْءَ","使忘记",0],
+  ["مَثَّلَهُ يُمَثِّلُ تَمْثِيلاً","代表；扮演",0],
+  ["رَاقَبَ يُرَاقِبُ مُرَاقَبَةً فُلاَنًا أو الشَّيْءَ","观察，监督",0],
+  ["ذَنْبٌ جـ ذُنُوبٌ","过失，过错",0],
+  ["عَامٌ جـ أَعْوَامٌ","年，年度",0],
+  ["طَابِعٌ جـ طَوَابِعُ","票，邮票，印记，戳；秉性",1],
+  ["مَطْبُوعٌ جـ مَطْبُوعَاتٌ","印刷品",0],
+  ["ذَاتَ يَوْمٍ","有一天",0],
+  ["غَنِيٌّ جـ أَغْنِيَاءُ م غَنِيَّةٌ","富有的，富足的；富人，财主",1],
+  ["عَلَى قَدْرِ اسْتِطَاعَتِهِ","尽他可能，尽可能地",0],
+  ["هَاوٍ ( اَلْهَاوِي ) جـ هُوَاةٌ","爱好者；业余的",0],
+  ["طَالَ يَطُولُ طُولاً الشَّيْءُ","长；变长",0],
+  ["نَطَقَ يَنْطِقُ نُطْقًا","发音，讲话",0],
+  ["شَرٌّ جـ شُرُورٌ","邪恶",0],
+  ["اِنْهَدَمَ يَنْهَدِمُ اِنْهِدَامًا الْبِنَاءُ","倒塌，被毁坏",0],
+  ["أَشْفَى يُشْفِي إِشْفَاءً / شَفَى يَشْفِي شِفَاءً اللهُ الْمَرِيضَ","使……痊愈",0],
+  ["ثَمَانِيَةَ عَشَرَ م ثَمَانِيَ عَشْرَةَ","十八",1],
+  ["مُتَنَاقِضٌ","互相矛盾的，互相对立的",0],
+  ["أَحَسَّ يُحِسُّ إِحْسَاسًا الشَّيْءَ أو بِهِ","感觉，觉得",0],
+  ["مَدَحَهُ يَمْدَحُ مَدْحًا","赞扬，颂扬",0],
+  ["فَاسِدٌ","腐烂的，腐朽的，腐败的",0],
+  ["نَتِيجَةٌ جـ نَتَائِجُ","结果，成果，后果，结局，成绩",1],
+  ["طَاقَةٌ جـ طَاقَاتٌ","能力，能量",0],
+  ["كَفٌّ جـ كُفُوفٌ","手掌（阴性）",0],
+  ["شِمَالٌ","左，左边",0],
+  ["شَرَابٌ جـ أَشْرِبَةٌ وشَرَابَاتٌ / مَشْرُوبَةٌ جـ مَشْرُوبَاتٌ","饮料，果子露；喝的",0],
+  ["فَصِيحٌ","有口才的；纯正的（语言）",0],
+  ["تَعَرَّفَ يَتَعَرَّفُ تَعَرُّفًا اِلَى فُلاَنٍ أَوْ عَلَيْهِ","认识，结识",0],
+  ["نِسْبِيًّا","相对地，比较地",0],
+  ["ذُو ( ذَا، ذِي ) جـ ذَوُونَ","具有……的；所有者，物主",0],
+  ["مُنَاخٌ / طَقْسٌ","气候",1],
+  ["بَحَثَ يَبْحَثُ بَحْثًا عَنِ الشَّيْءِ","找，寻找",0],
+  ["أَرْضَاهُ يُرْضِي إِرْضَاءً","使满意",0],
+  ["زَاوَلَ يُزَاوِلُ مُزَاوَلَةً الأَمْرَ","从事，实施",0],
+  ["هَزِيلٌ","瘦弱的",0],
+  ["رَقْمٌ قِيَاسِيٌّ","记录，创纪录的",0],
+  ["مُورِيتَانِيَا","毛里塔尼亚",0],
+  ["عَاطِفَةٌ جـ عَوَاطِفُ","感情，情绪",0],
+  ["جَبُنَ يَجْبُنُ جُبْنًا وجَبَانَةً الرَّجُلُ","胆小，害怕",0],
+  ["إِيمَانٌ","信仰",0]
+];
+
+
+/* ---------------- 数据层 ---------------- */
+function defaultState(){
+  return { version: 2, builtinVersion: 0, words: [], daily: {}, checked: {},
+           settings: {
+             read:  { newPerDay: 10, ratio: 20, a2cRatio: 50 },   // 背诵区
+             write: { newPerDay: 5,  ratio: 20, a2cRatio: 0 },    // 默写区（默认汉→阿）
+             autoTts: false, translit: false, keys: true
+           } };
+}
+let state = defaultState();
+function clampInt(v, lo, hi, dft){
+  v = parseInt(v, 10);
+  if (isNaN(v)) v = dft;
+  return Math.max(lo, Math.min(hi, v));
+}
+/** 已学过的词（背过至少一次，且今天还没背） */
+function learnedCount(){
+  const key = ymd();
+  let n = 0;
+  state.words.forEach(function(w){ if (w.reps > 0 && w.last !== key) n++; });
+  return n;
+}
+/** 按当前设置预估今天的任务量（不改变数据，用于滑块预览） */
+function estimateToday(){
+  const key = ymd();
+  const s = state.settings;
+  let forgot = 0, newAvail = 0, due = 0, other = 0;
+  state.words.forEach(function(w){
+    if (w.last === key) return;
+    if (w.forgot > 0 && !w.lv) forgot++;
+    else if (!w.last) newAvail++;
+    else if (w.next && w.next <= key) due++;
+    else other++;
+  });
+  const learned = due + other;
+  const newPick = Math.min(newAvail, s.newPerDay);
+  let sample = Math.round(learned * s.reviewRatio / 100);
+  if (s.reviewRatio > 0 && learned > 0 && sample < 1) sample = 1;
+  sample = Math.min(sample, learned);
+  const duePick = Math.min(due, sample);
+  const otherPick = Math.min(other, sample - duePick);
+  return { forgot: forgot, newPick: newPick, duePick: duePick, otherPick: otherPick,
+           sample: duePick + otherPick, learned: learned, newAvail: newAvail,
+           total: forgot + newPick + duePick + otherPick };
+}
+
+/** 新建单词对象 */
+function makeWord(ar, zh, opt){
+  opt = opt || {};
+  const w = {
+    id: uid(), w: String(ar).trim(), m: String(zh).trim(), t: opt.t || '',
+    note: opt.note || '', star: !!opt.star,
+    added: ymd(), lv: 0, last: null, next: null, reps: 0, forgot: 0
+  };
+  return w;
+}
+/** 把内置词汇表里「还没有的词」补进单词本，返回新增数量（可重复调用，幂等） */
+function seedBuiltin(){
+  const byKey = {};
+  state.words.forEach(function(w){ byKey[normalizeKey(w.w)] = true; });
+  let n = 0;
+  BUILTIN_WORDS.forEach(function(pair){
+    const k = normalizeKey(pair[0]);
+    if (byKey[k]) return;
+    state.words.push(makeWord(pair[0], pair[1], { star: pair[2] }));
+    byKey[k] = true;
+    n++;
+  });
+  return n;
+}
+
+/** 内置词表升级时刷新已有词条的文本（保留学习进度），返回被修正的条数 */
+function refreshBuiltin(){
+  const map = {};
+  BUILTIN_WORDS.forEach(function(p){ map[normalizeKey(p[0])] = p; });
+  let n = 0;
+  state.words.forEach(function(w){
+    const p = map[normalizeKey(w.w)];
+    if (!p) return;
+    if (w.m !== p[1]){ w.m = p[1]; n++; }
+    if (!!w.star !== !!p[2]) w.star = !!p[2];
+  });
+  return n;
+}
+
+/* ---------------- 进度池：每个人的背诵习惯与进度各存一个池子 ----------------
+ *  localStorage:
+ *    arabicDaily.pools.v1 = { v, named, active, list:[{id,name,createdAt,savedAt,kb,state}] }
+ *    arabicDaily.v1      = 当前启用池的 state（兼容旧版本 / 单文件回退时仍能读到数据）
+ * ------------------------------------------------------------------------- */
+const LS_POOLS = 'arabicDaily.pools.v1';
+const DEFAULT_POOL_NAME = '我的进度';
+const MAX_POOLS = 20;
+let POOLS = null;
+function poolUid(){ return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function newPoolRecord(name, st){
+  return { id: poolUid(), name: name || DEFAULT_POOL_NAME, createdAt: Date.now(), savedAt: Date.now(), kb: 0, state: st || null };
+}
+/** 读进度池结构；首次使用（或从旧版单份数据升级）时自动建第一个池 */
+function ensurePools(){
+  let obj = null;
+  try { obj = JSON.parse(localStorage.getItem(LS_POOLS) || 'null'); } catch (e){ obj = null; }
+  if (obj && Array.isArray(obj.list) && obj.list.length){
+    POOLS = obj;
+    POOLS.list = POOLS.list.filter(p => p && typeof p === 'object');
+    if (!POOLS.list.length) POOLS = null;
+  } else {
+    POOLS = null;                       // 存储里没有池子（清空数据 / 首次打开）→ 重新开始
+  }
+  if (!POOLS){
+    // 旧版单份数据迁移成第一个池（数据不丢）
+    let legacy = null;
+    try { legacy = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e){ legacy = null; }
+    const p = newPoolRecord(DEFAULT_POOL_NAME, legacy);
+    POOLS = { v: 1, named: false, active: p.id, list: [p] };
+  }
+  POOLS.list.forEach(function(p){
+    if (!p.id) p.id = poolUid();
+    if (!p.name) p.name = DEFAULT_POOL_NAME;
+    if (!p.createdAt) p.createdAt = Date.now();
+    if (p.state != null && typeof p.state !== 'object') p.state = null;
+  });
+  if (!POOLS.list.some(p => p.id === POOLS.active)) POOLS.active = POOLS.list[0].id;
+  if (POOLS.named == null) POOLS.named = true;      // 已存在多池结构 = 早就起过名了
+  return POOLS;
+}
+function savePools(){
+  if (!POOLS) return;
+  try { localStorage.setItem(LS_POOLS, JSON.stringify(POOLS)); }
+  catch (e){ toast('进度池保存失败：浏览器存储空间不足，可删掉不用的池子'); }
+}
+function activePool(){ return (POOLS && POOLS.list.filter(p => p.id === POOLS.active)[0]) || null; }
+function poolById(id){ return (POOLS && POOLS.list.filter(p => p.id === id)[0]) || null; }
+function poolStateOf(p){ return (p.id === POOLS.active) ? state : p.state; }
+function poolStatsOf(p){
+  const st = poolStateOf(p);
+  const words = (st && Array.isArray(st.words)) ? st.words : [];
+  return { words: words.length,
+           learned: words.filter(w => w.reps > 0).length,
+           days: (st && st.checked) ? Object.keys(st.checked).length : 0,
+           kb: st ? (p.kb || Math.round(JSON.stringify(st).length / 1024)) : 0 };
+}
+/** 新建池（fromState 为空 = 全新空池，会自动补内置词表） */
+function poolNew(name, fromState){
+  if (!POOLS) return null;
+  if (POOLS.list.length >= MAX_POOLS){ toast('最多 ' + MAX_POOLS + ' 个进度池，先删掉不用的吧'); return null; }
+  const p = newPoolRecord(name, fromState || null);
+  POOLS.list.push(p);
+  savePools();
+  return p;
+}
+function renamePool(id, name){
+  const p = poolById(id);
+  if (!p) return;
+  name = String(name || '').trim().slice(0, 24);
+  if (!name) return;
+  p.name = name;
+  savePools(); renderPools();
+}
+/** 切换进度池（先把当前池存好，再载入目标池） */
+function switchPool(id, silent){
+  if (!POOLS) return false;
+  const target = poolById(id);
+  if (!target) return false;
+  if (id === POOLS.active){ renderPools(); return false; }
+  const cur = activePool();
+  if (cur){ cur.state = state; cur.savedAt = Date.now(); }
+  POOLS.active = id;
+  state = normalizeState(target.state);
+  target.state = state;
+  savePools(); saveState();
+  refreshAll();
+  if (!silent) toast('已切换到进度池「' + target.name + '」· 单词 ' + state.words.length + ' 个');
+  return true;
+}
+function delPool(id){
+  if (!POOLS) return false;
+  if (POOLS.list.length <= 1){ toast('至少要保留一个进度池'); return false; }
+  const p = poolById(id);
+  if (!p) return false;
+  POOLS.list = POOLS.list.filter(x => x.id !== id);
+  if (id === POOLS.active){
+    POOLS.active = POOLS.list[0].id;
+    const np = activePool();
+    state = normalizeState(np.state);
+    np.state = state;
+  }
+  savePools(); saveState(); refreshAll();
+  toast('已删除进度池「' + p.name + '」');
+  return true;
+}
+/** 首次使用：让用户给自己的进度池起个名字（可跳过） */
+function showPoolStart(){
+  const box = $('#poolStart');
+  if (!box || !POOLS) return;
+  const inp = $('#poolNameInput');
+  if (inp){ inp.value = (activePool() && activePool().name !== DEFAULT_POOL_NAME) ? activePool().name : ''; }
+  box.hidden = false;
+  setTimeout(function(){ try { if (inp) inp.focus(); } catch (e){} }, 80);
+}
+function hidePoolStart(){
+  const box = $('#poolStart');
+  if (box) box.hidden = true;
+}
+
+function loadState(){
+  ensurePools();
+  const p = activePool();
+  let obj = p ? p.state : null;
+  if (!obj){                                     // 池里还没有数据：兼容旧版单份数据
+    try { obj = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e){ obj = null; }
+  }
+  try {
+    state = normalizeState(obj);
+  } catch (e){
+    console.warn('读取数据失败，已重置', e);
+    state = defaultState();
+  }
+  if (p) p.state = state;
+  saveState();
+}
+/** 把任意（旧版 / 导入的）state 对象规范化成当前版本结构，并补齐内置词表 */
+function normalizeState(obj){
+  let st;
+  try {
+    st = (obj && typeof obj === 'object') ? Object.assign(defaultState(), obj) : defaultState();
+  } catch (e){
+    st = defaultState();
+  }
+  state = st;
+  if (obj && typeof obj === 'object'){
+    const old = obj.settings || {};
+    const s = {
+      read:  Object.assign({}, defaultState().settings.read),
+      write: Object.assign({}, defaultState().settings.write),
+      autoTts: !!old.autoTts, translit: !!old.translit, keys: old.keys !== false
+    };
+    if (old.read || old.write){                       // 新版：两个区各自设置
+      if (old.read)  Object.assign(s.read, old.read);
+      if (old.write) Object.assign(s.write, old.write);
+    } else {                                          // 旧版：单一设置 -> 拆分到两个区
+      const np = (old.newPerDay != null) ? old.newPerDay : (old.limit != null ? old.limit : 10);
+      const rr = (old.reviewRatio != null) ? old.reviewRatio : 20;
+      const a2 = (old.a2cRatio != null) ? old.a2cRatio : 50;
+      const wr = (old.writeRatio != null) ? old.writeRatio : 50;
+      s.read  = { newPerDay: np, ratio: rr, a2cRatio: a2 };
+      s.write = { newPerDay: Math.max(1, Math.round(np * wr / 100)), ratio: rr, a2cRatio: 0 };
+    }
+    state.settings = s;
+  }
+  // 本次升级前没有「同步」这个概念：让今天的默写区任务按同步规则重排一次（已判定的记录保留）
+  const rawWriteSync = (obj && obj.settings && obj.settings.write) ? obj.settings.write.sync : undefined;
+  if (rawWriteSync === undefined){
+    const k = ymd();
+    const dz = state.daily[k];
+    if (dz && dz.zones && dz.zones.write) dz.zones.write.built = false;
+  }
+  // 本次升级前背诵区还是「一个队列混两个方向」：让今天的背诵区按阿→中 / 中→阿 重新分开（已判定的保留）
+  if (state.readSplitVersion !== 1){
+    const k = ymd();
+    const dz = state.daily[k];
+    if (dz && dz.zones){
+      if (dz.zones.read)   dz.zones.read.built = false;
+      if (dz.zones.recall) dz.zones.recall.built = false;
+    }
+    state.readSplitVersion = 1;
+  }
+  ZONES.forEach(function(z){ zoneSet(z); });
+  if (!Array.isArray(state.words)) state.words = [];
+  if (!state.checked || typeof state.checked !== 'object') state.checked = {};
+  if (!state.daily  || typeof state.daily  !== 'object') state.daily  = {};
+  // 兼容旧字段
+  state.words.forEach(w => {
+    if (w.lv == null) w.lv = 0;
+    if (w.reps == null) w.reps = 0;
+    if (w.forgot == null) w.forgot = 0;
+    if (w.ex !== undefined) delete w.ex;       // 旧版例句字段，已废弃
+    if (w.custom !== undefined) delete w.custom;
+  });
+  if (state.sent !== undefined) delete state.sent;   // 旧版例句库数据，已废弃
+  // 首次使用 / 内置词表升级：自动补齐内置词汇，并按新版本刷新词条文本
+  let added = 0, updated = 0;
+  if (state.builtinVersion !== BUILTIN_VERSION){
+    added = seedBuiltin();
+    updated = refreshBuiltin();
+    state.builtinVersion = BUILTIN_VERSION;
+  }
+  return state;
+}
+function saveState(){
+  const p = activePool();
+  let json = null;
+  try { json = JSON.stringify(state); } catch (e){ json = null; }
+  if (p && json != null){
+    p.state = state; p.savedAt = Date.now(); p.kb = Math.round(json.length / 1024);
+    savePools();
+  }
+  try { if (json != null) localStorage.setItem(LS_KEY, json); }
+  catch (e){ toast('保存失败：浏览器存储空间不足'); }
+}
+function getWord(id){ return state.words.find(w => w.id === id) || null; }
+function randSeed(){ return Math.random().toString(36).slice(2, 10); }
+
+/* ---------------- 日期任务（daily）：背诵区（阿译中 / 中译阿 两个子分区）+ 默写区 ----------------
+ *  read   = 背诵区 · 阿 → 中
+ *  recall = 背诵区 · 中 → 阿
+ *  write  = 默写区（打字）
+ *  背诵区的两个子分区共享同一份「今天的计划」（新词量 / 抽查比例 / 分配比例），
+ *  再按分配比例把当天的词切开；也可以选择「中→阿 跟练阿→中（同一批词反过来练）」。
+ * ------------------------------------------------------------------------- */
+const MAX_ATTEMPTS = 3;   // 同一个词当天最多背 3 次（没记住会立刻回到队尾重背）
+const ZONES = ['read', 'recall', 'write'];
+const ZONE_NAME = { read: '背诵·阿→中', recall: '背诵·中→阿', write: '默写区' };
+const ZONE_SHORT = { read: '阿→中', recall: '中→阿', write: '默写区' };
+const ZONE_MODE = { read: 'read', recall: 'read', write: 'write' };   // 区 -> 卡片作答形式
+const ZONE_DESC = { read: '看阿语想意思（认读）', recall: '看中文想阿语（回想）', write: '看提示打字默写' };
+const ZONE_FIXED_DIR = { read: 'a2c', recall: 'c2a' };    // 这两个分区的方向是固定的
+const ZONE_GROUP = { read: 'read', recall: 'read', write: 'write' };  // 同一组共享一份今天的计划
+const READ_GROUP = ['read', 'recall'];
+function groupOf(zone){ return ZONE_GROUP[zone] || zone; }
+function groupZones(zone){ return ZONES.filter(z => groupOf(z) === groupOf(zone)); }
+function isReadGroup(zone){ return groupOf(zone) === 'read'; }
+
+/** 取某区的设置（每日新词量 / 复习抽查比例 / 分配比例 / 是否与背诵区同步 / 中译阿是否跟练） */
+function zoneSet(zone){
+  const key = isReadGroup(zone) ? 'read' : 'write';       // 背诵区两个子分区共用一份设置
+  if (!state.settings[key] || typeof state.settings[key] !== 'object'){
+    state.settings[key] = (key === 'write')
+      ? { newPerDay: 5,  ratio: 20, a2cRatio: 0, sync: true }
+      : { newPerDay: 10, ratio: 20, a2cRatio: 50, mirror: false };
+  }
+  const z = state.settings[key];
+  z.newPerDay = clampInt(z.newPerDay, 0, 200, key === 'write' ? 5 : 10);
+  z.ratio = clampInt(z.ratio, 0, 100, 20);
+  z.a2cRatio = clampInt(z.a2cRatio, 0, 100, 50);
+  if (key === 'write' && z.sync == null) z.sync = true;   // 默写区默认跟着背诵区走
+  if (key === 'read' && z.mirror == null) z.mirror = false;
+  return z;
+}
+function ensureZoneShape(z){
+  if (!z.done || typeof z.done !== 'object') z.done = {};
+  if (!z.tries || typeof z.tries !== 'object') z.tries = {};
+  if (z.attempts && typeof z.attempts === 'object'){       // 旧字段 attempts -> tries
+    Object.keys(z.attempts).forEach(function(id){
+      if (z.tries[id] == null) z.tries[id] = z.attempts[id];
+    });
+    delete z.attempts;
+  }
+  if (!z.grade || typeof z.grade !== 'object') z.grade = {};
+  if (!z.answer || typeof z.answer !== 'object') z.answer = {};
+  if (!z.cfg || typeof z.cfg !== 'object') z.cfg = {};
+  if (!Array.isArray(z.queue)) z.queue = [];
+  // 卡片顺序（order）：当天所有卡片 + 可能的重复出现（旧版 pending/retry 里的重复项）
+  if (!Array.isArray(z.order) || !z.order.length){
+    const base = z.queue.slice();
+    const seen = {};
+    base.forEach(function(id){ seen[id] = true; });
+    (z.pending || []).concat(z.retry || []).forEach(function(id){
+      if (!seen[id]){ base.push(id); seen[id] = true; }
+    });
+    z.order = base;
+  }
+  z.queue = z.order.slice();                       // 保持 queue 与 order 一致（总量统计用）
+  if (z.pos == null) z.pos = firstUnjudgedIdx(z);
+  z.pos = Math.max(0, Math.min(z.pos, Math.max(0, z.order.length - 1)));
+  if (z.reviewing == null) z.reviewing = false;
+  if (z.built == null) z.built = false;
+  delete z.pending; delete z.retry; delete z.round;   // 旧字段不再使用
+  return z;
+}
+/** 取某区的状态对象（不触发重建） */
+function rawZone(ds, zone){
+  if (!ds.zones || typeof ds.zones !== 'object') ds.zones = {};
+  if (!ds.zones[zone]) ds.zones[zone] = newZoneObj();
+  return ensureZoneShape(ds.zones[zone]);
+}
+function newZoneObj(){
+  return { queue: [], order: [], pos: 0, done: {}, tries: {}, grade: {}, answer: {}, cfg: {},
+           dir: null, reviewing: false, comp: null, msg: '', built: false };
+}
+/** —— 导航与判定辅助 —— */
+function firstUnjudgedIdx(z, from){
+  const ord = z.order || [];
+  for (let i = (from || 0); i < ord.length; i++){ if (!z.done[ord[i]]) return i; }
+  for (let i = 0; i < Math.min(from || 0, ord.length); i++){ if (!z.done[ord[i]]) return i; }
+  return 0;
+}
+function currentIdx(z){ return Math.max(0, Math.min(z.pos || 0, Math.max(0, (z.order || []).length - 1))); }
+function currentIdOf(z){ const o = z.order || []; return o.length ? o[currentIdx(z)] : null; }
+function unjudgedIds(z){ return (z.order || []).filter(function(id){ return !z.done[id]; }); }
+function uniqueCount(z){
+  const seen = {}, arr = [];
+  (z.order || []).forEach(function(id){ if (!seen[id]){ seen[id] = true; arr.push(id); } });
+  return arr;
+}
+/** 兼容旧版单队列结构：整份迁移成「背诵区」 */
+function ensureDailyShape(ds){
+  if (!ds.zones || typeof ds.zones !== 'object'){
+    const legacy = Array.isArray(ds.queue) ? ds : null;
+    ds.zones = {};
+    if (legacy){
+      const z = newZoneObj();
+      z.queue = legacy.queue; z.order = legacy.queue.slice();
+      z.done = legacy.done || {}; z.tries = legacy.attempts || {};
+      z.grade = legacy.grade || {}; z.cfg = legacy.cfg || {};
+      z.pos = 0; z.comp = legacy.comp || null;
+      z.msg = legacy.msg || '';
+      z.built = true;                       // 旧数据已生成过，不要重建
+      ensureZoneShape(z);
+      ds.zones.read = z;
+    }
+    ['queue', 'done', 'attempts', 'grade', 'cfg', 'pending', 'retry', 'round', 'comp'].forEach(function(k){ delete ds[k]; });
+    saveState();
+  }
+  ZONES.forEach(function(z){ rawZone(ds, z); });
+  return ds;
+}
+function todayState(){
+  const k = ymd();
+  // 清理 60 天前的每日任务，避免数据无限增长
+  Object.keys(state.daily).forEach(key => {
+    if (daysBetween(parseYmd(key), new Date()) > 60) delete state.daily[key];
+  });
+  let ds = state.daily[k];
+  const needNew = !ds || !ds.seed || (!Array.isArray(ds.queue) && !ds.zones);
+  if (needNew){
+    ds = { date: k, seed: randSeed(), zones: {}, msg: '' };
+    state.daily[k] = ds;
+    saveState();
+  }
+  ensureDailyShape(ds);
+  ds.date = k;
+  return ds;                                // 两个区按需生成：谁先打开先算谁
+}
+/** 两个区都确保已生成（打卡判断、结算页用） */
+function ensureZonesBuilt(ds){
+  ds = ds || todayState();
+  ZONES.forEach(function(z){ zoneState(ds, z); });
+  return ds;
+}
+/** 取某区（必要时生成当天的题目） */
+function zoneState(ds, zone){
+  zone = zone || 'read';
+  ds = ds || todayState();
+  const z = rawZone(ds, zone);
+  if (!z.built){
+    // 已经有判定记录（例如从旧版本升级上来的当天任务）→ 保留进度，只补新词
+    const hadJudged = Object.keys(z.done || {}).length > 0;
+    buildZoneQueue(ds, zone, hadJudged);
+    z.built = true;
+    saveState();
+  }
+  return z;
+}
+/** 只读取某区，不触发重建 */
+function zoneOf(ds, zone){ ds = ds || todayState(); return rawZone(ds, zone || 'read'); }
+
+/** 某个区的组队逻辑
+ *  ① 重点词：没记住过（lv=0 且有忘记记录）—— 最高优先级
+ *  ② 新词额度：a) 今天在另一个区刚背过的词（立刻巩固）b) 从未背过的词
+ *  ③ 复习抽查：按比例从「到期 + 其他已学」里抽，先满足到期的，再随机补
+ *  keepJudged=true 时保留本区今天已判定的词与进度（滑块调整 / 重新生成时用）
+ *  背诵区的两个子分区（阿→中 / 中→阿）先算出一份共同的计划，再按分配比例切开：
+ *    · 默认「按比例分配」：分配比例 50% → 今天一半的词练阿→中，一半练中→阿（总量不变）
+ *    · 「中→阿 跟练阿→中」：阿→中 练今天的全部词，中→阿 再用同一批词反过来练（总量 ×2）
+ *  默写区若开启「与背诵区同步」，则今天的默写内容 = 背诵区两个子分区的词（去重，顺序一致）
+ */
+function buildZoneQueue(ds, zone, keepJudged){
+  const key = ds.date || ymd();
+  const z = rawZone(ds, zone);
+  const s = zoneSet(zone);
+  const done = z.done || {};
+  const gz = groupOf(zone);                            // 'read' | 'write'：计划按「组」算，与具体子分区无关
+
+  /* —— 默写区：与背诵区内容同步（背什么就默写什么） —— */
+  if (zone === 'write' && s.sync){
+    const rz = zoneState(ds, 'read');                  // 背诵区两个子分区先建好（顺序是确定性的）
+    const rv = zoneState(ds, 'recall');
+    const allIds = uniqueCount({ order: (rz.order || []).concat(rv.order || []) });
+    const judged = keepJudged && done ? uniqueCount(z).filter(id => done[id]) : [];
+    const judgedSet = {}; judged.forEach(id => judgedSet[id] = true);
+    const ids = judged.concat(allIds.filter(id => getWord(id) && !judgedSet[id] && !done[id]));
+    z.order = ids;
+    z.queue = ids.slice();
+    if (!keepJudged){ z.done = {}; z.tries = {}; z.grade = {}; z.answer = {}; z.reviewing = false; }
+    z.cfg = z.cfg || {};
+    const a2c = s.a2cRatio;
+    ids.forEach(function(id){
+      const r = mulberry32(strSeed(key + zone + 'c' + (ds.seed || '') + id));
+      z.cfg[id] = (r() * 100 < a2c ? 'a2c' : 'c2a');
+    });
+    if (ids.length >= 2 && a2c > 0 && a2c < 100){
+      if (ids.every(id => z.cfg[id] === 'a2c')) z.cfg[ids[ids.length - 1]] = 'c2a';
+      else if (ids.every(id => z.cfg[id] === 'c2a')) z.cfg[ids[0]] = 'a2c';
+    }
+    z.comp = { sync: true, from: 'read', total: ids.length, readTotal: allIds.length, a2cRatio: a2c };
+    z.msg = z.queue.length ? ''
+      : (allIds.length ? '背诵区今天的词都已经默写过了，明天再来吧 🌴'
+                       : '背诵区今天没有新任务，所以默写区也没有内容。');
+    return z;
+  }
+
+  const bForgot = [], bToday = [], bNew = [], bDue = [], bOther = [];
+  state.words.forEach(function(w){
+    if (done[w.id]) return;                            // 本区今天已判定过
+    if (w.forgot > 0 && !w.lv) bForgot.push(w);        // 没记住过 -> 最高优先级
+    else if (w.last === key) bToday.push(w);           // 今天刚在另一区背过 -> 优先巩固
+    else if (!w.last) bNew.push(w);                    // 从未背过
+    else if (w.next && w.next <= key) bDue.push(w);    // 已学 + 到期
+    else bOther.push(w);                               // 已学 + 未到期
+  });
+  // 注意：种子里用「组名」而不是分区名，保证阿→中 / 中→阿 算出来的是同一份计划
+  const rnd = tag => mulberry32(strSeed(key + gz + tag + (ds.seed || '')));
+  const forgotPick = shuffle(bForgot, rnd('f')).slice(0, 60);
+  const todayPick  = shuffle(bToday, rnd('y')).slice(0, s.newPerDay);
+  const newPick    = shuffle(bNew, rnd('n')).slice(0, Math.max(0, s.newPerDay - todayPick.length));
+  const poolSize = bDue.length + bOther.length;
+  let sampleN = Math.round(poolSize * s.ratio / 100);
+  if (s.ratio > 0 && poolSize > 0 && sampleN < 1) sampleN = 1;   // 比例很小也至少抽 1 个
+  sampleN = Math.min(sampleN, poolSize);
+  const duePick   = shuffle(bDue, rnd('d')).slice(0, sampleN);
+  const otherPick = shuffle(bOther, rnd('o')).slice(0, Math.max(0, sampleN - duePick.length));
+
+  const plan = [];
+  forgotPick.forEach(w => plan.push({ w: w, k: 'forgot' }));
+  todayPick.forEach(w => plan.push({ w: w, k: 'today' }));
+  newPick.forEach(w => plan.push({ w: w, k: 'new' }));
+  duePick.forEach(w => plan.push({ w: w, k: 'due' }));
+  otherPick.forEach(w => plan.push({ w: w, k: 'other' }));
+  const finalPlan = plan.slice(0, 250);                // 硬上限，避免任务过重
+
+  /* —— 背诵区：把今天的计划按分配比例精确切开（词序仍按优先级，与哪个子分区无关） —— */
+  const a2c = s.a2cRatio;
+  let dirMap = {};
+  let shareA = 0;
+  if (isReadGroup(zone)){
+    // 用一个与分区无关的稳定随机排名来决定谁去「阿→中」：这样 50% 就真的是各一半
+    const ranked = finalPlan.map(function(x, i){
+      return { id: x.w.id, i: i, r: mulberry32(strSeed(key + 'rdir' + (ds.seed || '') + x.w.id))() };
+    });
+    ranked.sort(function(a, b){ return (a.r - b.r) || (a.i - b.i); });
+    shareA = Math.round(finalPlan.length * a2c / 100);
+    if (finalPlan.length >= 2 && a2c > 0 && a2c < 100){
+      shareA = Math.min(finalPlan.length - 1, Math.max(1, shareA));   // 保证两个子分区当天都有内容
+    }
+    ranked.forEach(function(o, idx){ dirMap[o.id] = (idx < shareA) ? 'a2c' : 'c2a'; });
+  }
+  const a2cList = finalPlan.filter(x => dirMap[x.w.id] === 'a2c');
+  const c2aList = finalPlan.filter(x => dirMap[x.w.id] === 'c2a');
+  let mine;
+  const mirror = !!(isReadGroup(zone) && s.mirror);
+  if (isReadGroup(zone)) mine = mirror ? finalPlan : (zone === 'read' ? a2cList : c2aList);   // 跟练：两边都是今天的全部词
+  else mine = finalPlan;                               // 独立抽词的默写区（未开同步时）
+
+  const judged = keepJudged && done ? uniqueCount(z).filter(id => done[id]) : [];
+  const judgedSet = {}; judged.forEach(id => judgedSet[id] = true);
+  const newPicks = mine.map(x => x.w.id).filter(id => !judgedSet[id]);
+  z.order   = judged.concat(newPicks);
+  z.queue   = z.order.slice();
+  if (!keepJudged){ z.done = {}; z.tries = {}; z.grade = {}; z.answer = {}; z.reviewing = false; }
+  z.cfg = z.cfg || {};
+  // 背诵区两个子分区的方向是固定的；其它区按当天种子在两种方向间分配
+  z.dir = ZONE_FIXED_DIR[zone] || null;
+  mine.forEach(function(x){
+    if (z.dir){ z.cfg[x.w.id] = z.dir; return; }
+    const r = mulberry32(strSeed(key + zone + 'c' + (ds.seed || '') + x.w.id));
+    z.cfg[x.w.id] = (r() * 100 < a2c ? 'a2c' : 'c2a');
+  });
+  if (!z.dir && mine.length >= 2 && a2c > 0 && a2c < 100){
+    const allA = mine.every(x => z.cfg[x.w.id] === 'a2c');
+    if (allA) z.cfg[mine[mine.length - 1].w.id] = 'c2a';
+    else if (mine.every(x => z.cfg[x.w.id] === 'c2a')) z.cfg[mine[0].w.id] = 'a2c';
+  }
+  const cnt = k => mine.filter(x => x.k === k).length;
+  z.comp = { forgot: cnt('forgot'), today: cnt('today'), new: cnt('new'), due: cnt('due'), other: cnt('other'),
+             newPerDay: s.newPerDay, ratio: s.ratio, poolSize: poolSize,
+             group: gz, planTotal: finalPlan.length,
+             shareA: mirror ? finalPlan.length : a2cList.length,
+             shareB: mirror ? finalPlan.length : c2aList.length,
+             mirror: mirror, a2cRatio: a2c };
+  if (!z.queue.length){
+    if (isReadGroup(zone)){
+      z.msg = s.mirror
+        ? '背诵区今天没有需要背的词了，明天再来吧 🌴'
+        : (zone === 'recall'
+            ? '今天的分配比例是「全部阿→中」，所以这个分区没有任务；把分配比例调一下就有了。'
+            : '今天的分配比例是「全部中→阿」，所以这个分区没有任务；把分配比例调一下就有了。');
+    } else {
+      z.msg = state.words.length ? '这个区今天没有需要背的词了，明天再来吧 🌴' : '';
+    }
+  } else z.msg = '';
+  return z;
+}
+/** 某个区的方向偏好（背诵区按分区固定，其它按当天分配） */
+function cardDir(z, id){
+  if (z.dir === 'a2c' || z.dir === 'c2a') return z.dir;
+  if (!z.cfg || typeof z.cfg !== 'object') z.cfg = {};
+  if (z.cfg[id] !== 'a2c' && z.cfg[id] !== 'c2a') z.cfg[id] = 'a2c';
+  return z.cfg[id];
+}
+/** 任务构成说明 */
+function compText(ds, zone){
+  ds = ds || todayState();
+  const z = zoneOf(ds, zone);
+  const c = z.comp;
+  if (!c || !z.queue.length) return '';
+  if (c.sync) return '今天 ' + z.queue.length + ' 个：与背诵区同步（背诵区今天背的词）';
+  const parts = [];
+  const nw = c['new'] + c.today;
+  if (nw) parts.push('新词 ' + nw + (c.today ? '（含今日巩固 ' + c.today + '）' : ''));
+  if (c.due || c.other) parts.push('复习抽查 ' + (c.due + c.other) + '（到期 ' + c.due + ' + 随机 ' + c.other + '）');
+  if (c.forgot) parts.push('重点词 ' + c.forgot);
+  let txt = '今天 ' + z.queue.length + ' 个：' + parts.join(' · ');
+  if (c.group === 'read' && c.planTotal){
+    txt += c.mirror
+      ? '（跟练阿→中今天的词）'
+      : '（背诵区今天共 ' + c.planTotal + ' 个：阿→中 ' + c.shareA + ' · 中→阿 ' + c.shareB + '）';
+  }
+  return txt;
+}
+function dayFinished(ds, zone){
+  const z = zoneOf(ds, zone);
+  return unjudgedIds(z).length === 0;
+}
+/** 两个区是否都完成（空任务的区视为完成） */
+function allFinished(ds){
+  ds = ds || todayState();
+  return ZONES.every(function(zn){
+    const z = zoneOf(ds, zn);
+    return !z.queue.length || dayFinished(ds, zn);
+  });
+}
+function zoneHasTask(ds, zone){ const z = zoneOf(ds, zone); return !!z.queue.length; }
+/** 当前卡片在当天卡片里的位置信息（第几张 / 共几张） */
+function posInfo(z){
+  const total = (z.order || []).length;
+  return { idx: currentIdx(z), total: total, human: total ? (currentIdx(z) + 1) : 0 };
+}
+function progressOf(ds, zone){
+  const z = zoneOf(ds, zone || 'read');
+  const done = z.done || {};
+  const uniq = uniqueCount(z);
+  let mem = 0, bad = 0;
+  uniq.forEach(function(id){
+    if (done[id] === 'ok') mem++;
+    else if (done[id] === 'bad') bad++;
+  });
+  const total = uniq.length;
+  const left = unjudgedIds(z).length;
+  const processed = Math.max(0, total - left);
+  return { total: total, mem: mem, bad: bad, forgot: bad, left: left, processed: processed,
+           pct: total ? Math.round(processed / total * 100) : 100 };
+}
+function remainingBad(ds, zone){
+  const z = zoneOf(ds, zone);
+  const done = z.done || {};
+  return uniqueCount(z).filter(function(id){ return done[id] === 'bad'; }).length;
+}
+
+/* ---------------- 词条拆分：词头 + 补充形式 ----------------
+   例：مُتَعَلِّمٌ جـ مُتَعَلِّمُونَ  → 词头 مُتَعَلِّمٌ / 补充 جـ مُتَعَلِّمُونَ
+       نَقَصَهُ يَنْقُصُ نَقْصًا الشَّيْءُ → 词头 نَقَصَهُ / 补充 يَنْقُصُ ...
+   （只有明确标记才拆：复数 جـ、阴性 م、动词现在式、斜杠并列形式） */
+function splitEntry(text){
+  const s = String(text || '').trim();
+  if (!s) return { head: '', tail: '' };
+  let i = s.indexOf(' جـ ');
+  if (i > 0) return { head: s.slice(0, i).trim(), tail: s.slice(i + 1).trim() };
+  const toks = s.split(/\s+/).filter(Boolean);
+  const mi = toks.indexOf('م');
+  if (mi > 0 && toks.length > mi + 1) return { head: toks.slice(0, mi).join(' '), tail: toks.slice(mi).join(' ') };
+  const bare0 = toks[0] ? toks[0].replace(/[\u064B-\u0652\u0670]/g, '') : '';
+  const bare1 = toks[1] ? toks[1].replace(/[\u064B-\u0652\u0670]/g, '') : '';
+  if (toks.length >= 3 && /^[يتنأ]/.test(bare1) && !/^اَل/.test(bare0))
+    return { head: toks[0], tail: toks.slice(1).join(' ') };
+  const si = s.indexOf(' / ');
+  if (si > 0) return { head: s.slice(0, si).trim(), tail: s.slice(si + 3).trim() };
+  return { head: s, tail: '' };
+}
+/** 卡片大字号的档位：词条越长字号越小 */
+function sizeClass(head, tail){
+  const n = (head || '').length + (tail ? tail.length * 0.35 : 0);
+  if (n <= 12) return 'sz-l';
+  if (n <= 20) return 'sz-m';
+  if (n <= 32) return 'sz-s';
+  return 'sz-xs';
+}
+
+/* ---------------- 默写判定（阿语 / 中文） ---------------- */
+/** 阿语归一化：去音符、统一字母变体、只留字母 */
+function normArabic(s){
+  return String(s || '')
+    .replace(/[\u064B-\u0652\u0670\u0640\u06D6-\u06ED]/g, '')
+    .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627')
+    .replace(/\u0649/g, '\u064A')
+    .replace(/\u0624/g, '\u0648')
+    .replace(/\u0626/g, '\u064A')
+    .replace(/\u0629/g, '\u0647')
+    .replace(/[^\u0621-\u064A]/g, '')
+    .trim();
+}
+function levDist(a, b){
+  const m = a.length, n = b.length;
+  if (!m) return n;
+  if (!n) return m;
+  let prev = new Array(n + 1), cur = new Array(n + 1);
+  for (let j = 0; j <= n; j++) prev[j] = j;
+  for (let i = 1; i <= m; i++){
+    cur[0] = i;
+    for (let j = 1; j <= n; j++){
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+    }
+    const t = prev; prev = cur; cur = t;
+  }
+  return prev[n];
+}
+/** 判定阿语默写：target 为标准词头 */
+function gradeArabic(input, target){
+  const a = normArabic(input), b = normArabic(target);
+  if (!a) return { r: 'empty' };
+  if (a === b) return { r: 'exact' };
+  if (b.length >= 3 && a.indexOf(b) >= 0) return { r: 'exact' };          // 多写了变位/复数，核心词对
+  if (a.length >= 3 && b.indexOf(a) >= 0) return { r: 'near' };          // 只写了词干
+  const d = levDist(a, b);
+  const ratio = d / Math.max(a.length, b.length, 1);
+  if (d <= 2 || ratio <= 0.25) return { r: 'near', d: d };
+  return { r: 'wrong' };
+}
+/** 中文归一化 */
+function normChinese(s){
+  return String(s || '')
+    .replace(/[\uFF01-\uFF5E]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[，,。.、；;：:！!？?“”"'‘’（）()「」『』《》〈〉·…—\-\s\u3000]/g, '')
+    .toLowerCase();
+}
+/** 判定中文默写（释义可能有多个义项，任一命中即算对） */
+function gradeChinese(input, meaning){
+  const a = normChinese(input);
+  if (!a) return { r: 'empty' };
+  const raw = String(meaning || '');
+  const full = normChinese(raw);
+  const senses = raw.split(/[，,；;、\/\n]/).map(normChinese).filter(x => x);   // 先按原文切义项，再归一化
+  if (a === full || senses.some(s => s === a)) return { r: 'exact' };
+  if (a.length >= 2 && (full.indexOf(a) >= 0 || senses.some(s => s.indexOf(a) >= 0 && a.length >= 2)))
+    return { r: 'exact' };
+  const sim = (x, y) => {                              // 字符重合度
+    const A = new Set(x), B = new Set(y);
+    let inter = 0;
+    A.forEach(c => { if (B.has(c)) inter++; });
+    return inter / Math.max(A.size, 1);
+  };
+  const cands = senses.concat([full]);
+  if (Math.min.apply(null, cands.map(s => levDist(a, s))) <= 1) return { r: 'near' };   // 差一个字
+  const best = Math.max.apply(null, cands.map(s => sim(a, s)));
+  if (best >= 0.6) return { r: 'near' };
+  return { r: 'wrong' };
+}
+/** 按方向判定默写 */
+function gradeTyping(dir, input, w){
+  return dir === 'c2a' ? gradeArabic(input, splitEntry(w.w).head) : gradeChinese(input, w.m);
+}
+/** 阿拉伯语屏幕键盘（无阿语输入法也能默写） */
+const AR_KEYS = ['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج',
+                 'ش','س','ي','ب','ل','ا','ت','ن','م','ك',
+                 'ظ','ط','ذ','د','ز','ر','و','ة','ء','ى',
+                 'أ','إ','آ','ؤ','ئ'];
+function keyboardHtml(){
+  return '<div class="akb" id="akb" hidden>' +
+    AR_KEYS.map(k => '<button type="button" class="akb-k" data-k="' + k + '">' + k + '</button>').join('') +
+    '<button type="button" class="akb-k akb-wide" data-k=" ">空格</button>' +
+    '<button type="button" class="akb-k akb-wide" data-k="⌫">⌫ 删除</button>' +
+    '</div>';
+}
+
+/* ---------------- 语音朗读 ---------------- */
+function speak(text){
+  if (!text || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(String(text));
+    u.lang = 'ar-SA';
+    u.rate = 0.82;
+    const voices = window.speechSynthesis.getVoices() || [];
+    const v = voices.find(x => /^ar/i.test(x.lang)) || voices.find(x => /arabic/i.test(x.name));
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+  } catch (e){ /* 忽略 */ }
+}
+
+/* ---------------- 导入解析 ---------------- */
+function normalizeKey(s){ return String(s || '').trim().replace(/[\u064B-\u0652\u0670\u0640]/g, ''); }
+function splitLine(line){
+  line = String(line).replace(/\r/g, '');
+  let sep = null;
+  if (line.indexOf('::') >= 0) sep = '::';
+  else if (line.indexOf('\t') >= 0) sep = '\t';
+  else if (line.indexOf('：') >= 0) sep = '：';
+  else if (line.indexOf(':') >= 0) sep = ':';
+  else if (line.indexOf('；') >= 0) sep = '；';
+  else if (line.indexOf(';') >= 0) sep = ';';
+  if (!sep){
+    // 没有分隔符：用第一个连续空格/全角空格切分
+    const m = line.match(/^(\S+)[\s\u3000]+(.+)$/);
+    if (m) return { w: m[1].trim(), m: m[2].trim(), t: '' };
+    return { w: line.trim(), m: '', t: '' };
+  }
+  const parts = line.split(sep).map(s => s.trim());
+  return { w: parts[0] || '', m: parts[1] || '', t: parts[2] || '' };
+}
+function parseWords(text){
+  const rows = [];
+  String(text || '').split(/\n/).forEach(function(line){
+    if (!line.trim()) return;
+    if (/^\s*(#|\/\/)/.test(line)) return;          // 支持 # 注释
+    let star = false;
+    if (/^\s*[*＊]\s*\S/.test(line)){ star = true; line = line.replace(/^\s*[*＊]\s*/, ''); }  // 行首 * = 标记为补充词
+    const o = splitLine(line);
+    if (!o.w) return;
+    if (!o.m) return;                                // 只写单词没释义的行忽略
+    o.star = star;
+    rows.push(o);
+  });
+  return rows;
+}
+
+/* ---------------- 滑块：背诵区的两个子分区共享一份设置；默写区各自调节 ---------------- */
+function tuneHtml(zone, sfx){
+  const isWrite = zone === 'write';
+  const isRead = isReadGroup(zone);
+  return '' +
+    '<details class="tune" id="tuneBox' + zone + sfx + '">' +
+      '<summary>' + ZONE_NAME[zone] + '：' +
+        '<span id="sumOwn' + zone + sfx + '">新词 <b id="tNew' + zone + sfx + '">10</b> · 抽查 <b id="tRatio' + zone + sfx + '">20</b>% · </span>' +
+        '分配 <b id="tA2C' + zone + sfx + '">50</b>%' +
+        '<span class="small" id="sumSync' + zone + sfx + '">（拖动滑块调整）</span></summary>' +
+      '<div class="tune-body">' +
+        (isWrite
+          ? '<div class="tune-row"><label>默写内容来源</label>' +
+              '<span class="val"><b id="tSync' + zone + sfx + '">同步背诵区</b></span></div>' +
+            '<div class="row" style="margin-bottom:4px">' +
+              '<button type="button" class="btn" id="btnSyncOn' + zone + sfx + '">🔗 同步背诵区（推荐）</button>' +
+              '<button type="button" class="btn" id="btnSyncOff' + zone + sfx + '">🎲 独立抽词</button>' +
+            '</div>' +
+            '<div class="hint" style="margin-top:2px">同步：背诵区今天背哪些词，默写区就默写哪些词（顺序一致）；' +
+              '独立：默写区按下面的滑块自己抽词。</div>'
+          : '') +
+        (isRead
+          ? '<div class="tune-row"><label>中→阿 的内容</label>' +
+              '<span class="val"><b id="tMirror' + zone + sfx + '">按比例分配</b></span></div>' +
+            '<div class="row" style="margin-bottom:4px">' +
+              '<button type="button" class="btn" id="btnMirrorOn' + zone + sfx + '">🔗 跟练阿→中（同一批词）</button>' +
+              '<button type="button" class="btn" id="btnMirrorOff' + zone + sfx + '">🎲 按比例分配</button>' +
+            '</div>' +
+            '<div class="hint" style="margin-top:2px">按比例分配：今天的词按下面的「分配比例」切开，' +
+              '阿→中 练一部分、中→阿 练另一部分（总量不变）；<br>跟练：阿→中 先练今天的全部词，' +
+              '中→阿 再用同一批词反过来练一遍（总量翻倍，更扎实）。</div>'
+          : '') +
+        '<div id="ownRows' + zone + sfx + '">' +
+          '<div class="tune-row" style="margin-top:14px"><label for="rNew' + zone + sfx + '">每天新学单词（含今天在另一个区刚背过的）</label>' +
+            '<span class="val"><b id="vNew' + zone + sfx + '">10</b> 个</span></div>' +
+          '<input type="range" id="rNew' + zone + sfx + '" min="0" max="60" step="1" value="10">' +
+          '<div class="tune-row" style="margin-top:14px"><label for="rRatio' + zone + sfx + '">复习抽查比例（从已学的 <b id="vLearned' + zone + sfx + '">0</b> 个词里随机抽）</label>' +
+            '<span class="val"><b id="vRatio' + zone + sfx + '">20</b>%</span></div>' +
+          '<input type="range" id="rRatio' + zone + sfx + '" min="0" max="100" step="5" value="20">' +
+        '</div>' +
+        '<div id="dirRows' + zone + sfx + '">' +
+          '<div class="tune-row" style="margin-top:14px"><label for="rA2C' + zone + sfx + '">' +
+            (isWrite ? '题目方向（阿译汉 : 汉译阿）' : '分配比例（阿→中 : 中→阿）') + '</label>' +
+            '<span class="val">' + (isWrite ? '阿→汉' : '阿→中') + ' <b id="vA2C' + zone + sfx + '">50</b>% · ' +
+            (isWrite ? '汉→阿' : '中→阿') + ' <b id="vC2A' + zone + sfx + '">50</b>%</span></div>' +
+          '<input type="range" id="rA2C' + zone + sfx + '" min="0" max="100" step="10" value="50">' +
+        '</div>' +
+        '<div class="tune-preview" id="tunePreview' + zone + sfx + '"></div>' +
+        '<div class="hint">松手即生效：会按新设置重新抽题（已背过的记录保留，不会重复出现）。' +
+          (isRead ? '' : '') + '</div>' +
+      '</div>' +
+    '</details>';
+}
+function initTune(){
+  // 背诵区：两个子分区的面板 + 设置页各一份，共 3 个面板共享同一份设置
+  const boxes = { 'read-r-top': '#tuneTop-read', 'recall-c-top': '#tuneTop-recall',
+                  'write-w-top': '#tuneTop-write',
+                  'read-r-set': '#tuneSet-read', 'write-w-set': '#tuneSet-write' };
+  Object.keys(boxes).forEach(function(key){
+    const el = $(boxes[key]);
+    if (!el) return;
+    const zone = key.indexOf('recall') === 0 ? 'recall' : (key.indexOf('read') === 0 ? 'read' : 'write');
+    const sfx = key.slice(zone.length);
+    el.innerHTML = tuneHtml(zone, sfx);
+    ['rNew', 'rRatio', 'rA2C'].forEach(function(base){
+      const inp = $('#' + base + zone + sfx);
+      if (!inp) return;
+      inp.addEventListener('input', function(){
+        const v = this.value;
+        if (base === 'rNew') $('#vNew' + zone + sfx).textContent = v;
+        if (base === 'rRatio') $('#vRatio' + zone + sfx).textContent = v;
+        if (base === 'rA2C'){
+          $('#vA2C' + zone + sfx).textContent = v;
+          $('#vC2A' + zone + sfx).textContent = 100 - v;
+        }
+        updateTunePreview(zone, sfx);
+      });
+      inp.addEventListener('change', function(){ applyTuneFromDom(zone, sfx); });
+    });
+    // 默写区：同步 / 独立 切换
+    const on = $('#btnSyncOn' + zone + sfx), off = $('#btnSyncOff' + zone + sfx);
+    if (on)  on.addEventListener('click', function(){ applySync(true, sfx); });
+    if (off) off.addEventListener('click', function(){ applySync(false, sfx); });
+    // 背诵区：中→阿 跟练 / 按比例分配
+    const mOn = $('#btnMirrorOn' + zone + sfx), mOff = $('#btnMirrorOff' + zone + sfx);
+    if (mOn)  mOn.addEventListener('click', function(){ applyMirror(true); });
+    if (mOff) mOff.addEventListener('click', function(){ applyMirror(false); });
+  });
+  syncTune();
+}
+function applyTuneFromDom(zone, sfx){
+  applyTune(zone, $('#rNew' + zone + sfx).value, $('#rRatio' + zone + sfx).value, $('#rA2C' + zone + sfx).value);
+}
+/** 切换默写区「与背诵区同步」并重建任务 */
+function applySync(sync, sfx){
+  const s = zoneSet('write');
+  if (!!s.sync === !!sync){ syncTune('write'); return; }
+  s.sync = !!sync;
+  saveState();
+  const ds = todayState();
+  const z = zoneOf(ds, 'write');
+  buildZoneQueue(ds, 'write', true);        // 保留本区今天已判定的进度
+  z.built = true;
+  saveState();
+  syncTune();
+  renderReview('write');
+  toast(sync ? '默写区已改为「同步背诵区」：今天背过的词就是默写内容' : '默写区已改为「独立抽词」，可在下面调词量');
+}
+function syncTune(zone){
+  ZONES.forEach(function(zn){
+    if (zone && zn !== zone) return;
+    const s = zoneSet(zn);
+    const write = zn === 'write';
+    ['-r-top', '-c-top', '-w-top', '-r-set', '-w-set', ''].forEach(function(sfx){
+      const rn = $('#rNew' + zn + sfx);
+      if (!rn) return;
+      rn.value = s.newPerDay;
+      $('#rRatio' + zn + sfx).value = s.ratio;
+      $('#rA2C' + zn + sfx).value = s.a2cRatio;
+      $('#vNew' + zn + sfx).textContent = s.newPerDay;
+      $('#vRatio' + zn + sfx).textContent = s.ratio;
+      $('#vA2C' + zn + sfx).textContent = s.a2cRatio;
+      $('#vC2A' + zn + sfx).textContent = 100 - s.a2cRatio;
+      $('#tNew' + zn + sfx).textContent = s.newPerDay;
+      $('#tRatio' + zn + sfx).textContent = s.ratio;
+      $('#tA2C' + zn + sfx).textContent = s.a2cRatio;
+      $('#vLearned' + zn + sfx).textContent = learnedCount();
+      // 默写区同步模式：隐藏「新词量 / 抽查比例」两行，突出「内容跟着背诵区」
+      const own = $('#ownRows' + zn + sfx);
+      if (own && write) own.hidden = !!s.sync;
+      // 跟练模式：分配比例失去意义 → 收起
+      const dirRows = $('#dirRows' + zn + sfx);
+      if (dirRows && !write) dirRows.hidden = !!s.mirror;
+      const sumOwn = $('#sumOwn' + zn + sfx);
+      if (sumOwn && write) sumOwn.hidden = !!s.sync;
+      const sumSync = $('#sumSync' + zn + sfx);
+      if (sumSync){
+        sumSync.textContent = write
+          ? (s.sync ? '（内容同步背诵区）' : '（拖动滑块调整本区词量）')
+          : (s.mirror ? '（中→阿 跟练阿→中）' : '（拖动滑块调整）');
+      }
+      const tSync = $('#tSync' + zn + sfx);
+      if (tSync) tSync.textContent = s.sync ? '同步背诵区' : '独立抽词';
+      const bOn = $('#btnSyncOn' + zn + sfx), bOff = $('#btnSyncOff' + zn + sfx);
+      if (bOn && bOff){
+        markToggle(bOn, !!s.sync);
+        markToggle(bOff, !s.sync);
+      }
+      const tMirror = $('#tMirror' + zn + sfx);
+      if (tMirror) tMirror.textContent = s.mirror ? '跟练阿→中' : '按比例分配';
+      const mOn = $('#btnMirrorOn' + zn + sfx), mOff = $('#btnMirrorOff' + zn + sfx);
+      if (mOn && mOff){
+        markToggle(mOn, !!s.mirror);
+        markToggle(mOff, !s.mirror);
+      }
+      updateTunePreview(zn, sfx);
+    });
+  });
+}
+/** 把「二选一」按钮里选中的那个涂成品牌色 */
+function markToggle(btn, on){
+  btn.style.background = on ? 'var(--brand)' : '';
+  btn.style.color = on ? '#fff' : '';
+  btn.style.borderColor = on ? 'var(--brand)' : '';
+}
+/** 某区的今日预估（不改变数据） */
+function estimateZone(zone){
+  const key = ymd();
+  const s = zoneSet(zone);
+
+  /* 默写区同步模式：内容 = 背诵区今天的清单（两个子分区合起来），不再按本区滑块抽词 */
+  if (zone === 'write' && s.sync){
+    const zs = (state.daily[key] && state.daily[key].zones) || {};
+    const done = (zs.write && zs.write.done) || {};
+    const seen = {};
+    let total = 0;
+    READ_GROUP.forEach(function(zn){
+      const rz = zs[zn];
+      if (!rz || !Array.isArray(rz.order)) return;
+      rz.order.forEach(function(id){
+        if (seen[id] || done[id]) return;
+        seen[id] = true;
+        if (state.words.some(w => w.id === id)) total++;
+      });
+    });
+    const a2c = Math.round(total * s.a2cRatio / 100);
+    return { sync: true, forgot: 0, today: 0, newPick: 0, duePick: 0, otherPick: 0,
+             sample: 0, poolSize: 0, todayAvail: 0, newAvail: 0,
+             total: total, a2cCount: a2c, c2aCount: total - a2c, a2cRatio: s.a2cRatio };
+  }
+
+  const done = (state.daily[key] && state.daily[key].zones && state.daily[key].zones[zone])
+    ? (state.daily[key].zones[zone].done || {}) : {};
+  let forgot = 0, today = 0, newAvail = 0, due = 0, other = 0;
+  state.words.forEach(function(w){
+    if (done[w.id]) return;
+    if (w.forgot > 0 && !w.lv) forgot++;
+    else if (w.last === key) today++;
+    else if (!w.last) newAvail++;
+    else if (w.next && w.next <= key) due++;
+    else other++;
+  });
+  const todayPick = Math.min(today, s.newPerDay);
+  const newPick = Math.min(newAvail, Math.max(0, s.newPerDay - todayPick));
+  const poolSize = due + other;
+  let sample = Math.round(poolSize * s.ratio / 100);
+  if (s.ratio > 0 && poolSize > 0 && sample < 1) sample = 1;
+  sample = Math.min(sample, poolSize);
+  const duePick = Math.min(due, sample);
+  const otherPick = Math.min(other, sample - duePick);
+  const forgotPick = Math.min(forgot, 60);
+  const planTotal = forgotPick + todayPick + newPick + duePick + otherPick;
+
+  /* 背诵区：按分配比例切成两个子分区（估算值，仅用于滑块预览） */
+  if (isReadGroup(zone)){
+    let shareA = Math.round(planTotal * s.a2cRatio / 100);
+    if (planTotal >= 2 && s.a2cRatio > 0 && s.a2cRatio < 100) shareA = Math.min(planTotal - 1, Math.max(1, shareA));
+    const shareB = planTotal - shareA;
+    const mineTotal = s.mirror ? planTotal : (zone === 'read' ? shareA : shareB);
+    const f = planTotal ? mineTotal / planTotal : 0;
+    const pick = function(n){ return Math.round(n * f); };
+    return { forgot: pick(forgotPick), today: pick(todayPick), newPick: pick(newPick),
+             duePick: pick(duePick), otherPick: pick(otherPick),
+             sample: pick(duePick) + pick(otherPick), poolSize: poolSize,
+             todayAvail: today, newAvail: newAvail,
+             total: mineTotal, planTotal: planTotal, shareA: shareA, shareB: shareB,
+             mirror: !!s.mirror, a2cRatio: s.a2cRatio,
+             a2cCount: (zone === 'read' ? mineTotal : 0), c2aCount: (zone === 'read' ? 0 : mineTotal) };
+  }
+
+  return { forgot: forgotPick, today: todayPick, newPick: newPick, duePick: duePick, otherPick: otherPick,
+           sample: duePick + otherPick, poolSize: poolSize, todayAvail: today, newAvail: newAvail,
+           total: planTotal, a2cRatio: s.a2cRatio };
+}
+function estimateToday(){ return estimateZone('read'); }   // 兼容旧调用
+function updateTunePreview(zone, sfx){
+  zone = zone || 'read';
+  sfx = sfx || '';
+  const e = estimateZone(zone);
+  const a2c = (e.a2cCount != null) ? e.a2cCount : Math.round(e.total * e.a2cRatio / 100);
+  let body;
+  if (e.sync){
+    body = '与背诵区同步（背诵区今天背什么，这里就默写什么；词量与抽查由背诵区决定）';
+  } else if (isReadGroup(zone)){
+    body = '新词 <b>' + (e.today + e.newPick) + '</b> 个' +
+      (e.today ? '（其中今天刚学过待巩固 ' + e.today + '）' : '') +
+      '（还有 ' + Math.max(0, e.newAvail - e.newPick) + ' 个未学）' +
+      ' · 复习抽查 <b>' + e.sample + '</b> 个（到期 ' + e.duePick + ' + 随机 ' + e.otherPick + '，共 ' + e.poolSize + ' 个可抽）' +
+      (e.forgot ? ' · 重点词 <b>' + e.forgot + '</b> 个' : '') +
+      '<br>背诵区今天共 <b>' + e.planTotal + '</b> 个，分配：' +
+      (e.mirror
+        ? '<b>跟练模式</b>（阿→中 ' + e.planTotal + ' 个 · 中→阿 也是这 ' + e.planTotal + ' 个）'
+        : '阿→中 <b>' + e.shareA + '</b> · 中→阿 <b>' + e.shareB + '</b>');
+  } else {
+    body = '新词 <b>' + (e.today + e.newPick) + '</b> 个' +
+      (e.today ? '（其中今天刚学过待巩固 ' + e.today + '）' : '') +
+      '（还有 ' + (e.newAvail - e.newPick) + ' 个未学）' +
+      '· 复习抽查 <b>' + e.sample + '</b> 个（到期 ' + e.duePick + ' + 随机 ' + e.otherPick + '，共 ' + e.poolSize + ' 个可抽）' +
+      (e.forgot ? ' · 重点词 <b>' + e.forgot + '</b> 个' : '');
+  }
+  const txt = '<b>' + ZONE_NAME[zone] + '</b>今天预计 <b>' + e.total + '</b> 个：' + body +
+    (e.sync && e.total === 0 ? '（背诵区今天还没生成任务时，先看背诵区）' : '') +
+    '<br>方向：阿译汉 ' + a2c + ' 个 · 汉译阿 ' + (e.total - a2c) + ' 个';
+  const el = $('#tunePreview' + zone + sfx);
+  if (el) el.innerHTML = txt;
+}
+/** 应用某区滑块：保存设置并重建「该组」今天的任务（保留已背记录与进度）
+ *  背诵区的两个子分区共享设置，改一个就一起重排 */
+function applyTune(zone, newPerDay, ratio, a2c){
+  const s = zoneSet(zone);
+  const np = clampInt(newPerDay, 0, 200, s.newPerDay);
+  const ra = clampInt(ratio, 0, 100, s.ratio);
+  const a2 = clampInt(a2c, 0, 100, s.a2cRatio);
+  const changed = (np !== s.newPerDay) || (ra !== s.ratio) || (a2 !== s.a2cRatio);
+  s.newPerDay = np; s.ratio = ra; s.a2cRatio = a2;
+  saveState();
+  const ds = todayState();
+  const before = zoneOf(ds, zone).queue.length;
+  groupZones(zone).forEach(function(zn){
+    const zz = zoneOf(ds, zn);
+    buildZoneQueue(ds, zn, true);           // 保留各自今天已判定的词与进度
+    zz.built = true;
+  });
+  saveState();
+  syncTune();
+  groupZones(zone).forEach(function(zn){ renderReview(zn); });
+  if (changed){
+    const now = zoneOf(ds, zone).queue.length;
+    toast(ZONE_NAME[zone] + '已重排：今天 ' + now + ' 个' + (now === before ? '' : '（原 ' + before + ' 个）'));
+  }
+}
+/** 切换「中→阿 跟练阿→中」：同一批词反过来再练一遍 */
+function applyMirror(on){
+  const s = zoneSet('read');
+  if (!!s.mirror === !!on){ syncTune(); return; }
+  s.mirror = !!on;
+  saveState();
+  const ds = todayState();
+  groupZones('read').forEach(function(zn){
+    const zz = zoneOf(ds, zn);
+    buildZoneQueue(ds, zn, true);
+    zz.built = true;
+  });
+  saveState();
+  syncTune();
+  groupZones('read').forEach(function(zn){ renderReview(zn); });
+  toast(on ? '中→阿 已改为「跟练阿→中」：同一批词反过来再练一遍'
+           : '中→阿 已改为「按比例分配」：今天的词按分配比例切开');
+}
+
+/* =======================================================================
+   视图：今日背诵
+   ======================================================================= */
+/** 当天某区默写成绩：n = 提交过的题数，ok = 一次写对，pct = 一次写对率 */
+function writeAccuracy(ds, zone){
+  zone = zone || 'write';
+  const z = zoneOf(ds, zone);
+  const g = z.grade || {}, cfg = z.cfg || {};
+  let n = 0, ok = 0;
+  Object.keys(g).forEach(function(id){
+    n++;
+    if (g[id] === 'exact') ok++;
+  });
+  return { n: n, ok: ok, pct: n ? Math.round(ok / n * 100) : 0 };
+}
+function renderReview(zone){
+  zone = zone || 'read';
+  syncTune(zone);
+  const area = $('#reviewArea-' + zone);
+  if (!area) return;
+  if (!state.words.length){
+    area.innerHTML = '<div class="card empty"><span class="big">📚</span>还没有单词<br>请到「单词本」粘贴导入，格式：<b>单词 : 释义</b><br><br><button class="btn primary" data-goto="v-words">去导入单词</button></div>';
+    return;
+  }
+  const ds = todayState();
+  zoneState(ds, zone);
+  const p = progressOf(ds, zone);
+  const z = zoneOf(ds, zone);
+
+  // 默写区「同步背诵区」时的引导提示（背诵区两个子分区合起来看）
+  let syncNote = '';
+  if (zone === 'write' && zoneSet('write').sync){
+    const rz = zoneOf(ds, 'read');
+    const rv = zoneOf(ds, 'recall');
+    const rzHas = !!(rz.queue.length || rv.queue.length);
+    const rzLeft = (rz.queue.length ? unjudgedIds(rz).length : 0) + (rv.queue.length ? unjudgedIds(rv).length : 0);
+    const rTotal = uniqueCount({ order: (rz.order || []).concat(rv.order || []) }).length;
+    if (rzHas && rzLeft){
+      syncNote = '<div class="sync-note warn">💡 建议先背完<b>背诵区</b>（阿→中 / 中→阿）再来默写，还剩 <b>' + rzLeft + '</b> 张' +
+        '<button class="btn" data-goto="v-read">去背诵区</button></div>';
+    } else if (rzHas){
+      syncNote = '<div class="sync-note ok">✅ 背诵区已完成：下面默写的就是今天背过的 <b>' + rTotal + '</b> 个词</div>';
+    }
+  }
+  // 中→阿 分区的提示
+  if (zone === 'recall' && zoneSet('read').mirror){
+    const rz = zoneOf(ds, 'read');
+    const left = rz.queue.length ? unjudgedIds(rz).length : 0;
+    syncNote = left
+      ? '<div class="sync-note warn">🔗 跟练模式：这里是<b>阿→中</b>今天练过的那批词（还剩 <b>' + left + '</b> 张没背完，先去那边过一遍更好记）' +
+        '<button class="btn" data-goto="v-read">去阿→中</button></div>'
+      : '<div class="sync-note ok">🔗 跟练模式：下面就是今天在<b>阿→中</b>练过的 <b>' + uniqueCount(rz).length + '</b> 个词，换一个方向再练一遍</div>';
+  }
+
+  if (!z.queue.length){
+    area.innerHTML = syncNote +
+      '<div class="card center"><span class="big-emoji">🌴</span>' +
+      '<h3 style="margin:8px 0 4px">' + ZONE_NAME[zone] + '今天没有任务</h3>' +
+      '<div class="small">' + (z.msg || '没有需要背的词了，明天再来吧。') + '</div>' +
+      '<div class="hint">可以把「' + ZONE_NAME[zone] + '」的每日新词量调大，或去「单词本」导入更多单词。</div>' +
+      '<div class="row" style="justify-content:center;margin-top:12px">' +
+      '<button class="btn" data-goto="v-words">继续导入单词</button>' +
+      '<button class="btn primary" data-goto="v-checkin">去打卡</button></div></div>';
+    renderSubTabs();
+    return;
+  }
+
+  const head = syncNote +
+    '<div class="prog-wrap">' +
+      '<div class="prog-head"><span>' + ZONE_NAME[zone] + '进度 ' + p.pct + '%</span><span>已记住 <b>' + p.mem + '</b> / ' + p.total +
+      (p.left ? '　·　剩余 ' + p.left : '') + '</span></div>' +
+      '<div class="bar"><i style="width:' + p.pct + '%"></i></div>' +
+      (compText(ds, zone) ? '<div class="comp">' + escapeHtml(compText(ds, zone)) + '</div>' : '') +
+    '</div>';
+
+  // 本区今天已全部走完（未处于「回顾」状态时显示结算页）
+  if (dayFinished(ds, zone) && !z.reviewing){
+    area.innerHTML = head + renderDone(p, zone);
+    bindReviewOnce(zone);
+    renderSubTabs();
+    return;
+  }
+
+  const id = currentIdOf(z);
+  const w = getWord(id);
+  if (!w){                                   // 词被删了：跳过这张卡
+    z.done[id] = z.done[id] || 'ok';
+    z.pos = firstUnjudgedIdx(z, currentIdx(z));
+    saveState(); return renderReview(zone);
+  }
+  const judged = !!z.done[id];
+  const verdict = z.done[id];                 // 'ok' | 'bad' | undefined
+  const isReview = !!(w.last || w.reps > 0);
+  const showT = state.settings.translit && w.t;
+  const parts = splitEntry(w.w);
+  const dir = cardDir(z, w.id);
+  const mode = ZONE_MODE[zone];
+  const pi = posInfo(z);
+  const tried = z.tries[id] || 0;
+
+  // —— 题面：阿→汉 显示阿语；汉→阿 只显示中文（不能露出阿语）
+  const front = (dir === 'a2c')
+    ? '<div class="word ar ' + sizeClass(parts.head, parts.tail) + '" dir="rtl">' + escapeHtml(parts.head) + '</div>' +
+      (parts.tail ? '<div class="wform ar" dir="rtl">' + escapeHtml(parts.tail) + '</div>' : '') +
+      '<div class="translit" ' + (showT ? '' : 'hidden') + ' id="translitLine">' + escapeHtml(w.t || '') + '</div>'
+    : '<div class="prompt-zh">' + escapeHtml(w.m) + '</div>' +
+      '<div class="prompt-tip">' + (mode === 'write' ? '请写出对应的阿拉伯语单词' : '请回忆对应的阿拉伯语单词') + (parts.tail ? '（只写词头即可）' : '') + '</div>';
+
+  // —— 答案区
+  const answerInner =
+    '<div class="ans-line"><span class="mean-label">' + (dir === 'a2c' ? '释义' : '标准答案') + '</span>' +
+      (dir === 'a2c'
+        ? '<div class="meaning">' + escapeHtml(w.m) + '</div>'
+        : '<div class="word-sm ar" dir="rtl" data-speak="' + escapeHtml(parts.head) + '">' + escapeHtml(parts.head) + '</div>' +
+          (parts.tail ? '<div class="wform ar" dir="rtl">' + escapeHtml(parts.tail) + '</div>' : '')) +
+    '</div>' +
+    (dir === 'c2a' ? '<div class="ans-line"><span class="mean-label">释义</span><div class="meaning-sm">' + escapeHtml(w.m) + '</div></div>' : '') +
+    (parts.tail ? '<div class="full-entry"><span class="mean-label">完整词条</span><span class="ar" dir="rtl">' + escapeHtml(w.w) + '</span></div>' : '');
+
+  // —— 交互区（认读 / 默写）；已判定过的卡片只读展示
+  const storedAns = z.answer ? (z.answer[id] || '') : '';
+  const storedGrade = z.grade ? z.grade[id] : null;
+  const gradeLabel = { exact: '✅ 写对了', near: '⚠️ 差一点', wrong: '❌ 写错了', empty: '👀 看了答案' };
+  const gradeCls = { exact: 'g-ok', near: 'g-near', wrong: 'g-bad', empty: 'g-none' };
+  let quizArea;
+  if (judged){
+    quizArea = '<div class="grade-box readonly">' +
+        '<div class="grade-badge ' + (verdict === 'ok' ? 'g-ok' : 'g-bad') + '">' +
+          (verdict === 'ok' ? '✅ 已判定：记住了' : '❌ 已判定：没记住') + '（回顾中，不可改判）</div>' +
+        (dir === 'c2a' && storedAns ? '<div class="grade-line">你写的是：<b class="ar" dir="rtl">' + escapeHtml(storedAns) + '</b></div>' : '') +
+        (storedGrade ? '<div class="grade-line">默写判定：' + (gradeLabel[storedGrade] || '') + '</div>' : '') +
+      '</div>';
+  } else if (mode === 'write'){
+    quizArea = '<div class="write-box" id="writeBox">' +
+        '<input type="text" id="writeInput" class="write-input' + (dir === 'c2a' ? ' ar' : '') + '" ' +
+          (dir === 'c2a' ? 'dir="rtl" lang="ar" ' : '') +
+          'value="' + escapeHtml(storedAns) + '" ' +
+          'autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ' +
+          'placeholder="' + (dir === 'c2a' ? '在这里输入阿拉伯语…' : '在这里输入中文释义…') + '">' +
+        '<div class="row" style="margin-top:10px">' +
+          '<button class="btn primary grow" id="btnSubmit">提交默写 ⏎</button>' +
+          '<button class="btn" id="btnGiveUp">不会，看答案</button>' +
+          (dir === 'c2a' ? '<button class="btn ghost" id="btnAkb">阿语键盘 ⌨️</button>' : '') +
+        '</div>' +
+        keyboardHtml() +
+        (storedGrade ? '<div class="grade-box ' + (gradeCls[storedGrade] || '') + '">' +
+            '<div class="grade-badge ' + (gradeCls[storedGrade] || '') + '">上次提交：' + (gradeLabel[storedGrade] || '') + '</div>' +
+            '<div class="small">还没判定「记住了 / 没记住」，可以重新提交或直接判定。</div></div>' : '') +
+        '<div class="grade-box" id="gradeBox" hidden></div>' +
+      '</div>';
+  } else {
+    quizArea = '<button class="btn primary reveal-btn" id="btnReveal">显示释义 👀</button>';
+  }
+
+  // —— 上一个 / 下一个 导航（到边界时按钮仍可点，会给出明确反馈）
+  const navRow =
+    '<div class="nav-row">' +
+      '<button class="btn nav-btn' + (pi.idx <= 0 ? ' edge' : '') + '" id="btnPrev">← 上一个</button>' +
+      '<span class="nav-pos">第 <b>' + pi.human + '</b> / ' + pi.total + ' 张' +
+        (judged ? '　<span class="nav-j">已判定</span>' : '') + '</span>' +
+      '<button class="btn nav-btn' + (pi.idx >= pi.total - 1 ? ' edge' : '') + '" id="btnNext">下一个 →</button>' +
+    '</div>';
+
+  area.innerHTML = head +
+    '<div class="card quiz">' +
+      '<span class="tag ' + (isReview ? 'rv' : '') + '">' +
+        (isReview ? '复习 · Lv.' + (w.lv || 0) : '新单词') +
+        (tried ? '　重背 ' + tried + ' 次' : '') +
+        '　' + (dir === 'a2c' ? '阿 → 中' : '中 → 阿') + (mode === 'write' ? '（默写）' : '') + '</span>' +
+      front +
+      quizArea +
+      '<div class="answer" id="answer">' + answerInner + '</div>' +
+      '<div class="actions" id="actions">' +
+        '<button class="btn-ok"  id="btnOk">✅ 记住了</button>' +
+        '<button class="btn-bad" id="btnBad">❌ 没记住</button>' +
+      '</div>' +
+      navRow +
+      (z.reviewing ? '<div class="row" style="justify-content:center;margin-top:8px"><button class="btn ghost" id="btnExitReview">← 返回结算页</button></div>' : '') +
+      '<div class="kbd-tip">' +
+        (mode === 'write' ? '输入后回车提交　' : '点击单词可朗读　') +
+        '<b>← →</b> 翻上/下一张　·　' +
+        (mode === 'write' ? '<b>回车</b> 提交' : '<b>空格</b> 显示释义') +
+        '　·　<b>1</b> 记住了　<b>2</b> 没记住' +
+      '</div>' +
+    '</div>';
+  // 已判定的卡片：答案直接展开、评分按钮隐藏
+  if (judged){
+    const ans = area.querySelector('#answer'), act = area.querySelector('#actions');
+    if (ans) ans.classList.add('show');
+    if (act) act.classList.add('show');
+  }
+  bindReviewOnce(zone);
+  renderSubTabs();
+}
+function renderDone(p, zone){
+  zone = zone || 'read';
+  const ds = ensureZonesBuilt(todayState());
+  const checked = !!state.checked[ds.date];
+  const stillBad = p.bad;
+  const acc = writeAccuracy(ds, zone);
+  const pending = ZONES.filter(z => z !== zone && zoneHasTask(ds, z) && !dayFinished(ds, z));
+  const otherDone = pending.length === 0;
+  const gotoFor = z => (z === 'write') ? 'v-write' : 'v-read';
+  return '<div class="card center">' +
+    '<div class="stars">★★★</div>' +
+    '<h3 style="margin:8px 0 4px">' + ZONE_NAME[zone] + '今天的任务完成！</h3>' +
+    '<div class="small">共 ' + p.total + ' 个词，记住 ' + p.mem + ' 个' +
+      (stillBad ? '，有 ' + stillBad + ' 个还没记住' : '') + '。</div>' +
+    (zone === 'write' && acc.n ? '<div class="small" style="margin-top:4px">默写 ' + acc.n + ' 题，一次写对率 ' + acc.pct + '%</div>' : '') +
+    (zone === 'write' && zoneSet('write').sync ? '<div class="small" style="margin-top:4px">今日内容与背诵区同步 🔗</div>' : '') +
+    (zone === 'recall' && zoneSet('read').mirror ? '<div class="small" style="margin-top:4px">跟练模式：与阿→中同一批词 🔗</div>' : '') +
+    '<div class="row" style="justify-content:center;margin-top:16px">' +
+      (otherDone
+        ? (checked
+            ? '<span class="pill">✅ 今天已打卡</span><button class="btn" data-goto="v-checkin">查看打卡记录</button>'
+            : '<button class="btn primary" id="btnGoCheckin" style="font-size:16px;padding:13px 26px">✅ 立即打卡</button>')
+        : pending.map(function(z){
+            return '<button class="btn primary" data-goto="' + gotoFor(z) + '" data-sub="' + z + '" style="font-size:15px;padding:12px 22px">去完成 ' + ZONE_SHORT[z] + ' →</button>';
+          }).join('')) +
+    '</div>' +
+    (stillBad ? '<div class="hint">📌 有 ' + stillBad + ' 个词「没记住」，已排到明天的任务最前面。</div>' : '') +
+    '<div class="row" style="justify-content:center;margin-top:6px">' +
+      '<button class="btn" id="btnReviewToday">🔁 回顾今天的词</button>' +
+      '<button class="btn ghost" id="btnAgain" data-zone="' + zone + '">重新背一遍</button>' +
+      '<button class="btn ghost" data-goto="v-words">导入更多单词</button>' +
+    '</div></div>';
+}
+function bindReviewOnce(zone){
+  zone = zone || 'read';
+  const area = $('#reviewArea-' + zone);
+  if (!area) return;
+  // ⚠️ 两个区会同时存在于页面上，卡片里的 id 是重复的；
+  //    一律在本区容器内查找，否则 #btnNext / #btnOk 会命中「背诵区」的元素。
+  const $z = function(sel){ return area.querySelector(sel); };
+  const ds0 = todayState();
+  const z0 = zoneOf(ds0, zone);
+  const mode = ZONE_MODE[zone];
+  const btnReveal = $z('#btnReveal');
+  const answer = $z('#answer');
+  const actions = $z('#actions');
+  const curId = currentIdOf(z0);
+
+  function reveal(){
+    if (!answer || answer.classList.contains('show')) return;
+    answer.classList.add('show');
+    if (actions) actions.classList.add('show');
+    if (btnReveal) btnReveal.style.display = 'none';
+    const w = getWord(curId);
+    if (w && state.settings.autoTts) speak(w.w);
+  }
+  if (btnReveal) btnReveal.addEventListener('click', reveal);
+  const q = $z('.quiz');
+  if (q) q.addEventListener('click', function(e){
+    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.write-box')) return;
+    reveal();
+  });
+  const wordEl = $z('.word');
+  if (wordEl) wordEl.addEventListener('click', function(){ speak(wordEl.textContent); });
+
+  /* ---------- 上一个 / 下一个 ---------- */
+  const go = function(delta){
+    const ds = todayState();
+    const z = zoneOf(ds, zone);
+    const ord = z.order || [];
+    const total = ord.length;
+    if (!total) return;
+    const cur = currentIdx(z);
+    let next = cur + delta;
+    if (next < 0){
+      toast('已经是第一张了（第 1 / ' + total + ' 张）');
+      return;
+    }
+    if (next > total - 1){
+      // 到最后一张：如果还有没判定的卡（都在前面），直接绕回去，别让翻页看起来「没反应」
+      const left = unjudgedIds(z);
+      if (left.length){
+        const back = ord.indexOf(left[0]);
+        if (back >= 0 && back !== cur){
+          z.pos = back; saveState(); renderReview(zone);
+          toast('已是最后一张，跳回前面还没判定的卡（还剩 ' + left.length + ' 张）');
+          return;
+        }
+        toast('已是最后一张（第 ' + total + ' 张）· 还有 ' + left.length + ' 张没判定，当前这张就是它');
+        return;
+      }
+      toast('已是最后一张了，本区全部判定完成 🎉');
+      return;
+    }
+    if (next === cur) return;
+    z.pos = next;
+    saveState();
+    renderReview(zone);
+  };
+  const bp = $z('#btnPrev'), bn = $z('#btnNext');
+  if (bp) bp.addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
+  if (bn) bn.addEventListener('click', function(e){ e.stopPropagation(); go(1); });
+  const bex = $z('#btnExitReview');
+  if (bex) bex.addEventListener('click', function(e){
+    e.stopPropagation();
+    const z = zoneOf(todayState(), zone);
+    z.reviewing = false; saveState(); renderReview(zone);
+  });
+
+  /* ---------- 默写模式（默写区，未判定的卡片） ---------- */
+  const input = $z('#writeInput');
+  if (mode === 'write' && input){
+    const box = $z('#gradeBox');
+    const showGrade = function(force){
+      const ds = todayState();
+      const z = zoneOf(ds, zone);
+      const id = currentIdOf(z);
+      const w = getWord(id);
+      if (!w) return;
+      const dir = cardDir(z, id);
+      const typed = input.value;
+      const g = force === 'giveup' ? { r: 'empty' } : gradeTyping(dir, typed, w);
+      z.grade = z.grade || {};
+      z.answer = z.answer || {};
+      z.grade[id] = g.r;
+      z.answer[id] = typed;
+      saveState();
+      const label = { exact: '✅ 写对了', near: '⚠️ 差一点', wrong: '❌ 写错了', empty: '👀 看看答案' }[g.r];
+      const cls = { exact: 'g-ok', near: 'g-near', wrong: 'g-bad', empty: 'g-none' }[g.r];
+      const std = dir === 'c2a' ? splitEntry(w.w).head : w.m;
+      if (box){
+        box.hidden = false;
+        box.innerHTML = '<div class="grade-badge ' + cls + '">' + label + '</div>' +
+          (typed ? '<div class="grade-line">你的答案：<b' + (dir === 'c2a' ? ' class="ar" dir="rtl"' : '') + '>' + escapeHtml(typed) + '</b></div>' : '') +
+          '<div class="grade-line">标准答案：<b' + (dir === 'c2a' ? ' class="ar" dir="rtl"' : '') + '>' + escapeHtml(std) + '</b></div>' +
+          (g.r === 'near' ? '<div class="small">拼写/用词接近，自己判断算不算对 😉</div>' : '') +
+          (g.r !== 'exact' ? '<button type="button" class="btn" id="btnRetry">✍️ 再写一次</button>' : '');
+      }
+      input.disabled = true;
+      const s = $z('#btnSubmit'); if (s) s.style.display = 'none';
+      const gv = $z('#btnGiveUp'); if (gv) gv.style.display = 'none';
+      reveal();
+      const ok = g.r === 'exact' ? $z('#btnOk') : (g.r === 'wrong' || g.r === 'empty' ? $z('#btnBad') : null);
+      if (ok) ok.classList.add('rec');
+    };
+    const submit = $z('#btnSubmit');
+    if (submit) submit.addEventListener('click', function(e){ e.stopPropagation(); showGrade(); });
+    const giveup = $z('#btnGiveUp');
+    if (giveup) giveup.addEventListener('click', function(e){ e.stopPropagation(); showGrade('giveup'); });
+    input.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){ e.preventDefault(); if (!input.disabled) showGrade(); }
+      e.stopPropagation();
+    });
+    if (box) box.addEventListener('click', function(e){
+      if (!e.target.closest('#btnRetry')) return;
+      e.stopPropagation();
+      input.disabled = false;
+      input.value = '';
+      box.hidden = true;
+      box.innerHTML = '';
+      const s2 = $z('#btnSubmit'); if (s2) s2.style.display = '';
+      const g2 = $z('#btnGiveUp'); if (g2) g2.style.display = '';
+      try { input.focus(); } catch (err){}
+    });
+    const akb = $z('#akb'), akbBtn = $z('#btnAkb');
+    if (akbBtn) akbBtn.addEventListener('click', function(e){ e.stopPropagation(); if (akb) akb.hidden = !akb.hidden; });
+    if (akb) akb.addEventListener('click', function(e){
+      const k = e.target.closest('.akb-k');
+      if (!k) return;
+      e.stopPropagation();
+      const ch = k.getAttribute('data-k');
+      if (ch === '⌫') input.value = input.value.slice(0, -1);
+      else input.value += ch;
+      input.focus();
+    });
+    setTimeout(function(){ try { input.focus(); } catch (e){} }, 60);
+  }
+
+  const btnOk = $z('#btnOk'), btnBad = $z('#btnBad');
+  if (!z0.done[curId]){
+    if (btnOk) btnOk.addEventListener('click', function(e){ e.stopPropagation(); doReview(true, zone); });
+    if (btnBad) btnBad.addEventListener('click', function(e){ e.stopPropagation(); doReview(false, zone); });
+  } else {
+    if (btnOk) btnOk.style.display = 'none';
+    if (btnBad) btnBad.style.display = 'none';
+  }
+
+  const btnGoCheckin = $z('#btnGoCheckin');
+  if (btnGoCheckin) btnGoCheckin.addEventListener('click', function(){ checkIn(); switchView('v-checkin'); });
+  const btnReviewToday = $z('#btnReviewToday');
+  if (btnReviewToday) btnReviewToday.addEventListener('click', function(e){
+    e.stopPropagation();
+    const z = zoneOf(todayState(), zone);
+    z.reviewing = true;
+    z.pos = 0;
+    saveState(); renderReview(zone);
+  });
+  const btnAgain = $z('#btnAgain');
+  if (btnAgain) btnAgain.addEventListener('click', function(){
+    const ds = todayState();
+    const gz = this.getAttribute('data-zone') || zone;
+    const z = zoneOf(ds, gz);
+    z.done = {}; z.tries = {}; z.grade = {}; z.answer = {};
+    z.pos = 0; z.reviewing = false;
+    saveState(); renderReview(gz); toast(ZONE_NAME[gz] + '的单词重新背一遍');
+  });
+}
+function currentWord(ds, zone){
+  zone = zone || 'read';
+  ds = ds || todayState();
+  const z = zoneOf(ds, zone);
+  return getWord(currentIdOf(z));
+}
+function doReview(ok, zone){
+  zone = zone || 'read';
+  const ds = todayState();
+  const z = zoneOf(ds, zone);
+  const id = currentIdOf(z);
+  const w = id ? getWord(id) : null;
+  if (!w || z.done[id]){ return; }             // 找不到或已判定：忽略
+  const today = ds.date;
+  w.last = today;
+  w.reps = (w.reps || 0) + 1;
+  if (ok){
+    w.lv = Math.min((w.lv || 0) + 1, SPACE_DAYS.length);
+    w.next = ymd(addDays(new Date(), SPACE_DAYS[w.lv - 1]));
+    z.done[w.id] = 'ok';
+  } else {
+    w.forgot = (w.forgot || 0) + 1;
+    w.lv = 0;
+    w.next = null;
+    z.tries[w.id] = (z.tries[w.id] || 0) + 1;
+    // 每天最多问 3 次：还没到次数就留作未判定，稍后会再轮到它
+    z.done[w.id] = (z.tries[w.id] >= MAX_ATTEMPTS) ? 'bad' : undefined;
+    if (z.done[w.id] === undefined) delete z.done[w.id];
+  }
+  // 光标移到下一张未判定的卡（没记住的卡本轮先跳过，稍后绕回来再问）
+  z.pos = firstUnjudgedIdx(z, currentIdx(z) + (ok ? 0 : 1));
+  z.reviewing = false;
+  saveState();
+  renderReview(zone);
+  if (dayFinished(ds, zone)){
+    const p = progressOf(ds, zone);
+    ensureZonesBuilt(ds);
+    const other = ZONES.filter(x => x !== zone);
+    const otherDone = other.every(x => !zoneHasTask(ds, x) || dayFinished(ds, x));
+    toast(ZONE_NAME[zone] + '完成' + (p.bad ? '（还有 ' + p.bad + ' 个没记住）' : '') +
+      (otherDone ? (state.checked[ds.date] ? '' : '，可以打卡了 ✅') : '，别忘了' + ZONE_NAME[other[0]]));
+  }
+}
+
+/* =======================================================================
+   视图：单词本
+   ======================================================================= */
+let wordsShown = 150;   // 单词本一次最多渲染多少条（近千词时保证流畅）
+function renderWords(){
+  const q = ($('#searchWord').value || '').trim().toLowerCase();
+  $('#wordCount').textContent = '（共 ' + state.words.length + ' 个）';
+  const list = $('#wordList');
+  const arr = state.words.filter(function(w){
+    if (!q) return true;
+    return (w.w + ' ' + w.m + ' ' + (w.t || '')).toLowerCase().indexOf(q) >= 0;
+  });
+  if (!arr.length){
+    list.innerHTML = '<div class="empty">' + (state.words.length ? '没有匹配的单词' : '单词本是空的，先在上方导入吧') + '</div>';
+    return;
+  }
+  const shown = arr.slice(0, wordsShown);
+  list.innerHTML = shown.map(function(w){
+    const lv = w.lv || 0;
+    const stars = lv ? '<span class="lvl">' + '★'.repeat(Math.min(lv, 6)) + '</span>' : '';
+    const meta = '复习 ' + (w.reps || 0) + ' 次' + (w.forgot ? ' · 忘记 ' + w.forgot + ' 次' : '') +
+                 (w.next ? ' · 下次 ' + w.next.slice(5) : '') + ' ' +
+                 (w.last === ymd() ? '<span class="pill">今日已背</span>' : '');
+    const parts = splitEntry(w.w);
+    return '<div class="witem">' +
+      '<div class="w1 ar ' + (parts.head.length > 14 ? 'w1-sm' : '') + '" dir="rtl" data-speak="' + escapeHtml(parts.head) + '">' + escapeHtml(parts.head) +
+        (parts.tail ? '<span class="w1t ar" dir="rtl">' + escapeHtml(parts.tail) + '</span>' : '') + '</div>' +
+      '<div class="w2"><div class="m">' + escapeHtml(w.m) + (w.t ? ' <span class="small">[' + escapeHtml(w.t) + ']</span>' : '') +
+      (w.star ? ' <span class="small" style="color:#b45309">＊补充词</span>' : '') + '</div>' +
+      '<div class="meta">' + stars + ' ' + meta + '</div></div>' +
+      '<button class="btn ghost" data-del="' + w.id + '" title="删除">🗑</button>' +
+    '</div>';
+  }).join('') + (arr.length > shown.length
+    ? '<div class="row" style="justify-content:center;margin-top:10px"><button class="btn" id="btnMore">显示更多（还有 ' + (arr.length - shown.length) + ' 个）</button></div>'
+    : '');
+  const more = $('#btnMore');
+  if (more) more.addEventListener('click', function(){ wordsShown += 300; renderWords(); });
+}
+function renderPreview(){
+  const rows = parseWords($('#importBox').value);
+  const box = $('#previewArea');
+  if (!rows.length){ box.innerHTML = '<div class="hint">没有识别到有效行。格式示例：<code>كتاب : 书</code></div>'; return; }
+  const existing = {};
+  state.words.forEach(w => existing[normalizeKey(w.w)] = true);
+  let dup = 0;
+  const body = rows.slice(0, 8).map(function(r){
+    const isDup = !!existing[normalizeKey(r.w)];
+    if (isDup) dup++;
+    return '<tr><td class="a ar" dir="rtl">' + escapeHtml(r.w) + '</td><td>' + escapeHtml(r.m) +
+           (r.t ? ' <span class="small">[' + escapeHtml(r.t) + ']</span>' : '') + '</td><td class="small">' + (isDup ? '更新' : '新增') + '</td></tr>';
+  }).join('');
+  box.innerHTML = '<div class="hint">识别到 <b>' + rows.length + '</b> 行（下面只显示前 8 行）</div>' +
+    '<table class="preview"><tr><th>单词</th><th>释义</th><th>状态</th></tr>' + body + '</table>';
+}
+function doImport(){
+  const raw = $('#importBox').value;
+  const trimmed = raw.trim();
+  // 粘贴整份 JSON 备份 => 恢复全部数据
+  if (trimmed.charAt(0) === '{' && trimmed.indexOf('"words"') >= 0){
+    try {
+      const obj = JSON.parse(trimmed);
+      if (!Array.isArray(obj.words)) throw new Error('缺少 words');
+      state = Object.assign(defaultState(), obj);
+      state.settings = Object.assign({ limit: 10, autoTts: false, translit: false, keys: true }, obj.settings || {});
+      if (!state.checked || typeof state.checked !== 'object') state.checked = {};
+      if (!state.daily  || typeof state.daily  !== 'object') state.daily  = {};
+      state.words.forEach(function(w, i){
+        if (!w.id) w.id = uid() + i;
+        if (w.lv == null) w.lv = 0;
+        if (w.reps == null) w.reps = 0;
+        if (w.forgot == null) w.forgot = 0;
+      });
+      saveState();
+      $('#importBox').value = ''; $('#previewArea').innerHTML = '';
+      toast('备份恢复成功：' + state.words.length + ' 个单词');
+      switchView('v-read');
+      return;
+    } catch (err){
+      toast('JSON 备份解析失败：' + err.message);
+      return;
+    }
+  }
+  const rows = parseWords(raw);
+  if (!rows.length){ toast('没有识别到有效行'); return; }
+  const byKey = {};
+  state.words.forEach(w => byKey[normalizeKey(w.w)] = w);
+  let added = 0, updated = 0;
+  rows.forEach(function(r){
+    const k = normalizeKey(r.w);
+    const old = byKey[k];
+    if (old){
+      old.m = r.m;
+      if (r.t) old.t = r.t;
+      if (r.star) old.star = true;
+      updated++;
+    } else {
+      const w = makeWord(r.w, r.m, { t: r.t, star: r.star });
+      state.words.push(w);
+      byKey[k] = w;
+      added++;
+    }
+  });
+  saveState();
+  // 新单词补充进今天两个区的任务（保留已判定记录）
+  const ds = todayState();
+  ZONES.forEach(function(zn){
+    const z = zoneOf(ds, zn);
+    z.built = false;
+    buildZoneQueue(ds, zn, true);
+    z.built = true;
+  });
+  saveState();
+  $('#importBox').value = '';
+  $('#previewArea').innerHTML = '';
+  renderWords();
+  switchView('v-read');
+  toast('导入完成：新增 ' + added + ' 个，更新 ' + updated + ' 个');
+}
+
+/* =======================================================================
+   视图：打卡
+   ======================================================================= */
+function streakOf(){
+  let s = 0, d = startOfDay();
+  if (!state.checked[ymd(d)]) d = addDays(d, -1);      // 今天还没打卡则从昨天起算
+  while (state.checked[ymd(d)]){ s++; d = addDays(d, -1); }
+  return s;
+}
+function longestStreak(){
+  const keys = Object.keys(state.checked).sort();
+  let best = 0, cur = 0, prev = null;
+  keys.forEach(function(k){
+    const d = parseYmd(k);
+    if (prev && daysBetween(prev, d) === 1) cur++; else cur = 1;
+    prev = d; if (cur > best) best = cur;
+  });
+  return best;
+}
+function totalWordsStudied(){
+  let n = 0;
+  Object.keys(state.daily).forEach(function(k){
+    const ds = state.daily[k];
+    if (!ds || !ds.zones) return;
+    ZONES.forEach(function(zn){
+      const z = ds.zones[zn];
+      if (z && z.done) Object.keys(z.done).forEach(function(id){ if (z.done[id] === 'ok') n++; });
+    });
+  });
+  return n;
+}
+/** 所有打卡记录里的默写成绩合计 */
+function writeAccumulated(){
+  let n = 0, ok = 0;
+  Object.keys(state.checked).forEach(function(k){
+    const w = state.checked[k] && state.checked[k].write;
+    if (w && w.n){ n += w.n; ok += w.ok || 0; }
+  });
+  return { n: n, ok: ok, pct: n ? Math.round(ok / n * 100) : 0 };
+}
+function checkIn(){
+  const ds = ensureZonesBuilt(todayState());
+  if (state.checked[ds.date]){ toast('今天已经打过卡啦 ✅'); return; }
+  const anyTask = ZONES.some(z => zoneHasTask(ds, z));
+  if (!anyTask){ toast('今天两个区都没有任务，无需打卡'); return; }
+  if (!allFinished(ds)){
+    const pending = ZONES.filter(z => zoneHasTask(ds, z) && !dayFinished(ds, z)).map(z => ZONE_NAME[z]);
+    toast('还没完成：' + pending.join('、') + ' 💪');
+    return;
+  }
+  const rec = { at: Date.now(), zones: {}, total: 0, mem: 0, forgot: 0, write: { n: 0, ok: 0 }, words: [] };
+  ZONES.forEach(function(zn){
+    const z = zoneOf(ds, zn);
+    const p = progressOf(ds, zn);
+    if (!z.queue.length) return;
+    const acc = zn === 'write' ? writeAccuracy(ds, zn) : { n: 0, ok: 0, pct: 0 };
+    rec.zones[zn] = { total: p.total, mem: p.mem, forgot: p.bad, write: acc };
+    rec.total += p.total; rec.mem += p.mem; rec.forgot += p.bad;
+    rec.write.n += acc.n; rec.write.ok += acc.ok;
+    z.queue.forEach(function(id){
+      const w = getWord(id);
+      if (w) rec.words.push(w.w);
+    });
+  });
+  rec.write.pct = rec.write.n ? Math.round(rec.write.ok / rec.write.n * 100) : 0;
+  state.checked[ds.date] = rec;
+  saveState();
+  toast('打卡成功！已连续 ' + streakOf() + ' 天 🎉');
+  renderCheckin();
+  ZONES.forEach(function(zn){ if (curZone() === zn) renderReview(zn); });
+}
+function renderCheckin(){
+  const ds = ensureZonesBuilt(todayState());
+  const today = ds.date;
+  const rec = state.checked[today];
+  const finished = allFinished(ds);
+  const streak = streakOf();
+  const total = Object.keys(state.checked).length;
+
+  // 各区的状态
+  const zoneRows = ZONES.map(function(zn){
+    const z = zoneOf(ds, zn);
+    const p = progressOf(ds, zn);
+    const has = !!z.queue.length;
+    const done = has && dayFinished(ds, zn);
+    const acc = zn === 'write' ? writeAccuracy(ds, zn) : null;
+    const goto = (zn === 'write') ? 'v-write' : 'v-read';
+    return '<div class="zone-row' + (done ? ' zdone' : '') + '">' +
+      '<div class="zn">' + (done ? '✅' : (has ? '⏳' : '—')) + ' ' + ZONE_NAME[zn] + '</div>' +
+      '<div class="zt">' + (has
+          ? '已记住 ' + p.mem + ' / ' + p.total + (p.left ? '（还剩 ' + p.left + '）' : '') +
+            (acc && acc.n ? ' · 默写写对 ' + acc.ok + '/' + acc.n : '')
+          : (zn === 'recall' && !zoneSet('read').mirror
+              ? '今天没有分到这个方向的词（分配比例 ' + zoneSet('read').a2cRatio + '%）'
+              : '今天没有任务（词量设为 0 或没有可背的词）')) + '</div>' +
+      (has && !done ? '<button class="btn ghost" data-goto="' + goto + '" data-sub="' + zn + '">去完成</button>' : '') +
+    '</div>';
+  }).join('');
+
+  $('#checkinCard').innerHTML =
+    '<div class="big-emoji">' + (rec ? '🎉' : (finished ? '🌤' : '📖')) + '</div>' +
+    '<h3 style="margin:8px 0 2px">' + (rec ? '今天已完成打卡' : '今天还没打卡') + '</h3>' +
+    '<div class="small">' + (rec
+        ? '打卡时间：' + fmtDate(rec.at) + '　·　共 ' + rec.total + ' 个词'
+        : (finished ? '所有分区都完成了，可以打卡啦！' : '完成后即可打卡')) + '</div>' +
+    '<div class="zone-status">' + zoneRows + '</div>' +
+    '<div style="margin-top:12px">' +
+      '<button class="btn primary" id="btnCheckinNow" style="font-size:16px;padding:13px 30px" ' +
+        (rec || !finished ? 'disabled' : '') + '>' +
+      (rec ? '✅ 今日已打卡' : '✅ 打卡') + '</button>' +
+    '</div>' +
+    (!finished && !rec ? '<div class="hint">两个区都背完（含重背没记住的词）才能打卡；把某区词量调到 0 则该区视为无任务。</div>' : '') +
+    (rec ? '<div class="hint">今日单词：' + (rec.words || []).slice(0, 12).map(escapeHtml).join('、') + ((rec.words || []).length > 12 ? ' …' : '') + '</div>' : '');
+
+  const b = $('#btnCheckinNow');
+  if (b) b.addEventListener('click', checkIn);
+
+  $('#statGrid').innerHTML =
+    '<div class="stat"><b>' + streak + '</b><span>连续打卡（天）</span></div>' +
+    '<div class="stat"><b>' + total + '</b><span>累计打卡（天）</span></div>' +
+    '<div class="stat"><b>' + state.words.length + '</b><span>单词总数</span></div>' +
+    '<div class="stat"><b>' + longestStreak() + '</b><span>最长连续</span></div>' +
+    '<div class="stat"><b>' + totalWordsStudied() + '</b><span>累计记住次数</span></div>' +
+    (function(){
+      const a = writeAccumulated();
+      return '<div class="stat"><b>' + (a.n ? a.pct + '%' : '—') + '</b><span>默写一次写对率' + (a.n ? '（' + a.n + ' 题）' : '') + '</span></div>';
+    })();
+
+  // 最近 28 天
+  const cells = [];
+  for (let i = 27; i >= 0; i--){
+    const d = addDays(startOfDay(), -i);
+    const k = ymd(d);
+    const on = !!state.checked[k];
+    cells.push('<div class="d ' + (on ? 'on' : '') + ' ' + (k === today ? 'today' : '') + '" data-day="' + k + '" title="' + k + '">' +
+      '<em>' + d.getDate() + '</em><span>' + (on ? '✓' : '') + '</span></div>');
+  }
+  $('#calGrid').innerHTML = cells.join('');
+
+  // 历史记录
+  const keys = Object.keys(state.checked).sort().reverse();
+  $('#histCount').textContent = keys.length ? '（' + keys.length + ' 天）' : '';
+  $('#histList').innerHTML = keys.length ? keys.map(function(k){
+    const r = state.checked[k];
+    return '<div class="hist-item"><div><div class="dt">' + k + '　周' + weekdayZh(parseYmd(k)) + '</div>' +
+      '<div class="mt">背诵 ' + (r.total || 0) + ' 个 · 记住 ' + (r.mem || 0) + ' 个' + (r.forgot ? ' · 重背 ' + r.forgot : '') +
+      (r.write && r.write.n ? ' · 默写 ' + r.write.n + ' 题 / 写对 ' + r.write.ok : '') +
+      (r.zones ? '　[背诵 ' + ((r.zones.read && r.zones.read.total) || 0) + ' / 默写 ' + ((r.zones.write && r.zones.write.total) || 0) + ']' : '') +
+      '</div></div>' +
+      '<span class="pill">✓ 已打卡</span></div>';
+  }).join('') : '<div class="empty">还没有打卡记录，完成今天的任务去打卡吧！</div>';
+}
+
+/* =======================================================================
+   设置
+   ======================================================================= */
+function renderPools(){
+  if (!POOLS) return;
+  const opts = POOLS.list.map(function(p){
+    return '<option value="' + p.id + '"' + (p.id === POOLS.active ? ' selected' : '') + '>' + escapeHtml(p.name) + '</option>';
+  }).join('');
+  ['#poolSel', '#poolSel2'].forEach(function(sel){
+    const el = $(sel);
+    if (!el) return;
+    el.innerHTML = opts;
+    el.value = POOLS.active;
+  });
+  const now = activePool();
+  const lbl = $('#poolNow');
+  if (lbl) lbl.textContent = '（当前：' + (now ? now.name : '—') + '　共 ' + POOLS.list.length + ' 个）';
+  const box = $('#poolList');
+  if (box) box.innerHTML = POOLS.list.map(function(p){
+    const s = poolStatsOf(p);
+    const on = p.id === POOLS.active;
+    return '<div class="plist-item' + (on ? ' on' : '') + '">' +
+      '<div class="grow"><div class="pn">' + escapeHtml(p.name) + (on ? ' <span class="nav-j">使用中</span>' : '') + '</div>' +
+      '<div class="pm">单词 ' + s.words + ' · 背过 ' + s.learned + ' · 打卡 ' + s.days + ' 天' + (s.kb ? ' · 约 ' + s.kb + ' KB' : '') + '</div></div>' +
+      (on ? '' : '<button class="btn" data-pool="' + p.id + '">切换</button>') +
+      '<button class="btn" data-poolren="' + p.id + '">改名</button>' +
+      '<button class="btn" data-poolcopy="' + p.id + '">复制</button>' +
+      '<button class="btn danger" data-pooldel="' + p.id + '">删除</button>' +
+      '</div>';
+  }).join('');
+}
+/** 切换进度池后把界面整体刷新一遍 */
+function refreshAll(){
+  const d = new Date();
+  const lbl = $('#todayLabel');
+  if (lbl) lbl.textContent = ymd(d) + ' 周' + weekdayZh(d);
+  ZONES.forEach(function(zn){ renderReview(zn); });
+  const p1 = $('#subpane-read'), p2 = $('#subpane-recall');
+  if (p1) p1.hidden = (curSub !== 'read');
+  if (p2) p2.hidden = (curSub !== 'recall');
+  $$('#subtabsRead button').forEach(b => b.classList.toggle('active', b.dataset.sub === curSub));
+  syncTune();
+  renderPools();
+  if (curView === 'v-words')   renderWords();
+  if (curView === 'v-checkin') renderCheckin();
+  if (curView === 'v-settings') renderSettings();
+}
+function renderSettings(){
+  syncTune();
+  renderPools();
+  $('#setAutoTts').checked = !!state.settings.autoTts;
+  $('#setTranslit').checked = !!state.settings.translit;
+  $('#setKeys').checked = !!state.settings.keys;
+}
+
+/* =======================================================================
+   视图切换 / 事件绑定
+   ======================================================================= */
+let curView = 'v-read';
+let curSub = 'read';                    // 背诵区当前所在的子分区：read（阿→中）/ recall（中→阿）
+function curZone(){
+  if (curView === 'v-write') return 'write';
+  if (curView === 'v-read')  return curSub;
+  return 'read';
+}
+/** 切换背诵区的子分区（阿→中 / 中→阿） */
+function switchReadSub(sub){
+  if (READ_GROUP.indexOf(sub) < 0) return;
+  curSub = sub;
+  $$('#subtabsRead button').forEach(b => b.classList.toggle('active', b.dataset.sub === sub));
+  const p1 = $('#subpane-read'), p2 = $('#subpane-recall');
+  if (p1) p1.hidden = (sub !== 'read');
+  if (p2) p2.hidden = (sub !== 'recall');
+  renderReview(sub);
+}
+/** 子分区按钮上的「还剩几个」小角标
+ *  只确保背诵区的两个子分区已生成——千万不要顺手把默写区也建出来，
+ *  否则默写区会在「背诵区还没背」的时候就定下词表，失去「背完再默写」的效果 */
+function renderSubTabs(){
+  const ds = todayState();
+  READ_GROUP.forEach(function(zn){
+    const el = $('#subCnt-' + zn);
+    if (!el) return;
+    const z = zoneState(ds, zn);
+    if (!z.queue.length){ el.textContent = ''; return; }
+    const mem = progressOf(ds, zn).mem;
+    const left = unjudgedIds(z).length;
+    el.textContent = '· ' + mem + '/' + uniqueCount(z).length + (left ? '（剩 ' + left + '）' : ' ✓');
+  });
+}
+function switchView(id){
+  curView = id;
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === id));
+  $$('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+  if (id === 'v-read'){
+    const p1 = $('#subpane-read'), p2 = $('#subpane-recall');
+    if (p1) p1.hidden = (curSub !== 'read');
+    if (p2) p2.hidden = (curSub !== 'recall');
+    $$('#subtabsRead button').forEach(b => b.classList.toggle('active', b.dataset.sub === curSub));
+    renderReview(curSub);
+  }
+  if (id === 'v-write')    renderReview('write');
+  if (id === 'v-words')    renderWords();
+  if (id === 'v-checkin')  renderCheckin();
+  if (id === 'v-settings') renderSettings();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function bindGlobal(){
+  initTune();
+  $('#tabs').addEventListener('click', function(e){
+    const b = e.target.closest('button[data-view]');
+    if (b) switchView(b.dataset.view);
+  });
+  const st = $('#subtabsRead');
+  if (st) st.addEventListener('click', function(e){
+    const b = e.target.closest('button[data-sub]');
+    if (b) switchReadSub(b.dataset.sub);
+  });
+  document.addEventListener('click', function(e){
+    const g = e.target.closest('[data-goto]');
+    if (g){
+      const sub = g.getAttribute('data-sub');
+      if (sub && READ_GROUP.indexOf(sub) >= 0) switchReadSub(sub);   // 背诵区的两个子分区
+      switchView(g.dataset.goto);
+      return;
+    }
+    const del = e.target.closest('[data-del]');
+    if (del){
+      const id = del.getAttribute('data-del');
+      const w = getWord(id);
+      if (!w) return;
+      if (confirm('删除单词「' + w.w + '」？')) {
+        state.words = state.words.filter(x => x.id !== id);
+        Object.keys(state.daily).forEach(function(k){
+          const ds = state.daily[k];
+          if (!ds) return;
+          const list = (ds.zones ? ZONES.map(function(zn){ return ds.zones[zn]; }) : [ds]);
+          list.forEach(function(z){
+            if (!z) return;
+            if (Array.isArray(z.order))   z.order   = z.order.filter(x => x !== id);
+            if (Array.isArray(z.queue))   z.queue   = z.queue.filter(x => x !== id);
+            if (z.done) delete z.done[id];
+            if (z.tries) delete z.tries[id];
+            if (z.grade) delete z.grade[id];
+            if (z.answer) delete z.answer[id];
+            if (z.cfg) delete z.cfg[id];
+            if (z.pos != null) z.pos = Math.max(0, Math.min(z.pos, Math.max(0, (z.order || []).length - 1)));
+          });
+        });
+        saveState(); renderWords(); toast('已删除');
+      }
+      return;
+    }
+    const sp = e.target.closest('[data-speak]');
+    if (sp) speak(sp.getAttribute('data-speak'));
+    const day = e.target.closest('[data-day]');
+    if (day){
+      const k = day.getAttribute('data-day');
+      const r = state.checked[k];
+      toast(r ? k + '：背诵 ' + r.total + ' 个，记住 ' + r.mem + ' 个' : k + '：未打卡');
+    }
+  });
+  // 单词本
+  $('#btnPreview').addEventListener('click', renderPreview);
+  $('#btnImport').addEventListener('click', doImport);
+  $('#btnClearBox').addEventListener('click', function(){ $('#importBox').value = ''; $('#previewArea').innerHTML = ''; });
+  $('#importBox').addEventListener('input', function(){ clearTimeout(window.__pv); window.__pv = setTimeout(renderPreview, 400); });
+  $('#searchWord').addEventListener('input', renderWords);
+  $('#btnExport').addEventListener('click', function(){
+    const data = JSON.stringify(state);
+    $('#importBox').value = data;
+    switchView('v-words');
+    toast('已把当前进度池的数据填入输入框，可复制保存；粘贴回来点「导入 / 更新」也能恢复单词');
+    try { navigator.clipboard.writeText(data); } catch (e){}
+  });
+  // ---------- 进度池 ----------
+  const onPoolSelChange = function(){ switchPool(this.value); };
+  const sel1 = $('#poolSel'), sel2 = $('#poolSel2');
+  if (sel1) sel1.addEventListener('change', onPoolSelChange);
+  if (sel2) sel2.addEventListener('change', onPoolSelChange);
+  const askPoolName = function(title, dft){
+    let v = null;
+    try { v = prompt(title, dft || ''); } catch (e){ v = null; }
+    if (v == null) return null;                      // 取消
+    v = String(v).trim().slice(0, 24);
+    return v || null;
+  };
+  const newPool = function(){
+    const name = askPoolName('新进度池的名字？（例如：小明 / 复习模式）', '进度池 ' + ((POOLS ? POOLS.list.length : 1) + 1));
+    if (!name) return;
+    const p = poolNew(name, null);
+    if (!p) return;
+    switchPool(p.id, true);
+    toast('已新建进度池「' + p.name + '」：单词本会自动补上内置 932 词，进度从零开始');
+  };
+  const bn1 = $('#btnPoolNew'), bn2 = $('#btnPoolNew2');
+  if (bn1) bn1.addEventListener('click', newPool);
+  if (bn2) bn2.addEventListener('click', newPool);
+  const bman = $('#btnPoolManage');
+  if (bman) bman.addEventListener('click', function(){ switchView('v-settings'); });
+  const bren = $('#btnPoolRename');
+  if (bren) bren.addEventListener('click', function(){
+    const p = activePool();
+    if (!p) return;
+    const name = askPoolName('给当前进度池改名：', p.name);
+    if (name) { renamePool(p.id, name); toast('已改名为「' + name + '」'); }
+  });
+  const bcopy = $('#btnPoolCopy');
+  if (bcopy) bcopy.addEventListener('click', function(){
+    const p = activePool();
+    if (!p) return;
+    const st = JSON.parse(JSON.stringify(state));    // 深拷贝，两个池子之后各走各的
+    const np = poolNew(p.name + ' 副本', st);
+    if (!np) return;
+    switchPool(np.id, true);
+    toast('已复制出一个新池子「' + np.name + '」，可以放心拿去改');
+  });
+  const bdel = $('#btnPoolDel');
+  if (bdel) bdel.addEventListener('click', function(){
+    const p = activePool();
+    if (!p) return;
+    if (POOLS.list.length <= 1){ toast('至少要保留一个进度池'); return; }
+    if (!confirm('删除进度池「' + p.name + '」？\n这个池子的单词进度、打卡记录会一起删除，不可恢复。')) return;
+    delPool(p.id);
+  });
+  const bexp = $('#btnPoolExport');
+  if (bexp) bexp.addEventListener('click', function(){
+    const data = JSON.stringify(state);
+    const box = $('#poolBox');
+    if (box) box.value = data;
+    const msg = $('#poolMsg');
+    if (msg) msg.innerHTML = '已导出当前进度池（' + Math.round(data.length / 1024) + ' KB）。复制这段内容保存好，换设备粘回来即可继续。';
+    try { navigator.clipboard.writeText(data); } catch (e){}
+    toast('已导出当前进度池');
+  });
+  const bimp = $('#btnPoolImport');
+  if (bimp) bimp.addEventListener('click', function(){
+    const box = $('#poolBox'), msg = $('#poolMsg');
+    const txt = box ? String(box.value || '').trim() : '';
+    if (!txt){ if (msg) msg.innerHTML = '先在下面粘贴进度池 JSON（或用「导出当前池」生成）。'; return; }
+    let obj = null;
+    try { obj = JSON.parse(txt); } catch (e){ obj = null; }
+    if (!obj || typeof obj !== 'object' || !Array.isArray(obj.words)){
+      if (msg) msg.innerHTML = '这段内容不是有效的进度池数据（需要有 words 字段）。';
+      toast('导入失败：格式不对');
+      return;
+    }
+    const p = poolNew('导入的进度池 ' + (POOLS.list.length + 1), obj);
+    if (!p) return;
+    switchPool(p.id, true);
+    if (msg) msg.innerHTML = '已导入为新进度池「' + p.name + '」，可以继续背了。';
+    toast('已导入为新进度池（单词 ' + state.words.length + ' 个）');
+  });
+  const bclr = $('#btnPoolClearBox');
+  if (bclr) bclr.addEventListener('click', function(){
+    const box = $('#poolBox'), msg = $('#poolMsg');
+    if (box) box.value = '';
+    if (msg) msg.innerHTML = '';
+  });
+  // 列表里的 切换 / 改名 / 复制 / 删除 按钮（事件委托）
+  const plist = $('#poolList');
+  if (plist) plist.addEventListener('click', function(e){
+    e.stopPropagation();
+    const sw = e.target.closest('[data-pool]');
+    if (sw){ switchPool(sw.getAttribute('data-pool')); return; }
+    const rn = e.target.closest('[data-poolren]');
+    if (rn){
+      const p2 = poolById(rn.getAttribute('data-poolren'));
+      if (!p2) return;
+      const name = askPoolName('给「' + p2.name + '」改名：', p2.name);
+      if (name) renamePool(p2.id, name);
+      return;
+    }
+    const cp = e.target.closest('[data-poolcopy]');
+    if (cp){
+      const p3 = poolById(cp.getAttribute('data-poolcopy'));
+      if (!p3) return;
+      const st = JSON.parse(JSON.stringify(poolStateOf(p3)));
+      const np = poolNew(p3.name + ' 副本', st);
+      if (!np) return;
+      switchPool(np.id, true);
+      toast('已复制为「' + np.name + '」');
+      return;
+    }
+    const dl = e.target.closest('[data-pooldel]');
+    if (dl){
+      const p4 = poolById(dl.getAttribute('data-pooldel'));
+      if (!p4) return;
+      if (!confirm('删除进度池「' + p4.name + '」？对应的进度与打卡记录会一起删除。')) return;
+      delPool(p4.id);
+    }
+  });
+  // 首次使用的起名字对话框
+  const sOk = $('#btnPoolStartOk');
+  if (sOk) sOk.addEventListener('click', function(){
+    const inp = $('#poolNameInput');
+    const p = activePool();
+    const name = String((inp && inp.value) || '').trim().slice(0, 24) || DEFAULT_POOL_NAME;
+    if (p) renamePool(p.id, name);
+    POOLS.named = true; savePools();
+    hidePoolStart();
+    renderPools();
+    toast('进度池「' + name + '」已就绪，开始背单词吧！');
+  });
+  const sSkip = $('#btnPoolStartSkip');
+  if (sSkip) sSkip.addEventListener('click', function(){
+    POOLS.named = true; savePools();
+    hidePoolStart();
+    renderPools();
+  });
+  // 设置
+  $('#setAutoTts').addEventListener('change', function(){ state.settings.autoTts = this.checked; saveState(); });
+  $('#setTranslit').addEventListener('change', function(){ state.settings.translit = this.checked; saveState(); renderReview(); });
+  $('#setKeys').addEventListener('change', function(){ state.settings.keys = this.checked; saveState(); renderReview(); });
+  $('#btnRebuild').addEventListener('click', function(){
+    const k = ymd();
+    const old = state.daily[k];
+    const seed = randSeed();
+    const ds = { date: k, seed: seed, zones: {}, msg: '' };
+    ZONES.forEach(function(zn){ ds.zones[zn] = { queue: [], done: {}, attempts: {}, grade: {}, cfg: {}, pending: [], retry: [], round: 0, comp: null, msg: '', built: false }; });
+    state.daily[k] = ds;
+    ZONES.forEach(function(zn){ buildZoneQueue(ds, zn); ds.zones[zn].built = true; });
+    saveState();
+    const n1 = ds.zones.read.queue.length, n2 = ds.zones.write.queue.length;
+    toast('已重新生成：背诵区 ' + n1 + ' 个 · 默写区 ' + n2 + ' 个');
+    switchView('v-read');
+  });
+  $('#btnReloadDemo').addEventListener('click', function(){
+    if (!confirm('把内置词汇表（' + BUILTIN_WORDS.length + ' 个词）中还没有的词补进单词本？\n已有的词不会被改动。')) return;
+    const n = seedBuiltin();
+    saveState(); renderWords();
+    toast(n ? '已补充 ' + n + ' 个内置单词' : '内置单词都已经在单词本里了');
+  });
+  $('#btnClearProgress').addEventListener('click', function(){
+    if (!confirm('清空所有学习进度、每日任务和打卡记录？（单词会保留）')) return;
+    state.daily = {}; state.checked = {};
+    state.words.forEach(function(w){ w.lv = 0; w.last = null; w.next = null; w.reps = 0; w.forgot = 0; });
+    saveState(); toast('学习进度已清空'); switchView('v-read');
+  });
+  $('#btnWipe').addEventListener('click', function(){
+    const p = activePool();
+    const pn = p ? p.name : '';
+    if (!confirm('清空进度池「' + pn + '」的全部数据（包括单词本）？\n其它进度池不受影响，此操作不可恢复。')) return;
+    if (!confirm('再确认一次：真的要清空「' + pn + '」吗？')) return;
+    state = defaultState();
+    normalizeState(state);
+    if (p) p.state = state;
+    savePools(); saveState();
+    toast('进度池「' + pn + '」已清空');
+    refreshAll();
+  });
+  // 键盘快捷键（按当前所在区生效）：← → 翻页，空格显示释义，1 记住了，2 没记住
+  document.addEventListener('keydown', function(e){
+    if (!state.settings.keys) return;
+    if (curView !== 'v-read' && curView !== 'v-write') return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+    const area = $('#reviewArea-' + curZone());       // 只在当前区的容器里找按钮
+    if (!area) return;
+    const pick = sel => area.querySelector(sel);
+    if (e.key === 'ArrowLeft'){
+      const b = pick('#btnPrev'); if (b){ e.preventDefault(); b.click(); }
+    } else if (e.key === 'ArrowRight'){
+      const b = pick('#btnNext'); if (b){ e.preventDefault(); b.click(); }
+    } else if (e.code === 'Space' || e.key === 'Enter'){
+      const b = pick('#btnReveal');
+      if (b){ e.preventDefault(); b.click(); }
+    } else if (e.key === '1'){
+      const b = pick('#btnOk'), a = pick('#actions');
+      if (b && a && a.classList.contains('show')){ e.preventDefault(); b.click(); }
+    } else if (e.key === '2'){
+      const b = pick('#btnBad'), a = pick('#actions');
+      if (b && a && a.classList.contains('show')){ e.preventDefault(); b.click(); }
+    }
+  });
+  // 语音列表异步加载
+  if ('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ /* 触发一次加载，speak 时自动使用 */ };
+    try { window.speechSynthesis.getVoices(); } catch (e){}
+  }
+  // 跨天自动刷新
+  setInterval(function(){
+    const ds = state.daily[ymd()];
+    if (!ds){ ZONES.forEach(function(z){ renderReview(z); }); toast('新的一天，任务已刷新 🌅'); }
+    const lbl = $('#todayLabel');
+    if (lbl) lbl.textContent = ymd(new Date()) + ' 周' + weekdayZh(new Date());
+  }, 60000);
+}
+
+/* ---------------- 启动 ---------------- */
+let started = false;
+function init(){
+  if (started) return;
+  started = true;
+  loadState();
+  const d = new Date();
+  $('#todayLabel').textContent = ymd(d) + ' 周' + weekdayZh(d);
+  bindGlobal();
+  ZONES.forEach(function(z){ renderReview(z); });
+  switchReadSub('read');
+  renderPools();
+  if (POOLS && !POOLS.named) showPoolStart();      // 首次使用：先给自己的进度池起个名字
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+</script>
+</body>
+</html>
