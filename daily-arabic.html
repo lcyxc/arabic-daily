@@ -202,12 +202,6 @@
   }
   .akb-k:active{background:var(--brand-soft)}
   .akb-wide{grid-column:span 4;font-size:13px;font-family:inherit}
-  @media(max-width:420px){
-    .akb{grid-template-columns:repeat(9,1fr)}
-    .akb-k{font-size:15px;padding:8px 0}
-    .write-input{font-size:18px}
-    .write-input.ar{font-size:21px}
-  }
   /* 打卡 */
   .center{text-align:center;padding:14px 10px}
   .big-emoji{font-size:44px;line-height:1}
@@ -363,11 +357,93 @@
   .sync-note.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}
   .sync-note.ok{background:var(--brand-soft);border:1px solid #b8e0da;color:#0c5f58}
   .sync-note .btn{padding:6px 10px;font-size:12.5px}
-  @media(max-width:420px){
-    .card{padding:13px;border-radius:14px}
-    .meaning{font-size:16.5px}
-    .actions button{font-size:15px;padding:14px 6px}
+  /* ============================================================
+     移动端适配
+     · 手机上按钮/输入框都放大到「一指就能点」的尺寸
+     · 输入框字号 ≥16px，避免 iOS Safari 聚焦时自动放大页面
+     · 阿语键盘按屏宽自动换行，不会挤成一条
+     · 支持 iPhone 刘海/底部横条（安全区）
+     ============================================================ */
+  html{-webkit-text-size-adjust:100%}
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  button.btn, nav.tabs button, nav.subtabs button, .akb-k, .nav-btn, .plist-item .btn, .sync-note .btn{
+    touch-action:manipulation;      /* 去掉移动端 300ms 点击延迟 / 双击缩放 */
+  }
+  @media(max-width:520px){
+    main{padding:12px 10px 0}
+    .card{padding:14px 13px;border-radius:14px;margin-bottom:10px}
+    /* 头部更紧凑：标题一行、标签可横向滑动、进度池条压缩 */
+    header.top{padding:10px 12px 8px}
+    .brand h1{font-size:16px}
+    .brand .sub{font-size:11.5px}
+    nav.tabs{margin-top:8px;gap:5px;padding-bottom:2px}
+    nav.tabs button{padding:9px 14px;font-size:14px;min-height:38px}
+    .poolbar{margin-top:8px;padding-top:8px;gap:5px}
+    .poolbar select{font-size:14px;padding:8px 10px;min-height:38px}
+    .poolbar .btn{padding:8px 10px;font-size:13px;min-height:38px}
+    /* 背诵区两个子分区按钮：够大、文字不换行 */
+    nav.subtabs{gap:8px;margin-bottom:10px}
+    nav.subtabs button{padding:12px 8px;font-size:14.5px;min-height:48px;line-height:1.35}
+    /* 表单：16px 防 iOS 缩放 + 触控高度 */
+    input[type=text],input[type=number],textarea,select{font-size:16px;padding:11px 12px}
+    textarea{min-height:132px}
+    button.btn{font-size:15px;padding:12px 16px;min-height:46px}
+    button.ghost{padding:10px 12px}
+    .row{gap:8px}
+    .row>.btn{flex:1 1 40%;min-width:108px}   /* 一行里的按钮自动两两成排，不再挤成小条 */
+    /* 滑块：加大轨道与滑块，方便手指拖 */
+    input[type=range]{height:34px}
+    input[type=range]::-webkit-slider-thumb{width:28px;height:28px;margin-top:-10px}
+    .tune-row{font-size:14px;margin-bottom:9px}
+    .write-input{font-size:21px}
+    .write-input.ar{font-size:25px}
+    .actions button{font-size:16px;padding:15px 8px;min-height:54px}
+    /* 上一个/下一个：位置文字换到第二行，两个按钮各占一半更好点 */
+    .nav-row{gap:8px;padding-top:10px;margin-top:12px;flex-wrap:wrap}
+    .nav-btn{font-size:15px;padding:12px 10px;min-height:46px;flex:1 1 0}
+    .nav-pos{order:3;flex:1 1 100%;text-align:center;font-size:12.5px}
+    .prog-head{flex-wrap:wrap;gap:2px 8px;font-size:12.5px}
+    .comp{font-size:11.5px}
+    .hint{font-size:13px}
+    .small{font-size:13px}
+    .sync-note{font-size:13px;padding:10px}
+    /* 阿语键盘：按屏宽自动换行（11 列在手机上太窄） */
+    .akb{grid-template-columns:repeat(auto-fit,minmax(40px,1fr));gap:5px;padding:7px}
+    .akb-k{min-height:42px;font-size:19px}
+    .akb-k.akb-wide{font-size:13px}
+    /* 单词本 / 进度池列表：文字一行、按钮另起一行 */
+    .witem{padding:10px 0;gap:8px}
+    .witem .w1{font-size:20px;max-width:44%}
+    .witem .w1.w1-sm{font-size:15px}
+    .witem .w2 .m{font-size:14px}
+    .witem .w2 .meta{font-size:11.5px}
+    .plist-item{flex-wrap:wrap;gap:6px 8px;padding:10px}
+    .plist-item .grow{flex:1 1 100%}
+    .plist-item .btn{padding:8px 12px;font-size:13px;min-height:38px;flex:1 1 auto}
+    /* 打卡页统计与日历 */
+    .stat-grid{gap:8px}
     .stat b{font-size:19px}
+    .cal{gap:4px}
+    /* 弹窗 */
+    .mask{padding:14px}
+    .dialog{padding:18px 16px 14px;border-radius:16px}
+    .dialog .row>.btn{flex:1 1 100%}
+    .meaning{font-size:17px}
+    .prompt-zh{font-size:clamp(19px,6.4vw,26px)}
+    .tune-preview{font-size:13px}
+    details.tune{padding:12px 13px}
+    footer{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  }
+  @media(max-width:380px){
+    header.top{padding:9px 10px 7px}
+    .brand h1{font-size:15px}
+    nav.tabs button{padding:9px 11px;font-size:13.5px}
+    .poolbar .pb-lbl{display:none}          /* 极窄屏藏掉「进度池」标签，留选择器 */
+    nav.subtabs button{font-size:13.5px;padding:11px 6px}
+    .nav-btn{padding:11px 8px;font-size:13.5px}
+    .witem .w1{max-width:40%;font-size:19px}
+    .akb{grid-template-columns:repeat(auto-fit,minmax(36px,1fr))}
+    .akb-k{min-height:40px;font-size:18px}
   }
   @media(prefers-color-scheme:dark){
     /* 保持简洁，不做完整暗色，只轻微降低亮度 */
@@ -422,7 +498,29 @@
   <!-- ========== 单词本 / 导入 ========== -->
   <section class="view" id="v-words">
     <div class="card">
-      <h2>导入单词</h2>
+      <h2>📚 单词本 <span class="small" id="bookNow"></span></h2>
+      <div class="row" style="margin-top:2px">
+        <select id="bookSel" class="grow" title="切换单词本"></select>
+      </div>
+      <div id="bookList" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="btnBookNewEmpty">＋ 新建空单词本</button>
+        <button class="btn" id="btnBookNewBuiltin">＋ 新建（含内置 932 词）</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="btnBookRename">当前本改名</button>
+        <button class="btn" id="btnBookCopy">复制当前本</button>
+        <button class="btn" id="btnBookExport">导出为文本</button>
+        <button class="btn danger" id="btnBookDel">删除当前本</button>
+      </div>
+      <div class="hint">
+        每个单词本有**自己的词表和自己的记忆进度**，互不影响。切换单词本会按新词表重排今天的任务。
+        「导出为文本」得到的是 <code>单词 : 释义</code> 纯文本，可编辑后再粘回来导入。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>导入单词 <span class="small" id="importTarget"></span></h2>
       <label class="f">每行一个，格式 <b>单词 : 释义</b>（也可加第 3 列音标）</label>
       <textarea id="importBox" spellcheck="false" placeholder="مَبَسَّطٌ : 简化的，通俗的
 مُتَعَلِّمٌ جـ مُتَعَلِّمُونَ : 学生，学习者
@@ -431,7 +529,8 @@
 جَمِيلٌ::美丽的::jamīl"></textarea>
       <div class="row" style="margin-top:10px">
         <button class="btn" id="btnPreview">预览解析</button>
-        <button class="btn primary" id="btnImport">导入 / 更新</button>
+        <button class="btn primary" id="btnImport">导入到当前单词本</button>
+        <button class="btn" id="btnImportNewBook">导入为新建单词本</button>
         <button class="btn ghost" id="btnClearBox">清空输入</button>
       </div>
       <div class="hint">
@@ -444,7 +543,7 @@
     </div>
 
     <div class="card">
-      <h2>我的单词本 <span id="wordCount" class="small"></span></h2>
+      <h2>词条列表 <span id="wordCount" class="small"></span></h2>
       <div class="row" style="margin-bottom:8px">
         <input type="text" id="searchWord" class="grow" placeholder="搜索单词或释义…">
         <button class="btn ghost" id="btnExport">导出备份</button>
@@ -476,8 +575,9 @@
     <div class="card">
       <h2>👤 进度池 <span class="small" id="poolNow"></span></h2>
       <div class="hint" style="margin-top:0">
-        每个池子有<b>各自的单词进度、背诵/默写习惯（滑块）、打卡记录和单词本</b>，互不影响。<br>
-        多人共用一台设备时，一人一个池子；也可以给自己建「冲刺模式 / 复习模式」两个池子。
+        每个池子有<b>各自的单词本、学习进度、背诵/默写习惯（滑块）和打卡记录</b>，互不影响。<br>
+        多人共用一台设备时，一人一个池子；也可以给自己建「冲刺模式 / 复习模式」两个池子。<br>
+        （「单词本」是池子里的一层：一个池子可以放好几本词表，见「📚 单词本」页）
       </div>
       <div class="row" style="margin-top:10px">
         <select id="poolSel2" class="grow"></select>
@@ -1562,13 +1662,109 @@ const BUILTIN_WORDS = [
 
 
 /* ---------------- 数据层 ---------------- */
+/** 单词本（books）：一本 = 一份独立的词表 + 每个词自己的记忆进度
+ *  state.books   = [{ id, name, createdAt, words: [...] }]
+ *  state.curBook = 当前使用的单词本 id
+ *  state.words   = 当前单词本的词数组（同一引用，所有旧代码不用改）
+ */
 function defaultState(){
-  return { version: 2, builtinVersion: 0, words: [], daily: {}, checked: {},
+  return { version: 2, builtinVersion: 0, words: [], books: [], curBook: null,
+           daily: {}, checked: {},
            settings: {
              read:  { newPerDay: 10, ratio: 20, a2cRatio: 50 },   // 背诵区
              write: { newPerDay: 5,  ratio: 20, a2cRatio: 0 },    // 默写区（默认汉→阿）
              autoTts: false, translit: false, keys: true
            } };
+}
+function newBookRecord(name, words){
+  return { id: uid(), name: String(name || '新单词本').slice(0, 24), createdAt: Date.now(), words: words || [] };
+}function curBook(){ return (state.books || []).filter(b => b.id === state.curBook)[0] || null; }
+function bookById(id){ return (state.books || []).filter(b => b.id === id)[0] || null; }
+/** 把当前词数组写回当前单词本（所有改动最终都走 saveState，这里兜底同步一次） */
+function syncWordsToBook(){
+  const b = curBook();
+  if (b && Array.isArray(state.words)) b.words = state.words;
+}
+function bookStatsOf(b){
+  const words = (b && Array.isArray(b.words)) ? b.words : [];
+  const learned = words.filter(w => w.reps > 0).length;
+  return { words: words.length, learned: learned,
+           starred: words.filter(w => w.star).length,
+           kb: Math.round(JSON.stringify(words).length / 1024) };
+}
+/** 复制一份词表：换新的 word id、进度清零（这样两本之后各走各的） */
+function freshWordsCopy(words){
+  return (words || []).map(function(w, i){
+    const c = Object.assign({}, w);
+    c.id = uid() + i;
+    c.lv = 0; c.last = null; c.next = null; c.reps = 0; c.forgot = 0;
+    return c;
+  });
+}
+/** 新建单词本；withBuiltin=true 时直接补上内置 932 词 */
+function bookNew(name, withBuiltin, fromWords){
+  if (!state.books) state.books = [];
+  if (state.books.length >= 30){ toast('最多 30 个单词本，先删掉不用的吧'); return null; }
+  const b = newBookRecord(name, fromWords || []);
+  state.books.push(b);
+  if (withBuiltin && !fromWords){
+    const keep = state.words, keepCur = state.curBook;
+    state.words = b.words; state.curBook = b.id;      // 借用内置词表灌入
+    seedBuiltin();
+    state.words = keep; state.curBook = keepCur;
+    b.words = b.words;                                 // 数组引用已写入
+  }
+  saveState(); renderBooks();
+  return b;
+}
+function renameBook(id, name){
+  const b = bookById(id);
+  if (!b) return;
+  name = String(name || '').trim().slice(0, 24);
+  if (!name) return;
+  b.name = name;
+  saveState(); renderBooks();
+}
+function delBook(id){
+  if (!state.books || state.books.length <= 1){ toast('至少要保留一个单词本'); return false; }
+  const b = bookById(id);
+  if (!b) return false;
+  state.books = state.books.filter(x => x.id !== id);
+  if (state.curBook === id){
+    state.curBook = state.books[0].id;
+    state.words = curBook().words;
+    resetDayForNewWords();
+  }
+  saveState(); renderBooks(); refreshAll();
+  toast('已删除单词本「' + b.name + '」');
+  return true;
+}
+/** 切换单词本：换词表 → 今天的任务按新的词表重新生成（各本进度都留在各自词里） */
+function switchBook(id, silent){
+  const b = bookById(id);
+  if (!b || id === state.curBook){ renderBooks(); return false; }
+  syncWordsToBook();
+  state.curBook = id;
+  state.words = b.words;
+  normalizeWords(state.words);
+  resetDayForNewWords();
+  saveState(); renderBooks(); refreshAll();
+  if (!silent) toast('已切换到「' + b.name + '」（' + state.words.length + ' 个词）· 今日任务已按新单词本重排');
+  return true;
+}
+/** 换词表后把今天所有分区标记为重建 */
+function resetDayForNewWords(){
+  const k = ymd();
+  const dz = state.daily[k];
+  if (dz && dz.zones){
+    ZONES.forEach(function(zn){
+      const z = dz.zones[zn];
+      if (!z) return;
+      z.built = false;
+      z.order = []; z.queue = []; z.pos = 0;
+      z.done = {}; z.tries = {}; z.grade = {}; z.answer = {}; z.cfg = {}; z.reviewing = false;
+    });
+  }
 }
 let state = defaultState();
 function clampInt(v, lo, hi, dft){
@@ -1653,6 +1849,7 @@ function refreshBuiltin(){
  * ------------------------------------------------------------------------- */
 const LS_POOLS = 'arabicDaily.pools.v1';
 const DEFAULT_POOL_NAME = '我的进度';
+const DEFAULT_BOOK_NAME = '内置词汇表';
 const MAX_POOLS = 20;
 let POOLS = null;
 function poolUid(){ return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
@@ -1832,15 +2029,22 @@ function normalizeState(obj){
   if (!Array.isArray(state.words)) state.words = [];
   if (!state.checked || typeof state.checked !== 'object') state.checked = {};
   if (!state.daily  || typeof state.daily  !== 'object') state.daily  = {};
-  // 兼容旧字段
-  state.words.forEach(w => {
-    if (w.lv == null) w.lv = 0;
-    if (w.reps == null) w.reps = 0;
-    if (w.forgot == null) w.forgot = 0;
-    if (w.ex !== undefined) delete w.ex;       // 旧版例句字段，已废弃
-    if (w.custom !== undefined) delete w.custom;
-  });
   if (state.sent !== undefined) delete state.sent;   // 旧版例句库数据，已废弃
+  /* —— 单词本：老数据（只有一份 state.words）自动升级成一个单词本 —— */
+  if (!Array.isArray(state.books)) state.books = [];
+  state.books = state.books.filter(b => b && typeof b === 'object');
+  state.books.forEach(function(b){
+    if (!b.id) b.id = uid();
+    if (!b.name) b.name = '单词本';
+    if (!Array.isArray(b.words)) b.words = [];
+    normalizeWords(b.words);
+  });
+  if (!state.books.length){
+    state.books.push(newBookRecord(DEFAULT_BOOK_NAME, state.words));
+    state.curBook = state.books[0].id;
+  }
+  if (!bookById(state.curBook)) state.curBook = state.books[0].id;
+  state.words = curBook().words;                     // 让 state.words 指向当前单词本
   // 首次使用 / 内置词表升级：自动补齐内置词汇，并按新版本刷新词条文本
   let added = 0, updated = 0;
   if (state.builtinVersion !== BUILTIN_VERSION){
@@ -1850,7 +2054,18 @@ function normalizeState(obj){
   }
   return state;
 }
+/** 词条字段兼容（老数据 / 导入数据都会走一遍） */
+function normalizeWords(arr){
+  (arr || []).forEach(function(w){
+    if (w.lv == null) w.lv = 0;
+    if (w.reps == null) w.reps = 0;
+    if (w.forgot == null) w.forgot = 0;
+    if (w.ex !== undefined) delete w.ex;       // 旧版例句字段，已废弃
+    if (w.custom !== undefined) delete w.custom;
+  });
+}
 function saveState(){
+  syncWordsToBook();                              // 词表改动写回当前单词本
   const p = activePool();
   let json = null;
   try { json = JSON.stringify(state); } catch (e){ json = null; }
@@ -2767,7 +2982,8 @@ function renderReview(zone){
   const head = syncNote +
     '<div class="prog-wrap">' +
       '<div class="prog-head"><span>' + ZONE_NAME[zone] + '进度 ' + p.pct + '%</span><span>已记住 <b>' + p.mem + '</b> / ' + p.total +
-      (p.left ? '　·　剩余 ' + p.left : '') + '</span></div>' +
+      (p.left ? '　·　剩余 ' + p.left : '') +
+      (curBook() ? '　·　📚 ' + escapeHtml(curBook().name) : '') + '</span></div>' +
       '<div class="bar"><i style="width:' + p.pct + '%"></i></div>' +
       (compText(ds, zone) ? '<div class="comp">' + escapeHtml(compText(ds, zone)) + '</div>' : '') +
     '</div>';
@@ -3146,7 +3362,42 @@ function doReview(ok, zone){
    视图：单词本
    ======================================================================= */
 let wordsShown = 150;   // 单词本一次最多渲染多少条（近千词时保证流畅）
+/** 单词本管理卡片 */
+function renderBooks(){
+  if (!state.books) return;
+  const opts = state.books.map(function(b){
+    const s = bookStatsOf(b);
+    return '<option value="' + b.id + '"' + (b.id === state.curBook ? ' selected' : '') + '>' +
+      escapeHtml(b.name) + '（' + s.words + ' 词）</option>';
+  }).join('');
+  const sel = $('#bookSel');
+  if (sel){ sel.innerHTML = opts; sel.value = state.curBook; }
+  const now = curBook();
+  const label = $('#bookNow');
+  if (label) label.textContent = now ? ('当前：' + now.name) : '';
+  const list = $('#bookList');
+  if (list && state.books.length > 1){
+    list.innerHTML = state.books.map(function(b){
+      const s = bookStatsOf(b);
+      const on = b.id === state.curBook;
+      return '<div class="plist-item' + (on ? ' on' : '') + '">' +
+        '<div class="grow"><div class="pn">' + escapeHtml(b.name) + (on ? ' <span class="nav-j">使用中</span>' : '') + '</div>' +
+        '<div class="pm">' + s.words + ' 词 · 背过 ' + s.learned + (s.starred ? ' · 补充词 ' + s.starred : '') + ' · 约 ' + s.kb + ' KB</div></div>' +
+        (on ? '' : '<button class="btn" data-book="' + b.id + '">切换</button>') +
+        '<button class="btn" data-bookren="' + b.id + '">改名</button>' +
+        '<button class="btn" data-bookcopy="' + b.id + '">复制</button>' +
+        '<button class="btn danger" data-bookdel="' + b.id + '">删除</button>' +
+        '</div>';
+    }).join('');
+  } else if (list){
+    list.innerHTML = '<div class="hint" style="margin-top:0">只有一个单词本。想再建一个（比如把四级词单独放）就点下面的「新建单词本」。</div>';
+  }
+}
 function renderWords(){
+  renderBooks();
+  const bNow = curBook();
+  const tgt = $('#importTarget');
+  if (tgt) tgt.textContent = bNow ? ('→ 会导入到「' + bNow.name + '」') : '';
   const q = ($('#searchWord').value || '').trim().toLowerCase();
   $('#wordCount').textContent = '（共 ' + state.words.length + ' 个）';
   const list = $('#wordList');
@@ -3196,27 +3447,19 @@ function renderPreview(){
   box.innerHTML = '<div class="hint">识别到 <b>' + rows.length + '</b> 行（下面只显示前 8 行）</div>' +
     '<table class="preview"><tr><th>单词</th><th>释义</th><th>状态</th></tr>' + body + '</table>';
 }
-function doImport(){
+function doImport(asNewBook){
   const raw = $('#importBox').value;
   const trimmed = raw.trim();
   // 粘贴整份 JSON 备份 => 恢复全部数据
-  if (trimmed.charAt(0) === '{' && trimmed.indexOf('"words"') >= 0){
+  if (!asNewBook && trimmed.charAt(0) === '{' && trimmed.indexOf('"words"') >= 0){
     try {
       const obj = JSON.parse(trimmed);
       if (!Array.isArray(obj.words)) throw new Error('缺少 words');
-      state = Object.assign(defaultState(), obj);
-      state.settings = Object.assign({ limit: 10, autoTts: false, translit: false, keys: true }, obj.settings || {});
-      if (!state.checked || typeof state.checked !== 'object') state.checked = {};
-      if (!state.daily  || typeof state.daily  !== 'object') state.daily  = {};
-      state.words.forEach(function(w, i){
-        if (!w.id) w.id = uid() + i;
-        if (w.lv == null) w.lv = 0;
-        if (w.reps == null) w.reps = 0;
-        if (w.forgot == null) w.forgot = 0;
-      });
+      state = normalizeState(obj);
       saveState();
       $('#importBox').value = ''; $('#previewArea').innerHTML = '';
-      toast('备份恢复成功：' + state.words.length + ' 个单词');
+      toast('备份恢复成功：' + state.words.length + ' 个单词（当前单词本「' + (curBook() ? curBook().name : '') + '」）');
+      refreshAll();
       switchView('v-read');
       return;
     } catch (err){
@@ -3226,6 +3469,33 @@ function doImport(){
   }
   const rows = parseWords(raw);
   if (!rows.length){ toast('没有识别到有效行'); return; }
+
+  // 导入为「新建单词本」：整份文本变成一本新词表并切过去
+  if (asNewBook){
+    const name = '导入的单词本 ' + ((state.books || []).length + 1);
+    const b = bookNew(name, false);
+    if (!b) return;
+    switchBook(b.id, true);
+    const byKey2 = {};
+    state.words.forEach(function(w){ byKey2[normalizeKey(w.w)] = w; });
+    let n = 0;
+    rows.forEach(function(r){
+      const k = normalizeKey(r.w);
+      if (byKey2[k]) return;
+      const w = makeWord(r.w, r.m, { t: r.t, star: r.star });
+      state.words.push(w); byKey2[k] = w; n++;
+    });
+    saveState();
+    const ds0 = todayState();
+    ZONES.forEach(function(zn){ buildZoneQueue(ds0, zn, true); zoneOf(ds0, zn).built = true; });
+    saveState();
+    $('#importBox').value = ''; $('#previewArea').innerHTML = '';
+    renderWords();
+    toast('已新建单词本「' + b.name + '」：导入 ' + n + ' 个词，并切换过去了');
+    switchView('v-read');
+    return;
+  }
+
   const byKey = {};
   state.words.forEach(w => byKey[normalizeKey(w.w)] = w);
   let added = 0, updated = 0;
@@ -3245,7 +3515,7 @@ function doImport(){
     }
   });
   saveState();
-  // 新单词补充进今天两个区的任务（保留已判定记录）
+  // 新单词补充进今天各区的任务（保留已判定记录）
   const ds = todayState();
   ZONES.forEach(function(zn){
     const z = zoneOf(ds, zn);
@@ -3258,7 +3528,13 @@ function doImport(){
   $('#previewArea').innerHTML = '';
   renderWords();
   switchView('v-read');
-  toast('导入完成：新增 ' + added + ' 个，更新 ' + updated + ' 个');
+  toast('导入到「' + (curBook() ? curBook().name : '当前单词本') + '」完成：新增 ' + added + ' 个，更新 ' + updated + ' 个');
+}
+/** 把当前单词本导出成可编辑的纯文本（单词 : 释义） */
+function bookExportText(){
+  return state.words.map(function(w){
+    return (w.star ? '*' : '') + w.w + ' : ' + w.m + (w.t ? ' : ' + w.t : '');
+  }).join('\n') + '\n';
 }
 
 /* =======================================================================
@@ -3457,6 +3733,7 @@ function refreshAll(){
   $$('#subtabsRead button').forEach(b => b.classList.toggle('active', b.dataset.sub === curSub));
   syncTune();
   renderPools();
+  renderBooks();
   if (curView === 'v-words')   renderWords();
   if (curView === 'v-checkin') renderCheckin();
   if (curView === 'v-settings') renderSettings();
@@ -3577,9 +3854,10 @@ function bindGlobal(){
       toast(r ? k + '：背诵 ' + r.total + ' 个，记住 ' + r.mem + ' 个' : k + '：未打卡');
     }
   });
-  // 单词本
+  // 单词本 / 导入
   $('#btnPreview').addEventListener('click', renderPreview);
-  $('#btnImport').addEventListener('click', doImport);
+  $('#btnImport').addEventListener('click', function(){ doImport(false); });
+  $('#btnImportNewBook').addEventListener('click', function(){ doImport(true); });
   $('#btnClearBox').addEventListener('click', function(){ $('#importBox').value = ''; $('#previewArea').innerHTML = ''; });
   $('#importBox').addEventListener('input', function(){ clearTimeout(window.__pv); window.__pv = setTimeout(renderPreview, 400); });
   $('#searchWord').addEventListener('input', renderWords);
@@ -3587,8 +3865,94 @@ function bindGlobal(){
     const data = JSON.stringify(state);
     $('#importBox').value = data;
     switchView('v-words');
-    toast('已把当前进度池的数据填入输入框，可复制保存；粘贴回来点「导入 / 更新」也能恢复单词');
+    toast('已把当前进度池的数据填入输入框，可复制保存；粘贴回来点「导入到当前单词本」也能恢复');
     try { navigator.clipboard.writeText(data); } catch (e){}
+  });
+  // ---------- 单词本（一个池子可以有好几本词表） ----------
+  const askBookName = function(title, dft){
+    let v = null;
+    try { v = prompt(title, dft || ''); } catch (e){ v = null; }
+    if (v == null) return null;
+    v = String(v).trim().slice(0, 24);
+    return v || null;
+  };
+  const bSel = $('#bookSel');
+  if (bSel) bSel.addEventListener('change', function(){ switchBook(this.value); });
+  const newBook = function(withBuiltin){
+    const dft = withBuiltin ? ('内置词汇表 ' + ((state.books || []).length + 1)) : ('我的单词本 ' + ((state.books || []).length + 1));
+    const name = askBookName('新单词本的名字？', dft);
+    if (!name) return;
+    const b = bookNew(name, withBuiltin);
+    if (!b) return;
+    switchBook(b.id, true);
+    toast(withBuiltin ? ('已新建「' + b.name + '」：含内置 932 词，进度从零开始')
+                      : ('已新建空单词本「' + b.name + '」，去上面粘贴导入你自己的词吧'));
+    switchView('v-words');
+  };
+  const bnE = $('#btnBookNewEmpty'); if (bnE) bnE.addEventListener('click', function(){ newBook(false); });
+  const bnB = $('#btnBookNewBuiltin'); if (bnB) bnB.addEventListener('click', function(){ newBook(true); });
+  const bRen = $('#btnBookRename');
+  if (bRen) bRen.addEventListener('click', function(){
+    const b = curBook(); if (!b) return;
+    const name = askBookName('给当前单词本改名：', b.name);
+    if (name){ renameBook(b.id, name); toast('已改名为「' + name + '」'); }
+  });
+  const bCopy = $('#btnBookCopy');
+  if (bCopy) bCopy.addEventListener('click', function(){
+    const b = curBook(); if (!b) return;
+    const words = freshWordsCopy(state.words);
+    const nb = bookNew(b.name + ' 副本（进度清零）', false, words);
+    if (!nb) return;
+    switchBook(nb.id, true);
+    toast('已复制为「' + nb.name + '」：词表一样，进度从零开始');
+    switchView('v-words');
+  });
+  const bExp = $('#btnBookExport');
+  if (bExp) bExp.addEventListener('click', function(){
+    const b = curBook();
+    const txt = bookExportText();
+    $('#importBox').value = txt;
+    const box = $('#previewArea');
+    if (box) box.innerHTML = '<div class="hint">已把「' + escapeHtml(b ? b.name : '') + '」的 ' + state.words.length +
+      ' 个词导出到上面的输入框（格式：<code>单词 : 释义</code>）。可以复制到记事本编辑，改完粘回来点「导入到当前单词本」或「导入为新建单词本」。</div>';
+    try { navigator.clipboard.writeText(txt); } catch (e){}
+    toast('已导出当前单词本（' + state.words.length + ' 个词）');
+  });
+  const bDel = $('#btnBookDel');
+  if (bDel) bDel.addEventListener('click', function(){
+    const b = curBook(); if (!b) return;
+    if ((state.books || []).length <= 1){ toast('至少要保留一个单词本'); return; }
+    if (!confirm('删除单词本「' + b.name + '」？\n这本里的词和它们的学习进度会一起删除，不可恢复。')) return;
+    delBook(b.id);
+  });
+  const bList = $('#bookList');
+  if (bList) bList.addEventListener('click', function(e){
+    e.stopPropagation();
+    const sw = e.target.closest('[data-book]');
+    if (sw){ switchBook(sw.getAttribute('data-book')); switchView('v-words'); return; }
+    const rn = e.target.closest('[data-bookren]');
+    if (rn){
+      const b2 = bookById(rn.getAttribute('data-bookren')); if (!b2) return;
+      const name = askBookName('给「' + b2.name + '」改名：', b2.name);
+      if (name) renameBook(b2.id, name);
+      return;
+    }
+    const cp = e.target.closest('[data-bookcopy]');
+    if (cp){
+      const b3 = bookById(cp.getAttribute('data-bookcopy')); if (!b3) return;
+      const words = freshWordsCopy(b3.words || []);
+      const nb2 = bookNew(b3.name + ' 副本（进度清零）', false, words);
+      if (!nb2) return;
+      switchBook(nb2.id, true);
+      toast('已复制为「' + nb2.name + '」');
+      return;
+    }
+    const dl = e.target.closest('[data-bookdel]');
+    if (dl){
+      const b4 = bookById(dl.getAttribute('data-bookdel')); if (!b4) return;
+      if (!confirm('删除单词本「' + b4.name + '」？对应的词与学习进度会一起删除。')) return;
+      delBook(b4.id);
+    }
   });
   // ---------- 进度池 ----------
   const onPoolSelChange = function(){ switchPool(this.value); };
