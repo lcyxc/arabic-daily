@@ -514,7 +514,7 @@
         <button class="btn danger" id="btnBookDel">删除当前本</button>
       </div>
       <div class="hint">
-        每个单词本有**自己的词表和自己的记忆进度**，互不影响。切换单词本会按新词表重排今天的任务。
+        每个单词本有<b>自己的词表和自己的记忆进度</b>，互不影响。切换单词本会按新词表重排今天的任务。
         「导出为文本」得到的是 <code>单词 : 释义</code> 纯文本，可编辑后再粘回来导入。
       </div>
     </div>
@@ -648,6 +648,19 @@
 
 <footer>阿拉伯语每日打卡 · 单文件离线版</footer>
 <div id="toast"></div>
+
+<!-- 页面内弹窗（输入名字 / 确认）：手机上原生 prompt/confirm 会被拦截，所以自己做一个 -->
+<div class="mask" id="askDlg" hidden>
+  <div class="dialog">
+    <h3 id="askTitle">提示</h3>
+    <div class="small" id="askMsg" style="line-height:1.8"></div>
+    <input type="text" id="askInput" maxlength="24" hidden autocomplete="off">
+    <div class="row">
+      <button class="btn primary" id="askOk">确定</button>
+      <button class="btn ghost" id="askCancel">取消</button>
+    </div>
+  </div>
+</div>
 
 <!-- 首次使用：给自己的进度池起名字 -->
 <div class="mask" id="poolStart" hidden>
@@ -3823,7 +3836,8 @@ function bindGlobal(){
       const id = del.getAttribute('data-del');
       const w = getWord(id);
       if (!w) return;
-      if (confirm('删除单词「' + w.w + '」？')) {
+      askConfirm('删除单词「' + w.w + '」？', '删除单词', function(ok){
+        if (!ok) return;
         state.words = state.words.filter(x => x.id !== id);
         Object.keys(state.daily).forEach(function(k){
           const ds = state.daily[k];
@@ -3842,7 +3856,7 @@ function bindGlobal(){
           });
         });
         saveState(); renderWords(); toast('已删除');
-      }
+      });
       return;
     }
     const sp = e.target.closest('[data-speak]');
@@ -3868,34 +3882,83 @@ function bindGlobal(){
     toast('已把当前进度池的数据填入输入框，可复制保存；粘贴回来点「导入到当前单词本」也能恢复');
     try { navigator.clipboard.writeText(data); } catch (e){}
   });
+  // ---------- 页面内弹窗：输入名字 / 确认（手机浏览器会拦截原生 prompt/confirm）----------
+  let askCb = null;
+  function closeAsk(){ const box = $('#askDlg'); if (box) box.hidden = true; askCb = null; }
+  function openAsk(title, msg, withInput, dft, okText, cb){
+    const box = $('#askDlg');
+    if (!box){ cb(withInput ? null : false); return; }      // 兜底：没有弹窗元素就直接执行
+    $('#askTitle').textContent = title || '提示';
+    const msgEl = $('#askMsg');
+    msgEl.textContent = msg || '';
+    msgEl.hidden = !msg;
+    const inp = $('#askInput');
+    inp.hidden = !withInput;
+    if (withInput){ inp.value = dft || ''; inp.maxLength = 24; }
+    const okBtn = $('#askOk');
+    okBtn.textContent = okText || '确定';
+    askCb = cb;
+    box.hidden = false;
+    setTimeout(function(){ try { if (withInput){ inp.focus(); inp.select(); } else { okBtn.focus(); } } catch (e){} }, 60);
+  }
+  /** 输入名字：cb(name) ；取消时 cb(null) */
+  function askName(title, dft, cb){
+    openAsk(title, '', true, dft, '确定', function(res){
+      if (res === false || res === null || res === undefined){ cb(null); return; }
+      const v = String(res).trim().slice(0, 24);
+      cb(v || null);
+    });
+  }
+  /** 确认框：cb(true/false) */
+  function askConfirm(msg, title, cb){
+    openAsk(title || '请确认', msg, false, '', '确定', function(res){ cb(res === true || (res !== false && res !== null)); });
+  }
+  const dlgOk = $('#askOk'), dlgCancel = $('#askCancel');
+  const dlgInput = $('#askInput');
+  if (dlgOk) dlgOk.addEventListener('click', function(){
+    const withInput = dlgInput && !dlgInput.hidden;
+    const v = withInput ? dlgInput.value : true;
+    const cb = askCb;
+    closeAsk();
+    if (cb) cb(v);
+  });
+  if (dlgCancel) dlgCancel.addEventListener('click', function(){
+    const withInput = dlgInput && !dlgInput.hidden;
+    const cb = askCb;
+    closeAsk();
+    if (cb) cb(withInput ? null : false);
+  });
+  if (dlgInput) dlgInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); const b = $('#askOk'); if (b) b.click(); }
+  });
+  const dlgBox = $('#askDlg');
+  if (dlgBox) dlgBox.addEventListener('click', function(e){
+    if (e.target === dlgBox){ const b = $('#askCancel'); if (b) b.click(); }   // 点空白处 = 取消
+  });
+
   // ---------- 单词本（一个池子可以有好几本词表） ----------
-  const askBookName = function(title, dft){
-    let v = null;
-    try { v = prompt(title, dft || ''); } catch (e){ v = null; }
-    if (v == null) return null;
-    v = String(v).trim().slice(0, 24);
-    return v || null;
-  };
   const bSel = $('#bookSel');
   if (bSel) bSel.addEventListener('change', function(){ switchBook(this.value); });
   const newBook = function(withBuiltin){
     const dft = withBuiltin ? ('内置词汇表 ' + ((state.books || []).length + 1)) : ('我的单词本 ' + ((state.books || []).length + 1));
-    const name = askBookName('新单词本的名字？', dft);
-    if (!name) return;
-    const b = bookNew(name, withBuiltin);
-    if (!b) return;
-    switchBook(b.id, true);
-    toast(withBuiltin ? ('已新建「' + b.name + '」：含内置 932 词，进度从零开始')
-                      : ('已新建空单词本「' + b.name + '」，去上面粘贴导入你自己的词吧'));
-    switchView('v-words');
+    askName(withBuiltin ? '新建单词本（含内置 932 词），起个名字：' : '新建空单词本，起个名字：', dft, function(name){
+      if (!name) return;
+      const b = bookNew(name, withBuiltin);
+      if (!b) return;
+      switchBook(b.id, true);
+      toast(withBuiltin ? ('已新建「' + b.name + '」：含内置 932 词，进度从零开始')
+                        : ('已新建空单词本「' + b.name + '」，去上面粘贴导入你自己的词吧'));
+      switchView('v-words');
+    });
   };
   const bnE = $('#btnBookNewEmpty'); if (bnE) bnE.addEventListener('click', function(){ newBook(false); });
   const bnB = $('#btnBookNewBuiltin'); if (bnB) bnB.addEventListener('click', function(){ newBook(true); });
   const bRen = $('#btnBookRename');
   if (bRen) bRen.addEventListener('click', function(){
     const b = curBook(); if (!b) return;
-    const name = askBookName('给当前单词本改名：', b.name);
-    if (name){ renameBook(b.id, name); toast('已改名为「' + name + '」'); }
+    askName('给当前单词本改名：', b.name, function(name){
+      if (name){ renameBook(b.id, name); toast('已改名为「' + name + '」'); }
+    });
   });
   const bCopy = $('#btnBookCopy');
   if (bCopy) bCopy.addEventListener('click', function(){
@@ -3922,8 +3985,9 @@ function bindGlobal(){
   if (bDel) bDel.addEventListener('click', function(){
     const b = curBook(); if (!b) return;
     if ((state.books || []).length <= 1){ toast('至少要保留一个单词本'); return; }
-    if (!confirm('删除单词本「' + b.name + '」？\n这本里的词和它们的学习进度会一起删除，不可恢复。')) return;
-    delBook(b.id);
+    askConfirm('删除单词本「' + b.name + '」？\n这本里的词和它们的学习进度会一起删除，不可恢复。', '删除单词本', function(ok){
+      if (ok) delBook(b.id);
+    });
   });
   const bList = $('#bookList');
   if (bList) bList.addEventListener('click', function(e){
@@ -3933,8 +3997,7 @@ function bindGlobal(){
     const rn = e.target.closest('[data-bookren]');
     if (rn){
       const b2 = bookById(rn.getAttribute('data-bookren')); if (!b2) return;
-      const name = askBookName('给「' + b2.name + '」改名：', b2.name);
-      if (name) renameBook(b2.id, name);
+      askName('给「' + b2.name + '」改名：', b2.name, function(name){ if (name) renameBook(b2.id, name); });
       return;
     }
     const cp = e.target.closest('[data-bookcopy]');
@@ -3950,8 +4013,7 @@ function bindGlobal(){
     const dl = e.target.closest('[data-bookdel]');
     if (dl){
       const b4 = bookById(dl.getAttribute('data-bookdel')); if (!b4) return;
-      if (!confirm('删除单词本「' + b4.name + '」？对应的词与学习进度会一起删除。')) return;
-      delBook(b4.id);
+      askConfirm('删除单词本「' + b4.name + '」？对应的词与学习进度会一起删除。', '删除单词本', function(ok){ if (ok) delBook(b4.id); });
     }
   });
   // ---------- 进度池 ----------
@@ -3959,20 +4021,14 @@ function bindGlobal(){
   const sel1 = $('#poolSel'), sel2 = $('#poolSel2');
   if (sel1) sel1.addEventListener('change', onPoolSelChange);
   if (sel2) sel2.addEventListener('change', onPoolSelChange);
-  const askPoolName = function(title, dft){
-    let v = null;
-    try { v = prompt(title, dft || ''); } catch (e){ v = null; }
-    if (v == null) return null;                      // 取消
-    v = String(v).trim().slice(0, 24);
-    return v || null;
-  };
   const newPool = function(){
-    const name = askPoolName('新进度池的名字？（例如：小明 / 复习模式）', '进度池 ' + ((POOLS ? POOLS.list.length : 1) + 1));
-    if (!name) return;
-    const p = poolNew(name, null);
-    if (!p) return;
-    switchPool(p.id, true);
-    toast('已新建进度池「' + p.name + '」：单词本会自动补上内置 932 词，进度从零开始');
+    askName('新进度池的名字？（例如：小明 / 复习模式）', '进度池 ' + ((POOLS ? POOLS.list.length : 1) + 1), function(name){
+      if (!name) return;
+      const p = poolNew(name, null);
+      if (!p) return;
+      switchPool(p.id, true);
+      toast('已新建进度池「' + p.name + '」：单词本会自动补上内置 932 词，进度从零开始');
+    });
   };
   const bn1 = $('#btnPoolNew'), bn2 = $('#btnPoolNew2');
   if (bn1) bn1.addEventListener('click', newPool);
@@ -3983,8 +4039,9 @@ function bindGlobal(){
   if (bren) bren.addEventListener('click', function(){
     const p = activePool();
     if (!p) return;
-    const name = askPoolName('给当前进度池改名：', p.name);
-    if (name) { renamePool(p.id, name); toast('已改名为「' + name + '」'); }
+    askName('给当前进度池改名：', p.name, function(name){
+      if (name){ renamePool(p.id, name); toast('已改名为「' + name + '」'); }
+    });
   });
   const bcopy = $('#btnPoolCopy');
   if (bcopy) bcopy.addEventListener('click', function(){
@@ -4001,8 +4058,9 @@ function bindGlobal(){
     const p = activePool();
     if (!p) return;
     if (POOLS.list.length <= 1){ toast('至少要保留一个进度池'); return; }
-    if (!confirm('删除进度池「' + p.name + '」？\n这个池子的单词进度、打卡记录会一起删除，不可恢复。')) return;
-    delPool(p.id);
+    askConfirm('删除进度池「' + p.name + '」？\n这个池子的单词进度、打卡记录会一起删除，不可恢复。', '删除进度池', function(ok){
+      if (ok) delPool(p.id);
+    });
   });
   const bexp = $('#btnPoolExport');
   if (bexp) bexp.addEventListener('click', function(){
@@ -4067,8 +4125,9 @@ function bindGlobal(){
     if (dl){
       const p4 = poolById(dl.getAttribute('data-pooldel'));
       if (!p4) return;
-      if (!confirm('删除进度池「' + p4.name + '」？对应的进度与打卡记录会一起删除。')) return;
-      delPool(p4.id);
+      askConfirm('删除进度池「' + p4.name + '」？对应的进度与打卡记录会一起删除。', '删除进度池', function(ok){
+        if (ok) delPool(p4.id);
+      });
     }
   });
   // 首次使用的起名字对话框
@@ -4107,28 +4166,36 @@ function bindGlobal(){
     switchView('v-read');
   });
   $('#btnReloadDemo').addEventListener('click', function(){
-    if (!confirm('把内置词汇表（' + BUILTIN_WORDS.length + ' 个词）中还没有的词补进单词本？\n已有的词不会被改动。')) return;
-    const n = seedBuiltin();
-    saveState(); renderWords();
-    toast(n ? '已补充 ' + n + ' 个内置单词' : '内置单词都已经在单词本里了');
+    askConfirm('把内置词汇表（' + BUILTIN_WORDS.length + ' 个词）中还没有的词补进当前单词本？\n已有的词不会被改动。', '载入内置词汇表', function(ok){
+      if (!ok) return;
+      const n = seedBuiltin();
+      saveState(); renderWords();
+      toast(n ? '已补充 ' + n + ' 个内置单词' : '内置单词都已经在单词本里了');
+    });
   });
   $('#btnClearProgress').addEventListener('click', function(){
-    if (!confirm('清空所有学习进度、每日任务和打卡记录？（单词会保留）')) return;
-    state.daily = {}; state.checked = {};
-    state.words.forEach(function(w){ w.lv = 0; w.last = null; w.next = null; w.reps = 0; w.forgot = 0; });
-    saveState(); toast('学习进度已清空'); switchView('v-read');
+    askConfirm('清空所有学习进度、每日任务和打卡记录？（单词会保留）', '清空学习进度', function(ok){
+      if (!ok) return;
+      state.daily = {}; state.checked = {};
+      state.words.forEach(function(w){ w.lv = 0; w.last = null; w.next = null; w.reps = 0; w.forgot = 0; });
+      saveState(); toast('学习进度已清空'); switchView('v-read');
+    });
   });
   $('#btnWipe').addEventListener('click', function(){
     const p = activePool();
     const pn = p ? p.name : '';
-    if (!confirm('清空进度池「' + pn + '」的全部数据（包括单词本）？\n其它进度池不受影响，此操作不可恢复。')) return;
-    if (!confirm('再确认一次：真的要清空「' + pn + '」吗？')) return;
-    state = defaultState();
-    normalizeState(state);
-    if (p) p.state = state;
-    savePools(); saveState();
-    toast('进度池「' + pn + '」已清空');
-    refreshAll();
+    askConfirm('清空进度池「' + pn + '」的全部数据（包括单词本）？\n其它进度池不受影响，此操作不可恢复。', '清空进度池', function(ok){
+      if (!ok) return;
+      askConfirm('再确认一次：真的要清空「' + pn + '」吗？', '最后确认', function(ok2){
+        if (!ok2) return;
+        state = defaultState();
+        normalizeState(state);
+        if (p) p.state = state;
+        savePools(); saveState();
+        toast('进度池「' + pn + '」已清空');
+        refreshAll();
+      });
+    });
   });
   // 键盘快捷键（按当前所在区生效）：← → 翻页，空格显示释义，1 记住了，2 没记住
   document.addEventListener('keydown', function(e){
